@@ -5,33 +5,41 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home_black_24dp"
+            android:title="Home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_activity"
+            android:icon="@drawable/ic_activity_black_24dp"
+            android:title="Actividades" />
     </group>
-
-    <item android:title="Communicate">
+    <item android:title="Informações">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_achievements"
+                android:icon="@drawable/ic_achievements_black_24dp"
+                android:title="Conquistas" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_stats"
+                android:icon="@drawable/ic_stats_black_24dp"
+                android:title="Estatísticas" />
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/ic_account_circle_black_24dp"
+                android:title="Conta" />
+        </menu>
+    </item>
+
+    <item android:title="Comunidade">
+        <menu>
+            <item
+                android:id="@+id/nav_rankings"
+                android:icon="@drawable/ic_ranking_black_24dp"
+                android:title="Rankings" />
+            <item
+                android:id="@+id/nav_contacts"
+                android:icon="@drawable/ic_contact_phone_black_24dp"
+                android:title="Contactos" />
         </menu>
     </item>
 

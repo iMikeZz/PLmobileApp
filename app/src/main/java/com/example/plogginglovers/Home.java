@@ -41,6 +41,15 @@ public class Home extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View viewById = findViewById(R.id.activity_card);
+
+        viewById.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ActiveActivity.getIntent(Home.this));
+            }
+        });
     }
 
     @Override

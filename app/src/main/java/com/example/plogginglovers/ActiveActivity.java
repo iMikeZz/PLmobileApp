@@ -1,12 +1,19 @@
 package com.example.plogginglovers;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.CountDownTimer;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +30,8 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private Sensor accel;
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
+
+    private NotificationManager mNotificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,26 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
             public void onFinish() {
                 countDownTimer.setText("done!");
+                //createNotificationChannel(); needed if uses NotificationCompact.Builder that is depracated
+                Notification.Builder mBuilder = new Notification.Builder(ActiveActivity.this,"my_channel_01");
+                mBuilder.setSmallIcon(R.drawable.ic_activity_black_24dp);
+                mBuilder.setContentTitle("Acabou a atividade!");
+                //mBuilder.setContentText("Hi, This is Android Notification Detail!");
+                Intent resultIntent = new Intent(ActiveActivity.this, ActiveActivity.class);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(ActiveActivity.this);
+                stackBuilder.addParentStack(ActiveActivity.class);
+
+                // Adds the Intent that starts the Activity to the top of the stack
+                stackBuilder.addNextIntent(resultIntent);
+                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(resultPendingIntent);
+
+                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                // notificationID allows you to update the notification later on.
+                // mNotificationManager.createNotificationChannelGroup(new NotificationChannelGroup("888", "batata"));
+                mNotificationManager.notify(001, mBuilder.build());
+
             }
         }.start();
 
@@ -68,6 +97,23 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 sensorManager.unregisterListener(ActiveActivity.this);
             }
         });
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            CharSequence name = "batata";
+            String description = "batata";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("my_channel_01", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            //NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            mNotificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override

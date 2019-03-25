@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1031057408485",
+    "firebase_url": "https://plmobileapp-cc7d3.firebaseio.com",
+    "project_id": "plmobileapp-cc7d3",
+    "storage_bucket": "plmobileapp-cc7d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031057408485:android:2a1d4b8c3d8b4016",
+        "android_client_info": {
+          "package_name": "com.example.plogginglovers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1031057408485-fbe6r8f7g56tmp1um64gqnlnvcsbobsg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.plogginglovers",
+            "certificate_hash": "54d8abcb7bb783dca99e08cf2b69290b47c7db42"
+          }
+        },
+        {
+          "client_id": "1031057408485-9qke5qmblrl6v5ctivn6teb930rp6v4c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTkKh4GjLttwMYiT6iN-5pMI-9A_VktTA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1031057408485-9qke5qmblrl6v5ctivn6teb930rp6v4c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

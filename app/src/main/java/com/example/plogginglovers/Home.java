@@ -42,15 +42,27 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View viewById = findViewById(R.id.activity_card);
+        View activity_card = findViewById(R.id.activity_card);
 
-        viewById.setOnClickListener(new View.OnClickListener() {
+        activity_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(ActiveActivity.getIntent(Home.this));
             }
         });
+
+        View chat_card = findViewById(R.id.chat_card);
+
+        chat_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(ChatActivity.getIntent(Home.this));
+                startActivity(ChatActivity.getIntent(Home.this));
+            }
+        });
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -71,7 +83,7 @@ public class Home extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle action bar message clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -87,7 +99,7 @@ public class Home extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        // Handle navigation view message clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {

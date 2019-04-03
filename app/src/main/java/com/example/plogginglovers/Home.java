@@ -14,9 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,7 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mAuth = FirebaseAuth.getInstance();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -58,8 +64,8 @@ public class Home extends AppCompatActivity
         chat_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(ChatActivity.getIntent(Home.this));
-                startActivity(ApiUsersTestActivity.getIntent(Home.this));
+                startActivity(ChatActivity.getIntent(Home.this));
+                //startActivity(ApiUsersTestActivity.getIntent(Home.this));
                //startActivity(EcopontosActivity.getIntent(Home.this));
             }
         });
@@ -119,6 +125,11 @@ public class Home extends AppCompatActivity
 
         } else if (id == R.id.nav_stats) {
 
+        } else if (id == R.id.nav_logout){
+            mAuth.signOut();
+            Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
+            startActivity(LoginActivity.getIntent(this));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

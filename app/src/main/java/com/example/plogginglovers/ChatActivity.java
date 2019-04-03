@@ -41,7 +41,7 @@ public class ChatActivity extends AppCompatActivity {
         input = (EditText)findViewById(R.id.input);
         fab = (FloatingActionButton)findViewById(R.id.fab);
 
-        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+        //if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             // Start sign in/sign up activity
             /*startActivityForResult(
                     AuthUI.getInstance()
@@ -50,7 +50,7 @@ public class ChatActivity extends AppCompatActivity {
                     SIGN_IN_REQUEST_CODE
             );
             */
-
+            /*
             mAuth = FirebaseAuth.getInstance();
             mAuth.signInAnonymously()
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -74,7 +74,8 @@ public class ChatActivity extends AppCompatActivity {
                             // ...
                         }
                     });
-        } else {
+                    */
+        //} else {
             // User is already signed in. Therefore, display
             // a welcome Toast
             Toast.makeText(this,
@@ -86,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
 
             // Load chat room contents
             displayChatMessages();
-        }
+        //}
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -130,9 +130,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             app:cardElevation="8dp"
-            app:cardCornerRadius="8dp"
-            android:layout_row="0"
-            android:layout_column="7">
+            app:cardCornerRadius="8dp">
 
             <LinearLayout
                 android:layout_gravity="center_horizontal|center_vertical"

@@ -9,7 +9,7 @@ public class RetrofitClient {
 
     //Define the base URL//
 
-    private static final String BASE_URL = "https://jsonplaceholder.typicode.com"; //todo change
+    private static final String BASE_URL = "http://my-json-server.typicode.com/iMikeZz/PLmobileApp"; //todo change
 
     //Create the Retrofit instance//
 

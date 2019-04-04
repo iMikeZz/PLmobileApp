@@ -64,9 +64,9 @@ public class Home extends AppCompatActivity
         chat_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ChatActivity.getIntent(Home.this));
+                //startActivity(ChatActivity.getIntent(Home.this));
                 //startActivity(ApiUsersTestActivity.getIntent(Home.this));
-               //startActivity(EcopontosActivity.getIntent(Home.this));
+               startActivity(EcopontosActivity.getIntent(Home.this));
             }
         });
     }

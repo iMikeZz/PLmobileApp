@@ -10,10 +10,10 @@ import retrofit2.http.GET;
 
 public interface GetData {
 
-    @GET("/users")
+    @GET("users")
     //Wrap the response in a Call object with the type of the expected result//
     Call<List<RetroUser>> getAllUsers();
 
-    @GET("/ecopontos")
+    @GET("ecopontos")
     Call<List<Ecoponto>> getAllEcopontos();
 }

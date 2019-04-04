@@ -62,9 +62,12 @@ public class EcopontosActivity extends FragmentActivity implements OnMapReadyCal
             public void onResponse(Call<List<Ecoponto>> call, Response<List<Ecoponto>> response) {
                 System.out.println(response.body());
                 // Add a marker in Sydney and move the camera
-                LatLng sydney = new LatLng(-34, 151);
-                mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                if (response.body() != null){
+                    for (Ecoponto ecoponto : response.body()) {
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(ecoponto.getLat(), ecoponto.getLon())));
+                    }
+                }
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.766466, -8.847941), 10));
             }
 
             @Override

@@ -44,4 +44,5 @@ public enum RecyclingManager {
     public List<Garbage> getGarbages() {
         return garbages;
     }
+
 }

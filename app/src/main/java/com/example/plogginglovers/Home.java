@@ -69,6 +69,15 @@ public class Home extends AppCompatActivity
                 startActivity(EcopontosActivity.getIntent(Home.this));
             }
         });
+
+        View findGarbage = findViewById(R.id.find_garbage);
+
+        findGarbage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(FindGarbageActivity.getIntent(Home.this));
+            }
+        });
     }
 
 

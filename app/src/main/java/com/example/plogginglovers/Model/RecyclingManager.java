@@ -27,9 +27,9 @@ public enum RecyclingManager {
         this.garbages.add(new Garbage("Revistas", "Azul"));
         this.garbages.add(new Garbage("Papel", "Azul"));
         //Verde
-        this.garbages.add(new Garbage("Garrafas", "Verde"));
-        this.garbages.add(new Garbage("Frascos", "Verde"));
-        this.garbages.add(new Garbage("Boiões", "Verde"));
+        this.garbages.add(new Garbage("Garrafas de vidro", "Verde"));
+        this.garbages.add(new Garbage("Frascos de vidro", "Verde"));
+        this.garbages.add(new Garbage("Boiões de vidro", "Verde"));
         //Comum
         this.garbages.add(new Garbage("Pilhas", "Pilhão"));
         this.garbages.add(new Garbage("Loiça", "Comum"));
@@ -45,4 +45,13 @@ public enum RecyclingManager {
         return garbages;
     }
 
+    public String getEcoponto(String garbage) {
+        for (Garbage garbageFromList: getGarbages()) {
+            if (garbageFromList.getGarbage().equals(garbage)){
+                return garbageFromList.getEcoponto();
+            }
+        }
+
+        return null;
+    }
 }

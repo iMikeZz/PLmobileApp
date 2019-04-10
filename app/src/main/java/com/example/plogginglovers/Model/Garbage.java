@@ -26,4 +26,9 @@ public class Garbage {
     public void setEcoponto(String ecoponto) {
         this.ecoponto = ecoponto;
     }
+
+    @Override
+    public String toString() {
+        return garbage;
+    }
 }

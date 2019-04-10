@@ -8,11 +8,10 @@
     tools:context=".FindGarbageActivity">
 
     <AutoCompleteTextView
+        android:id="@+id/searchFilter"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:layout_weight="1"
-        android:text="AutoCompleteTextView"
-        android:id="@+id/searchFilter"/>
+        android:layout_weight="1" />
 
     <ListView
         android:layout_width="match_parent"

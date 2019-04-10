@@ -3,4 +3,8 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="greenEcoponto">#43a047</color>
+    <color name="blueEcoponto">#1565c0</color>
+    <color name="yellowEcoponto">#fdd835</color>
+    <color name="communEcoponto">#6d4c41</color>
 </resources>

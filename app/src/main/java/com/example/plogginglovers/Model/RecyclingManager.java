@@ -15,10 +15,9 @@ public enum RecyclingManager {
         this.garbages.add(new Garbage("Pacotes", "Amarelo"));
         this.garbages.add(new Garbage("Aerossóis", "Amarelo"));
         this.garbages.add(new Garbage("Tabuleiros", "Amarelo"));
-        this.garbages.add(new Garbage("Garrafas", "Amarelo"));
-        this.garbages.add(new Garbage("Garrafões", "Amarelo"));
-        this.garbages.add(new Garbage("Garrafões", "Amarelo"));
-        this.garbages.add(new Garbage("Frascos", "Amarelo"));
+        this.garbages.add(new Garbage("Garrafas de Plástico", "Amarelo"));
+        this.garbages.add(new Garbage("Garrafões de Plástico", "Amarelo"));
+        this.garbages.add(new Garbage("Frascos de Plástico", "Amarelo"));
         this.garbages.add(new Garbage("Sacos", "Amarelo"));
         this.garbages.add(new Garbage("Esferovite", "Amarelo"));
         //Azul
@@ -37,8 +36,6 @@ public enum RecyclingManager {
         this.garbages.add(new Garbage("Janelas", "Comum"));
         this.garbages.add(new Garbage("Espelhos", "Comum"));
         this.garbages.add(new Garbage("Lâmpadas", "Comum"));
-
-
     }
 
     public List<Garbage> getGarbages() {
@@ -53,5 +50,15 @@ public enum RecyclingManager {
         }
 
         return null;
+    }
+
+    public ArrayList<String> getGarbagesWithoutEcopontos(){
+        ArrayList<String> garbages = new ArrayList<>();
+
+        for (Garbage garbage: getGarbages()) {
+            garbages.add(garbage.getGarbage());
+        }
+
+        return garbages;
     }
 }

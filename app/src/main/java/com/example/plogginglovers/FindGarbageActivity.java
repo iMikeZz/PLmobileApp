@@ -15,13 +15,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.plogginglovers.Adapters.MyFindGarbageListAdapter;
 import com.example.plogginglovers.Model.RecyclingManager;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class FindGarbageActivity extends AppCompatActivity {
 
-    private ArrayAdapter adapter;
+    private MyFindGarbageListAdapter adapter;
+    private EditText editTextFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,12 @@ public class FindGarbageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_find_garbage);
 
         ListView listViewGarbage = (ListView) findViewById(R.id.listOfGarbage);
-        EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
+        editTextFilter = (EditText) findViewById(R.id.searchFilter);
 
+
+        adapter = new MyFindGarbageListAdapter(this, RecyclingManager.INSTANCE.getGarbagesWithoutEcopontos());
+
+        /*
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, RecyclingManager.INSTANCE.getGarbages()){
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -49,6 +56,7 @@ public class FindGarbageActivity extends AppCompatActivity {
                 return textView;
             }
         };
+        */
         listViewGarbage.setAdapter(adapter);
 
         editTextFilter.addTextChangedListener(new TextWatcher() {
@@ -59,7 +67,8 @@ public class FindGarbageActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                (FindGarbageActivity.this).adapter.getFilter().filter(s);
+                adapter.filter(editTextFilter.getText().toString().toLowerCase(Locale.getDefault()));
+                //(FindGarbageActivity.this).adapter.filter(s.toString());
             }
 
             @Override

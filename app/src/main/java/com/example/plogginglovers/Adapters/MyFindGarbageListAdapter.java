@@ -43,13 +43,13 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
             imageView.setImageResource(R.drawable.ecoponto_amarelo);
         } else if (ecoponto.equals("Azul")){
             titleText.setText(garbageList.get(position));
-            imageView.setImageResource(R.drawable.ic_stats_black_24dp); //todo change icon here
+            imageView.setImageResource(R.drawable.ecoponto_azul);
         } else if (ecoponto.equals("Verde")){
             titleText.setText(garbageList.get(position));
-            imageView.setImageResource(R.drawable.ic_stats_black_24dp); //todo change icon here
+            imageView.setImageResource(R.drawable.ecoponto_verde);
         } else{
             titleText.setText(garbageList.get(position));
-            imageView.setImageResource(R.drawable.ic_stats_black_24dp); //todo change icon here
+            imageView.setImageResource(R.drawable.lixo_comum);
         }
 
         return rowView;

@@ -16,7 +16,21 @@
       "lon": -9.0733883
     }
   ],
-  "profile": {
-    "name": "typicode"
-  }
+  "numbers": [
+    {
+      "name": "GNR",
+      "number": 123456789,
+      "description": "sadkasldmasdklm"
+    },
+    {
+      "name": "INEM",
+      "number": 112,
+      "description": "asdklsadmksadlkdasm"
+    },
+    {
+      "name": "POICIA MARITIMA",
+      "number": 987654321,
+      "description": "asdsadasdasdasd"
+    }
+  ]
 }

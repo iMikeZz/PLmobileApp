@@ -1,4 +1,4 @@
-package com.example.plogginglovers.Chat;
+package com.example.plogginglovers.Model;
 
 import java.util.Date;
 

@@ -1,5 +1,6 @@
 package com.example.plogginglovers.Interfaces;
 
+import com.example.plogginglovers.Model.Contact;
 import com.example.plogginglovers.Model.Ecoponto;
 import com.example.plogginglovers.Model.RetroUser;
 
@@ -16,4 +17,7 @@ public interface GetData {
 
     @GET("ecopontos")
     Call<List<Ecoponto>> getAllEcopontos();
+
+    @GET("numbers")
+    Call<List<Contact>> getAllNumbers();
 }

@@ -66,7 +66,8 @@ public class Home extends AppCompatActivity
             public void onClick(View v) {
                 //startActivity(ChatActivity.getIntent(Home.this));
                 //startActivity(ApiUsersTestActivity.getIntent(Home.this));
-                startActivity(EcopontosActivity.getIntent(Home.this));
+                //startActivity(EcopontosActivity.getIntent(Home.this));
+                startActivity(ContactsActivity.getIntent(Home.this));
             }
         });
 

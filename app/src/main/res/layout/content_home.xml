@@ -6,19 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Home">
 
-    <LinearLayout
-        android:id="@+id/headerView"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" >
-    </LinearLayout>
-
     <ScrollView
         android:id="@+id/scrollablContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/headerView" >
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:id="@+id/content"
@@ -28,31 +19,47 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/activity_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="205dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="@dimen/mtrl_card_spacing"
+                android:layout_marginTop="65dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
                 android:minHeight="200dp"
                 app:cardCornerRadius="10dp">
 
-                <ImageView
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/side_nav_bar"
-                    android:contentDescription="CardImageViewDesc" />
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textAllCaps="true"
-                    android:text="actividades"
-                    android:textSize="18sp" />
+                    <ImageView
+                        android:layout_width="245dp"
+                        android:layout_height="193dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="81dp"
+                        android:contentDescription="CardImageViewDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_activity_black_24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="51dp"
+                        android:layout_marginEnd="115dp"
+                        android:layout_marginBottom="107dp"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="actividades"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
+                </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -74,12 +81,12 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center_vertical"
+                    android:text="Testing"
                     android:textAllCaps="true"
-                    android:text="Joshua Sortino - Via Unsplash"
                     android:textSize="18sp" />
             </com.google.android.material.card.MaterialCardView>
 

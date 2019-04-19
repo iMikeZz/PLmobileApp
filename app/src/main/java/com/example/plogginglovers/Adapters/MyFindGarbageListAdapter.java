@@ -22,11 +22,11 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
     private final ArrayList<String> garbageList = new ArrayList<>();
     private ArrayList<String> filterListAux = new ArrayList<>();
 
-    public MyFindGarbageListAdapter(Activity context, ArrayList<String> maintitles) {
-        super(context, R.layout.my_list, maintitles);
+    public MyFindGarbageListAdapter(Activity context, ArrayList<String> garbagesList) {
+        super(context, R.layout.my_list, garbagesList);
         this.context=context;
-        garbageList.addAll(maintitles);
-        filterListAux.addAll(maintitles);
+        garbageList.addAll(garbagesList);
+        filterListAux.addAll(garbagesList);
     }
 
     public View getView(int position, View view, ViewGroup parent) {

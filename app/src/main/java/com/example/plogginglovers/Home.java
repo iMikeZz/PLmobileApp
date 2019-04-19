@@ -55,7 +55,7 @@ public class Home extends AppCompatActivity
         activity_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ActiveActivity.getIntent(Home.this));
+                startActivity(ActivitiesActivity.getIntent(Home.this));
             }
         });
 

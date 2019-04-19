@@ -1,45 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:gravity="center"
+    android:id="@+id/relativeLayout2"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
 
     <TextView
         android:id="@+id/tv_steps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:layout_width="51dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="0"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_wrapHeight="76"
+        tools:layout_conversion_wrapWidth="134" />
 
-
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Pedometer" />
-
-    <Button
-        android:id="@+id/btn_stop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stop Pedometer"
-        />
 
     <TextView
         android:id="@+id/countDownTimer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="57dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="0000"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_wrapHeight="76"
+        tools:layout_conversion_wrapWidth="150" />
 
     <TextView
         android:id="@+id/caloriesTxt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="53dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="0"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_wrapHeight="76"
+        tools:layout_conversion_wrapWidth="139" />
 
     <TextView
         android:id="@+id/kilometersTxt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="56dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="0"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_wrapHeight="76"
+        tools:layout_conversion_wrapWidth="147" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="29dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/walking"
+        tools:layout_conversion_wrapHeight="76"
+        tools:layout_conversion_wrapWidth="131" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="41dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toEndOf="@+id/kilometersTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/foot"
+        tools:layout_conversion_wrapHeight="76"
+        tools:layout_conversion_wrapWidth="108" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="38dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_steps"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/calories"
+        tools:layout_conversion_wrapHeight="76"
+        tools:layout_conversion_wrapWidth="100" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_height="29dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toEndOf="@+id/caloriesTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/timer"
+        tools:layout_conversion_wrapHeight="76"
+        tools:layout_conversion_wrapWidth="63" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

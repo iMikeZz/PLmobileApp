@@ -16,9 +16,12 @@ import android.os.CountDownTimer;
 import androidx.core.app.TaskStackBuilder;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
@@ -45,8 +48,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         simpleStepDetector.registerListener(this);
 
         TvSteps = (TextView) findViewById(R.id.tv_steps);
-        Button BtnStart = (Button) findViewById(R.id.btn_start);
-        Button BtnStop = (Button) findViewById(R.id.btn_stop);
         txtCals = (TextView) findViewById(R.id.caloriesTxt);
         txtKilos = (TextView) findViewById(R.id.kilometersTxt);
 
@@ -54,7 +55,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
-                countDownTimer.setText("seconds remaining: " + millisUntilFinished / 1000);
+                countDownTimer.setText("00:" + millisUntilFinished / 1000);
             }
 
             public void onFinish() {
@@ -82,21 +83,8 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             }
         }.start();
 
-        BtnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                numSteps = 0;
-                sensorManager.registerListener(ActiveActivity.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
-            }
-        });
-
-
-        BtnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                sensorManager.unregisterListener(ActiveActivity.this);
-            }
-        });
+        numSteps = 0;
+        sensorManager.registerListener(ActiveActivity.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void createNotificationChannel() {
@@ -138,5 +126,39 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
     public static Intent getIntent(Context context){
         return new Intent(context, ActiveActivity.class);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.camera_galery_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.galleryMenuItem:
+                Toast.makeText(getApplicationContext(), "Showing gallery", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.camMenuItem:
+                Toast.makeText(getApplicationContext(), "Taking a pic", Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        sensorManager.unregisterListener(ActiveActivity.this);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        sensorManager.unregisterListener(ActiveActivity.this);
+        super.onDestroy();
     }
 }

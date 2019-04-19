@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.plogginglovers.Adapters.ContactsListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
@@ -59,7 +58,7 @@ public class ContactsActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     dataModels.addAll(response.body());
 
-                    adapter= new ContactsListAdapter(dataModels, getApplicationContext());
+                    adapter = new ContactsListAdapter(dataModels, getApplicationContext());
 
                     listView.setAdapter(adapter);
 

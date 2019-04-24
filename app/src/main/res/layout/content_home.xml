@@ -20,10 +20,11 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/activity_card"
                 android:layout_width="wrap_content"
-                android:layout_height="205dp"
+                android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
                 android:layout_marginTop="65dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
+                android:background="@drawable/actividades"
                 android:minHeight="200dp"
                 app:cardCornerRadius="10dp">
 
@@ -32,33 +33,40 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:layout_width="245dp"
-                        android:layout_height="193dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginEnd="81dp"
-                        android:contentDescription="CardImageViewDesc"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_activity_black_24dp" />
-
-                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="51dp"
-                        android:layout_marginEnd="115dp"
-                        android:layout_marginBottom="107dp"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:text="actividades"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp" />
+                        android:contentDescription="CardImageViewDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/actividades" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/action_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="154dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="108dp"
+                        android:enabled="false"
+                        android:text="Actividades"
+                        android:textColor="#FFFFFF"
+                        app:chipBackgroundColor="#EB525252"
+                        app:chipIcon="@drawable/ic_nature_people_white_24dp"
+                        app:iconStartPadding="5dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="159dp"
+                        android:layout_marginTop="112dp"
+                        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -78,16 +86,6 @@
                     android:src="@drawable/side_nav_bar"
                     android:contentDescription="CardImageViewDesc" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center_vertical"
-                    android:text="Testing"
-                    android:textAllCaps="true"
-                    android:textSize="18sp" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView

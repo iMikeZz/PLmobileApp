@@ -58,7 +58,7 @@
                         app:iconStartPadding="5dp" />
 
                     <ImageView
-                        android:id="@+id/imageView3"
+                        android:id="@+id/imageView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -72,77 +72,214 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/chat_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="@dimen/mtrl_card_spacing"
+                android:layout_marginTop="65dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:minHeight="200dp">
+                android:background="@drawable/actividades"
+                android:minHeight="200dp"
+                app:cardCornerRadius="10dp">
 
-                <ImageView
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/side_nav_bar"
-                    android:contentDescription="CardImageViewDesc" />
+                    android:layout_height="match_parent">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:contentDescription="CardImageViewDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/stats" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/stats_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="154dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="122dp"
+                        android:enabled="false"
+                        android:text="Estatisticas"
+                        android:textColor="#FFFFFF"
+                        app:chipBackgroundColor="#EB525252"
+                        app:chipIcon="@drawable/ic_stats_white_24dp"
+                        app:iconStartPadding="5dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="139dp"
+                        android:layout_marginTop="126dp"
+                        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+                </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/find_garbage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/contactos_card"
+                android:layout_width="wrap_content"
+                android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="@dimen/mtrl_card_spacing"
+                android:layout_marginTop="65dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:minHeight="200dp">
+                android:background="@drawable/actividades"
+                android:minHeight="200dp"
+                app:cardCornerRadius="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lixo" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:contentDescription="CardImageViewDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/contactos" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/contactos_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="154dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="122dp"
+                        android:enabled="false"
+                        android:text="Estatisticas"
+                        android:textColor="#FFFFFF"
+                        app:chipBackgroundColor="#EB525252"
+                        app:chipIcon="@drawable/ic_contact_phone_white_24dp"
+                        app:iconStartPadding="5dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="139dp"
+                        android:layout_marginTop="126dp"
+                        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+                </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/rankings_card"
+                android:layout_width="wrap_content"
+                android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="@dimen/mtrl_card_spacing"
+                android:layout_marginTop="65dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:minHeight="200dp">
+                android:background="@drawable/rankings"
+                android:minHeight="200dp"
+                app:cardCornerRadius="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:contentDescription="CardImageViewDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/rankings" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ranking_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="154dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="122dp"
+                        android:enabled="false"
+                        android:text="Rankings"
+                        android:textColor="#FFFFFF"
+                        app:chipBackgroundColor="#EB525252"
+                        app:chipIcon="@drawable/ic_ranking_white_24dp"
+                        app:iconStartPadding="5dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="139dp"
+                        android:layout_marginTop="126dp"
+                        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+                </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/achievements_card"
+                android:layout_width="wrap_content"
+                android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="@dimen/mtrl_card_spacing"
+                android:layout_marginTop="65dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:minHeight="200dp">
+                android:background="@drawable/achievements"
+                android:minHeight="200dp"
+                app:cardCornerRadius="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5" />
-            </com.google.android.material.card.MaterialCardView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="@dimen/mtrl_card_spacing"
-                android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:minHeight="200dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:contentDescription="CardImageViewDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/achievements" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="6" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/achievements_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="154dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="122dp"
+                        android:enabled="false"
+                        android:text="Conquistas"
+                        android:textColor="#FFFFFF"
+                        app:chipBackgroundColor="#EB525252"
+                        app:chipIcon="@drawable/ic_achievements_white_24dp"
+                        app:iconStartPadding="5dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="139dp"
+                        android:layout_marginTop="126dp"
+                        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+                </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>

@@ -79,7 +79,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 // notificationID allows you to update the notification later on.
                 // mNotificationManager.createNotificationChannelGroup(new NotificationChannelGroup("888", "batata"));
                 mNotificationManager.notify(001, mBuilder.build());
-
             }
         }.start();
 

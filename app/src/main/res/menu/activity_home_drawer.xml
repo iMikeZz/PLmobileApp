@@ -27,7 +27,7 @@
             <item
                 android:id="@+id/nav_account"
                 android:icon="@drawable/ic_account_circle_black_24dp"
-                android:title="Conta" />
+                android:title="Perfil" />
         </menu>
     </item>
 

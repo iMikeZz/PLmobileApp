@@ -71,11 +71,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/chat_card"
+                android:id="@+id/stats_card"
                 android:layout_width="wrap_content"
                 android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="65dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
                 android:background="@drawable/actividades"
                 android:minHeight="200dp"
@@ -124,11 +124,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/contactos_card"
+                android:id="@+id/contacts_card"
                 android:layout_width="wrap_content"
                 android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="65dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
                 android:background="@drawable/actividades"
                 android:minHeight="200dp"
@@ -157,7 +157,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="122dp"
                         android:enabled="false"
-                        android:text="Estatisticas"
+                        android:text="Contactos"
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_contact_phone_white_24dp"
@@ -181,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="65dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
                 android:background="@drawable/rankings"
                 android:minHeight="200dp"
@@ -234,7 +234,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="169dp"
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                android:layout_marginTop="65dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
                 android:background="@drawable/achievements"
                 android:minHeight="200dp"
@@ -281,8 +281,6 @@
 
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </ScrollView>
-
 </RelativeLayout>

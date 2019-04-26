@@ -27,7 +27,7 @@ public class ActivitiesActivity extends AppCompatActivity {
 
         ListView activeActivitiesList = findViewById(R.id.activeActivityList);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, dataModels);
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dataModels);
 
         activeActivitiesList.setAdapter(adapter);
 

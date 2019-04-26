@@ -50,9 +50,9 @@ public class Home extends AppCompatActivity
             }
         });
 
-        View chat_card = findViewById(R.id.chat_card);
+        View rankings_card = findViewById(R.id.rankings_card);
 
-        chat_card.setOnClickListener(new View.OnClickListener() {
+        rankings_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //startActivity(ChatActivity.getIntent(Home.this));
@@ -63,7 +63,8 @@ public class Home extends AppCompatActivity
             }
         });
 
-        View findGarbage = findViewById(R.id.find_garbage);
+
+        View findGarbage = findViewById(R.id.achievements_card);
 
         findGarbage.setOnClickListener(new View.OnClickListener() {
             @Override

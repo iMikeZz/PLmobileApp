@@ -39,39 +39,8 @@ public class Home extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
-
-        View activity_card = findViewById(R.id.activity_card);
-
-        activity_card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(ActivitiesActivity.getIntent(Home.this));
-            }
-        });
-
-        View rankings_card = findViewById(R.id.rankings_card);
-
-        rankings_card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startActivity(ChatActivity.getIntent(Home.this));
-                //startActivity(ApiUsersTestActivity.getIntent(Home.this));
-                //startActivity(EcopontosActivity.getIntent(Home.this));
-                startActivity(ContactsActivity.getIntent(Home.this));
-                //startActivity(RankingActivity.getIntent(Home.this));
-            }
-        });
-
-
-        View findGarbage = findViewById(R.id.achievements_card);
-
-        findGarbage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(FindGarbageActivity.getIntent(Home.this));
-            }
-        });
     }
 
 
@@ -108,26 +77,28 @@ public class Home extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view message clicks here.
         int id = item.getItemId();
 
+        //todo tem de ser verifixcado qual é a atividade atual para não estar a criar atividades por cima de atividades
+
         if (id == R.id.nav_home) {
            //fazer aqui o handle
+            startActivity(Home.getIntent(this));
         } else if (id == R.id.nav_achievements) {
-
+            startActivity(AchievementsActivity.getIntent(this));
         } else if (id == R.id.nav_account) {
-
+            startActivity(AccountActivity.getIntent(this));
         } else if (id == R.id.nav_activity) {
-
+            startActivity(ActivitiesActivity.getIntent(Home.this));
         } else if (id == R.id.nav_contacts) {
-
+            startActivity(ContactsActivity.getIntent(this));
         } else if (id == R.id.nav_rankings) {
-
+            startActivity(RankingActivity.getIntent(this));
         } else if (id == R.id.nav_stats) {
-
+            startActivity(StatisticsActivity.getIntent(this));
         } else if (id == R.id.nav_logout){
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
@@ -143,4 +114,28 @@ public class Home extends AppCompatActivity
     public static Intent getIntent(Context context){
         return new Intent(context, Home.class);
     }
+
+    //region On Click Methods method
+
+    public void onClickGoToActivities(View view){
+        startActivity(ActivitiesActivity.getIntent(this));
+    }
+
+    public void onClickGoToStatistics(View view) {
+        startActivity(StatisticsActivity.getIntent(this));
+    }
+
+    public void onClickGoToContacts(View view) {
+        startActivity(ContactsActivity.getIntent(this));
+    }
+
+    public void onClickGoToRankings(View view) {
+        startActivity(RankingActivity.getIntent(this));
+    }
+
+    public void onClickGoToAchievements(View view) {
+        startActivity(AchievementsActivity.getIntent(this));
+    }
+
+    //endregion
 }

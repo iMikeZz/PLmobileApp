@@ -24,9 +24,9 @@
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
                 android:layout_marginTop="65dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:background="@drawable/actividades"
                 android:minHeight="200dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:onClick="onClickGoToActivities">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -55,7 +55,8 @@
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_nature_people_white_24dp"
-                        app:iconStartPadding="5dp" />
+                        app:iconStartPadding="5dp"
+                        android:onClick="onClickGoToActivities"/>
 
                     <ImageView
                         android:id="@+id/imageView1"
@@ -77,9 +78,9 @@
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:background="@drawable/actividades"
                 android:minHeight="200dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:onClick="onClickGoToStatistics">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -103,12 +104,12 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="122dp"
-                        android:enabled="false"
                         android:text="Estatisticas"
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_stats_white_24dp"
-                        app:iconStartPadding="5dp" />
+                        app:iconStartPadding="5dp"
+                        android:onClick="onClickGoToStatistics"/>
 
                     <ImageView
                         android:id="@+id/imageView2"
@@ -130,9 +131,9 @@
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:background="@drawable/actividades"
                 android:minHeight="200dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:onClick="onClickGoToContacts">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -156,12 +157,12 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="122dp"
-                        android:enabled="false"
                         android:text="Contactos"
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_contact_phone_white_24dp"
-                        app:iconStartPadding="5dp" />
+                        app:iconStartPadding="5dp"
+                        android:onClick="onClickGoToContacts"/>
 
                     <ImageView
                         android:id="@+id/imageView4"
@@ -183,9 +184,9 @@
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:background="@drawable/rankings"
                 android:minHeight="200dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:onClick="onClickGoToRankings">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -209,12 +210,12 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="122dp"
-                        android:enabled="false"
                         android:text="Rankings"
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_ranking_white_24dp"
-                        app:iconStartPadding="5dp" />
+                        app:iconStartPadding="5dp"
+                        android:onClick="onClickGoToRankings"/>
 
                     <ImageView
                         android:id="@+id/imageView5"
@@ -237,9 +238,9 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/achievements"
                 android:minHeight="200dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:onClick="onClickGoToAchievements">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -263,12 +264,12 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="122dp"
-                        android:enabled="false"
                         android:text="Conquistas"
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_achievements_white_24dp"
-                        app:iconStartPadding="5dp" />
+                        app:iconStartPadding="5dp"
+                        android:onClick="onClickGoToAchievements"/>
 
                     <ImageView
                         android:id="@+id/imageView6"

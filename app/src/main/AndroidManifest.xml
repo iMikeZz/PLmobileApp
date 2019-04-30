@@ -16,7 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RankingActivity"></activity>
+        <activity android:name=".AccountActivity"></activity>
+        <activity android:name=".AchievementsActivity" />
+        <activity android:name=".StatisticsActivity" />
+        <activity android:name=".RankingActivity" />
         <activity android:name=".ActivitiesActivity" />
         <activity android:name=".ContactsActivity" />
         <activity android:name=".FindGarbageActivity" />

@@ -10,11 +10,14 @@ import android.widget.TextView;
 
 import com.example.plogginglovers.Model.RecyclingManager;
 import com.example.plogginglovers.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 import androidx.core.content.ContextCompat;
+
+import io.github.tonnyl.light.Light;
 
 
 public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
@@ -37,7 +40,7 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
         System.out.println(titleText.getText().toString());
-        String ecoponto = RecyclingManager.INSTANCE.getEcoponto(garbageList.get(position));
+        final String ecoponto = RecyclingManager.INSTANCE.getEcoponto(garbageList.get(position));
         if (ecoponto.equals("Amarelo")){
             titleText.setText(garbageList.get(position));
             imageView.setImageResource(R.drawable.ecoponto_amarelo);
@@ -51,6 +54,13 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
             titleText.setText(garbageList.get(position));
             imageView.setImageResource(R.drawable.lixo_comum);
         }
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Light.normal(v, "Ecoponto " + ecoponto, Snackbar.LENGTH_SHORT);
+            }
+        });
 
         return rowView;
     }

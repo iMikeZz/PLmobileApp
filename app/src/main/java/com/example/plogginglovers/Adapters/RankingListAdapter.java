@@ -15,6 +15,7 @@ import java.util.List;
 
 public class RankingListAdapter extends ArrayAdapter<Team> {
     private Activity activity;
+    private int posAux = 4;
 
     public RankingListAdapter(Activity activity, int resource, List<Team> objects) {
         super(activity, resource, objects);
@@ -81,6 +82,7 @@ public class RankingListAdapter extends ArrayAdapter<Team> {
                 break;
             default:
                 holder.trophy.setImageDrawable(null);
+                holder.place.setText(String.valueOf(posAux++));
                 break;
         }
 
@@ -98,11 +100,13 @@ public class RankingListAdapter extends ArrayAdapter<Team> {
         private TextView name;
         private ImageView teamImage;
         private ImageView trophy;
+        private TextView place;
 
         public ViewHolder(View v) {
             name = (TextView) v.findViewById(R.id.txtViewName);
             teamImage = (ImageView) v.findViewById(R.id.teamImage);
             trophy = (ImageView) v.findViewById(R.id.trophy);
+            place = (TextView) v.findViewById(R.id.txtPlace);
         }
     }
 }

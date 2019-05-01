@@ -1,5 +1,9 @@
 package com.example.plogginglovers;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,8 +47,6 @@ public class Home extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -82,24 +84,35 @@ public class Home extends AppCompatActivity
         // Handle navigation view message clicks here.
         int id = item.getItemId();
 
-        //todo tem de ser verifixcado qual é a atividade atual para não estar a criar atividades por cima de atividades
+        //todo tem de ser verificado qual é a atividade atual para não estar a criar atividades por cima de atividades
+        /*
+        ActivityManager am = (ActivityManager)getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
+        */
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_home && !item.isChecked()) {
            //fazer aqui o handle
             startActivity(Home.getIntent(this));
-        } else if (id == R.id.nav_achievements) {
+            finish();
+        } else if (id == R.id.nav_achievements && !item.isChecked()) {
             startActivity(AchievementsActivity.getIntent(this));
-        } else if (id == R.id.nav_account) {
+            finish();
+        } else if (id == R.id.nav_account && !item.isChecked()) {
             startActivity(AccountActivity.getIntent(this));
-        } else if (id == R.id.nav_activity) {
-            startActivity(ActivitiesActivity.getIntent(Home.this));
-        } else if (id == R.id.nav_contacts) {
+            finish();
+        } else if (id == R.id.nav_activity && !item.isChecked()) {
+            startActivity(ActivitiesActivity.getIntent(this));
+            finish();
+        } else if (id == R.id.nav_contacts && !item.isChecked()) {
             startActivity(ContactsActivity.getIntent(this));
-        } else if (id == R.id.nav_rankings) {
+            finish();
+        } else if (id == R.id.nav_rankings && !item.isChecked()) {
             startActivity(RankingActivity.getIntent(this));
-        } else if (id == R.id.nav_stats) {
+            finish();
+        } else if (id == R.id.nav_stats && !item.isChecked()) {
             startActivity(StatisticsActivity.getIntent(this));
-        } else if (id == R.id.nav_logout){
+            finish();
+        } else if (id == R.id.nav_logout && !item.isChecked()){
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
             startActivity(LoginActivity.getIntent(this));

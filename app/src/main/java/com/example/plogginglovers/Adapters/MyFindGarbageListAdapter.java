@@ -58,7 +58,8 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Light.normal(v, "Ecoponto " + ecoponto, Snackbar.LENGTH_SHORT);
+                Light.make(v, "Ecoponto " + ecoponto, R.drawable.trash_can, R.color.material_grey /*backgroung*/, R.color.white /*textColor*/, Snackbar.LENGTH_SHORT).show();
+                //Light.normal(v, "Ecoponto " + ecoponto, Snackbar.LENGTH_SHORT);
             }
         });
 

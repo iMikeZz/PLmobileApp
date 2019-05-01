@@ -16,8 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AccountActivity"></activity>
-        <activity android:name=".AchievementsActivity" />
+        <activity android:name=".AccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".AchievementsActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".StatisticsActivity" />
         <activity android:name=".RankingActivity" />
         <activity android:name=".ActivitiesActivity" />
@@ -33,6 +34,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".ApiUsersTestActivity" />
+        <activity
+            android:name=".EcopontosActivity"
+            android:label="@string/title_activity_ecopontos" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".ActiveActivity" />
+        <activity
+            android:name=".Home"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -49,15 +59,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".EcopontosActivity"
-            android:label="@string/title_activity_ecopontos" />
-        <activity android:name=".ChatActivity" />
-        <activity android:name=".ActiveActivity" />
-        <activity
-            android:name=".Home"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

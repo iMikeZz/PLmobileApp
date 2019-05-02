@@ -151,9 +151,11 @@ public class Home extends AppCompatActivity
     }
 
     public void onClickGoToEcopontos(View view) {
+        startActivity(EcopontosActivity.getIntent(this));
     }
 
     public void onClickGoToFindGarbage(View view) {
+        startActivity(FindGarbageActivity.getIntent(this));
     }
 
     //endregion

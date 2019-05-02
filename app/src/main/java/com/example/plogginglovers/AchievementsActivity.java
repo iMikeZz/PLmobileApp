@@ -11,8 +11,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.plogginglovers.Adapters.AchievementsAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -40,6 +48,10 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
         //navigationView.getMenu().getItem(4).setChecked(true);
         navigationView.getMenu().findItem(R.id.nav_achievements).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
+
+        GridView gridView = findViewById(R.id.gridViewAchievements);
+        AchievementsAdapter achievementsAdapter = new AchievementsAdapter(this);
+        gridView.setAdapter(achievementsAdapter);
     }
 
     public static Intent getIntent(Context context){

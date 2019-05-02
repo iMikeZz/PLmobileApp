@@ -237,7 +237,6 @@
                 android:layout_marginLeft="@dimen/mtrl_card_spacing"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
-                android:layout_marginBottom="10dp"
                 android:minHeight="200dp"
                 app:cardCornerRadius="10dp"
                 android:onClick="onClickGoToAchievements">
@@ -283,6 +282,115 @@
 
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ecopontos_card"
+                android:layout_width="wrap_content"
+                android:layout_height="169dp"
+                android:layout_marginLeft="@dimen/mtrl_card_spacing"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="@dimen/mtrl_card_spacing"
+                android:minHeight="200dp"
+                app:cardCornerRadius="10dp"
+                android:onClick="onClickGoToEcopontos">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:contentDescription="CardImageViewDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ecopontos" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ecopontos_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="154dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="122dp"
+                        android:text="Ecopontos"
+                        android:textColor="#FFFFFF"
+                        app:chipBackgroundColor="#EB525252"
+                        app:chipIcon="@drawable/trash_can"
+                        app:iconStartPadding="5dp"
+                        android:onClick="onClickGoToEcopontos"/>
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="139dp"
+                        android:layout_marginTop="126dp"
+                        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/find_card"
+                android:layout_width="wrap_content"
+                android:layout_height="169dp"
+                android:layout_marginLeft="@dimen/mtrl_card_spacing"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="@dimen/mtrl_card_spacing"
+                android:layout_marginBottom="10dp"
+                android:minHeight="200dp"
+                app:cardCornerRadius="10dp"
+                android:onClick="onClickGoToFindGarbage">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:contentDescription="CardImageViewDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/find" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/find_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="154dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="122dp"
+                        android:text="Separar lixo"
+                        android:textColor="#FFFFFF"
+                        app:chipBackgroundColor="#EB525252"
+                        app:chipIcon="@drawable/ic_search_black_24dp"
+                        app:iconStartPadding="5dp"
+                        android:onClick="onClickGoToFindGarbage"/>
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="139dp"
+                        android:layout_marginTop="126dp"
+                        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

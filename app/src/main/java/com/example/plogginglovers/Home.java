@@ -150,5 +150,11 @@ public class Home extends AppCompatActivity
         startActivity(AchievementsActivity.getIntent(this));
     }
 
+    public void onClickGoToEcopontos(View view) {
+    }
+
+    public void onClickGoToFindGarbage(View view) {
+    }
+
     //endregion
 }

@@ -47,6 +47,16 @@
                 android:icon="@drawable/ic_contact_phone_black_24dp"
                 android:title="Contactos"
                 android:checkable="true"/>
+            <item
+                android:id="@+id/nav_ecopontos"
+                android:icon="@drawable/trash_can_black"
+                android:title="Ecopontos"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/nav_onde_colocar"
+                android:icon="@drawable/ic_search_black_24dp"
+                android:title="Onde Colocar ?"
+                android:checkable="true"/>
         </menu>
     </item>
 

@@ -19,11 +19,11 @@
         <activity android:name=".AccountActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".AchievementsActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".StatisticsActivity" />
-        <activity android:name=".RankingActivity" />
-        <activity android:name=".ActivitiesActivity" />
-        <activity android:name=".ContactsActivity" />
-        <activity android:name=".FindGarbageActivity" />
+        <activity android:name=".StatisticsActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".RankingActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ActivitiesActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ContactsActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".FindGarbageActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -36,9 +36,9 @@
         <activity android:name=".ApiUsersTestActivity" />
         <activity
             android:name=".EcopontosActivity"
-            android:label="@string/title_activity_ecopontos" />
-        <activity android:name=".ChatActivity" />
-        <activity android:name=".ActiveActivity" />
+            android:label="@string/title_activity_ecopontos" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ChatActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ActiveActivity"/>
         <activity
             android:name=".Home"
             android:label="@string/title_activity_home"

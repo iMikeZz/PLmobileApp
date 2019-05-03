@@ -364,17 +364,17 @@
                     <com.google.android.material.chip.Chip
                         android:id="@+id/find_chip"
                         style="@style/Widget.MaterialComponents.Chip.Action"
-                        android:layout_width="154dp"
+                        android:layout_width="165dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="18dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="122dp"
-                        android:text="Separar lixo"
+                        android:text="Onde colocar ?"
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
-                        app:chipIcon="@drawable/ic_search_black_24dp"
+                        app:chipIcon="@drawable/ic_search_white_24dp"
                         app:iconStartPadding="5dp"
                         android:onClick="onClickGoToFindGarbage"/>
 
@@ -384,7 +384,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginStart="139dp"
+                        android:layout_marginStart="153dp"
                         android:layout_marginTop="126dp"
                         app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
 

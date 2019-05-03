@@ -11,6 +11,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -80,7 +82,7 @@ public class Home extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view message clicks here.
         int id = item.getItemId();
 
@@ -112,7 +114,13 @@ public class Home extends AppCompatActivity
         } else if (id == R.id.nav_stats && !item.isChecked()) {
             startActivity(StatisticsActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_logout && !item.isChecked()){
+        } else if (id == R.id.nav_ecopontos && !item.isChecked()){
+            startActivity(EcopontosActivity.getIntent(this));
+            finish();
+        } else if(id == R.id.nav_onde_colocar && !item.isChecked()){
+            startActivity(FindGarbageActivity.getIntent(this));
+            finish();
+        }else if (id == R.id.nav_logout && !item.isChecked()){
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
             startActivity(LoginActivity.getIntent(this));

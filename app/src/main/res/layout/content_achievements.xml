@@ -24,5 +24,6 @@
         android:numColumns="3"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:verticalSpacing="2dp" />
+        android:verticalSpacing="2dp"
+        android:gravity="center"/>
 </RelativeLayout>

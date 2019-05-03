@@ -33,7 +33,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_account);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Account");
+        setTitle("Perfil");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -53,8 +53,8 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        int id = menuItem.getItemId();
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
 
         //todo tem de ser verificado qual é a atividade atual para não estar a criar atividades por cima de atividades
         /*
@@ -62,36 +62,42 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
         */
 
-        if (id == R.id.nav_home && !menuItem.isChecked()) {
+        if (id == R.id.nav_home && !item.isChecked()) {
             //fazer aqui o handle
             startActivity(Home.getIntent(this));
             finish();
-        } else if (id == R.id.nav_achievements && !menuItem.isChecked()) {
+        } else if (id == R.id.nav_achievements && !item.isChecked()) {
             startActivity(AchievementsActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_account && !menuItem.isChecked()) {
+        } else if (id == R.id.nav_account && !item.isChecked()) {
             startActivity(AccountActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_activity && !menuItem.isChecked()) {
+        } else if (id == R.id.nav_activity && !item.isChecked()) {
             startActivity(ActivitiesActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_contacts && !menuItem.isChecked()) {
+        } else if (id == R.id.nav_contacts && !item.isChecked()) {
             startActivity(ContactsActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_rankings && !menuItem.isChecked()) {
+        } else if (id == R.id.nav_rankings && !item.isChecked()) {
             startActivity(RankingActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_stats && !menuItem.isChecked()) {
+        } else if (id == R.id.nav_stats && !item.isChecked()) {
             startActivity(StatisticsActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_logout && !menuItem.isChecked()){
+        } else if (id == R.id.nav_ecopontos && !item.isChecked()){
+            startActivity(EcopontosActivity.getIntent(this));
+            finish();
+        } else if(id == R.id.nav_onde_colocar && !item.isChecked()){
+            startActivity(EcopontosActivity.getIntent(this));
+            finish();
+        }else if (id == R.id.nav_logout && !item.isChecked()){
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
             startActivity(LoginActivity.getIntent(this));
             finish();
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

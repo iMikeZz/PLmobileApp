@@ -19,20 +19,23 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.plogginglovers.Adapters.ObjectListAdapter;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
 
-public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener {
-    private TextView TvSteps, countDownTimer, txtCals, txtKilos;
+public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener {
+    private TextView TvSteps, countDownTimer, txtCals, txtKilos, txtPoints;
     private StepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
+    private int points = 0;
 
     private NotificationManager mNotificationManager;
 
@@ -51,6 +54,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         TvSteps = (TextView) findViewById(R.id.tv_steps);
         txtCals = (TextView) findViewById(R.id.caloriesTxt);
         txtKilos = (TextView) findViewById(R.id.kilometersTxt);
+        txtPoints = (TextView) findViewById(R.id.txtpoints);
 
         countDownTimer = findViewById(R.id.countDownTimer);
 
@@ -84,7 +88,46 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         }.start();
 
         numSteps = 0;
-        sensorManager.registerListener(ActiveActivity.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+
+        ListView listView = findViewById(R.id.objectList);
+        ObjectListAdapter objectListAdapter = new ObjectListAdapter(this, R.layout.object_list_item);
+        listView.setAdapter(objectListAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(position);
+            }
+        });
+
+        //NumberPicker numberPicker = findViewById(R.id.numberPicker);
+
+        //System.out.println(numberPicker);
+
+        /*numberPicker.setNumberPickerChangeListener(new NumberPicker.OnNumberPickerChangeListener() {
+            @Override
+            public void onProgressChanged(@NotNull NumberPicker numberPicker, int i, boolean b) {
+                System.out.println(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(@NotNull NumberPicker numberPicker) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NotNull NumberPicker numberPicker) {
+
+            }
+        });
+        */
+
+        /*
+        TextView textView = findViewById(R.id.txtpoints);
+        textView.setText(String.valueOf(RecyclingManager.INSTANCE.getPoints()));
+        */
+        objectListAdapter.setPointsListener(this);
     }
 
     private void createNotificationChannel() {
@@ -160,5 +203,17 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     protected void onDestroy() {
         sensorManager.unregisterListener(ActiveActivity.this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onPointsAddedListener(int points) {
+        this.points += points;
+        txtPoints.setText(this.points + " pts");
+    }
+
+    @Override
+    public void onPointsRemovedListener(int points) {
+        this.points -= points;
+        txtPoints.setText(this.points + " pts");
     }
 }

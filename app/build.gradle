@@ -55,6 +55,8 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0' //circle Image
 
     implementation 'net.alhazmy13.MediaPicker:libary:2.4.4' //picker
+
+    implementation 'com.github.sephiroth74:NumberSlidingPicker:1.0.3' //numberpicker
 }
 
 

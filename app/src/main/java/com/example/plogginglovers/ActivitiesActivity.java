@@ -106,7 +106,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
             startActivity(EcopontosActivity.getIntent(this));
             finish();
         } else if(id == R.id.nav_onde_colocar && !item.isChecked()){
-            startActivity(EcopontosActivity.getIntent(this));
+            startActivity(FindGarbageActivity.getIntent(this));
             finish();
         }else if (id == R.id.nav_logout && !item.isChecked()){
             mAuth.signOut();

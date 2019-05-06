@@ -27,10 +27,11 @@
         android:id="@+id/picker_card"
         android:layout_width="112dp"
         android:layout_height="40dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
         android:minHeight="200dp"
         app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/txtObjectName"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -99,10 +100,11 @@
         android:id="@+id/txtObjectName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="32dp"
         android:text="Garrafas"
         android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/picker_card"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/objectImage"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -110,8 +112,9 @@
         android:id="@+id/objectImage"
         android:layout_width="63dp"
         android:layout_height="61dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txtObjectName"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bootle" />

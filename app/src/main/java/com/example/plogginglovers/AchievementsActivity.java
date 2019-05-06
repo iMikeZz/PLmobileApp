@@ -30,8 +30,12 @@ import android.widget.Toast;
 
 import com.example.plogginglovers.Adapters.AchievementCostumDialog;
 import com.example.plogginglovers.Adapters.AchievementsAdapter;
+import com.example.plogginglovers.Model.Achievement;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AchievementsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -58,14 +62,21 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
         navigationView.getMenu().findItem(R.id.nav_achievements).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
 
+        final List<Achievement> achievements = new ArrayList<>();
+        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.yellow_achievement, 0));
+        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.grey_achievement, 1));
+        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.brown_achievement, 0));
+        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.yellow_achievement,1));
+
         GridView gridView = findViewById(R.id.gridViewAchievements);
-        AchievementsAdapter achievementsAdapter = new AchievementsAdapter(this);
+        AchievementsAdapter achievementsAdapter = new AchievementsAdapter(this,achievements);
         gridView.setAdapter(achievementsAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Dialog dialog = new AchievementCostumDialog(AchievementsActivity.this);
+                Achievement achievement = achievements.get(position);
+                Dialog dialog = new AchievementCostumDialog(AchievementsActivity.this, achievement.getImg(), achievement.getBackground());
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }

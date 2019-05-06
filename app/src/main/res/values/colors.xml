@@ -11,4 +11,6 @@
     <color name="material_grey">#212121</color>
     <color name="white">#FFFFFF</color>
     <color name="yellow_achievement">#F7DF75</color>
+    <color name="grey_achievement">#bdbdbd</color>
+    <color name="brown_achievement">#FFC97135</color>
 </resources>

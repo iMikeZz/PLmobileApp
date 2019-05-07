@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import android.util.Log;
 import android.view.View;
 import com.google.android.material.navigation.NavigationView;
 
@@ -20,14 +22,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import timber.log.Timber;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
+    private int clickable = 0;
+    private LinearLayout mask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,9 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mask = findViewById(R.id.mask);
+        mask.setVisibility(View.GONE);
     }
 
     @Override
@@ -155,10 +165,13 @@ public class Home extends AppCompatActivity
     }
 
     public void onClickGoToAchievements(View view) {
-        startActivity(AchievementsActivity.getIntent(this));
+        if (clickable == 0)
+            System.out.println("yaaaaa " + clickable);
+            startActivity(AchievementsActivity.getIntent(this));
     }
 
     public void onClickGoToEcopontos(View view) {
+        mask.setVisibility(View.VISIBLE);
         startActivity(EcopontosActivity.getIntent(this));
     }
 
@@ -167,4 +180,11 @@ public class Home extends AppCompatActivity
     }
 
     //endregion
+
+
+    @Override
+    protected void onResume() {
+        mask.setVisibility(View.GONE);
+        super.onResume();
+    }
 }

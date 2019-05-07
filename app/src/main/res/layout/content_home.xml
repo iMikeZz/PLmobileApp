@@ -6,16 +6,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Home">
 
+
     <ScrollView
         android:id="@+id/scrollablContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:clickable="false">
 
         <LinearLayout
             android:id="@+id/content"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/activity_card"
@@ -26,7 +28,8 @@
                 android:layout_marginRight="@dimen/mtrl_card_spacing"
                 android:minHeight="200dp"
                 app:cardCornerRadius="10dp"
-                android:onClick="onClickGoToActivities">
+                android:onClick="onClickGoToActivities"
+                >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -393,4 +396,12 @@
 
         </LinearLayout>
     </ScrollView>
+    <LinearLayout
+        android:id="@+id/mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:visibility="visible"/>
 </RelativeLayout>

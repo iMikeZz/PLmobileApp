@@ -2,6 +2,8 @@ package com.example.plogginglovers.Adapters;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -9,17 +11,16 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.example.plogginglovers.Model.Achievement;
 import com.example.plogginglovers.R;
 
 public class AchievementCostumDialog extends Dialog {
 
-    private int img;
-    private int background;
+    private Achievement achievement;
 
-    public AchievementCostumDialog(@NonNull Context context, int img, int background) {
+    public AchievementCostumDialog(@NonNull Context context, Achievement achievement) {
         super(context);
-        this.img = img;
-        this.background = background;
+        this.achievement = achievement;
     }
 
     @Override
@@ -31,7 +32,18 @@ public class AchievementCostumDialog extends Dialog {
         ImageView image = findViewById(R.id.achievementImage_details);
         ImageView background_view = findViewById(R.id.backgroundImage_details);
 
-        image.setImageResource(img);
-        background_view.setBackgroundResource(background);
+
+        if (achievement.getStatus() == 0){ // not done
+            ColorMatrix matrix = new ColorMatrix();
+            matrix.setSaturation(0);
+
+            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+            image.setColorFilter(filter);
+            background_view.setBackgroundResource(R.color.grey_achievement);
+        }else {
+            image.setImageResource(achievement.getImg());
+            background_view.setBackgroundResource(achievement.getBackground());
+        }
+
     }
 }

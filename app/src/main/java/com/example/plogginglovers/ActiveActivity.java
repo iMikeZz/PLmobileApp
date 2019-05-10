@@ -25,8 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plogginglovers.Adapters.ObjectListAdapter;
+import com.example.plogginglovers.Model.Garbage;
+import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener {
     private TextView TvSteps, countDownTimer, txtCals, txtKilos, txtPoints;
@@ -36,6 +41,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
     private int points = 0;
+    private List<Rubbish> garbageList;
 
     private NotificationManager mNotificationManager;
 
@@ -55,6 +61,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         txtCals = (TextView) findViewById(R.id.caloriesTxt);
         txtKilos = (TextView) findViewById(R.id.kilometersTxt);
         txtPoints = (TextView) findViewById(R.id.txtpoints);
+
+        garbageList = new ArrayList<>();
+
+        garbageList.add(new Rubbish("Garrafas", R.drawable.bootle, 100));
+        garbageList.add(new Rubbish("Garrafas", R.drawable.bootle, 200));
 
         countDownTimer = findViewById(R.id.countDownTimer);
 
@@ -91,7 +102,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
 
         ListView listView = findViewById(R.id.objectList);
-        ObjectListAdapter objectListAdapter = new ObjectListAdapter(this, R.layout.object_list_item);
+        ObjectListAdapter objectListAdapter = new ObjectListAdapter(this, R.layout.object_list_item, garbageList);
         listView.setAdapter(objectListAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

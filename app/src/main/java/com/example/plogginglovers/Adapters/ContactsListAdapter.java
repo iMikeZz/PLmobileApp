@@ -1,6 +1,8 @@
 package com.example.plogginglovers.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +71,8 @@ public class ContactsListAdapter extends ArrayAdapter<Contact>{
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Calling...", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+351917620681"));
+                getContext().startActivity(intent);
             }
         });
         // Return the completed view to render on screen

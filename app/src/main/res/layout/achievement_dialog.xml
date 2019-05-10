@@ -68,6 +68,60 @@
                         android:contentDescription="CardImageViewDesc"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bootle" />
+
+                    <TextView
+                        android:id="@+id/txtAchievementTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:text="Apanhar Garrafinhas"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/txtAchievementTitle"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="182dp"
+                        android:layout_marginTop="203dp"
+                        android:text="Progresso" />
+
+                    <TextView
+                        android:id="@+id/txtAchievementProgresso"
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/txtAchievementTitle"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="182dp"
+                        android:layout_marginTop="224dp"
+                        android:text="0"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/txtAchievementObjetivo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="224dp"
+                        android:layout_marginEnd="4dp"
+                        android:text="100"
+                        android:textAlignment="textEnd" />
+
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="224dp"
+                        android:layout_marginEnd="33dp"
+                        android:text="/" />
+
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>

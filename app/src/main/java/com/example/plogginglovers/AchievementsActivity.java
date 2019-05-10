@@ -76,7 +76,7 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Achievement achievement = achievements.get(position);
-                Dialog dialog = new AchievementCostumDialog(AchievementsActivity.this, achievement.getImg(), achievement.getBackground());
+                Dialog dialog = new AchievementCostumDialog(AchievementsActivity.this, achievement);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }

@@ -1,7 +1,9 @@
 package com.example.plogginglovers.Adapters;
 
 import android.content.Context;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.plogginglovers.Helpers.InputFilterMinMax;
+import com.example.plogginglovers.Model.Contact;
 import com.example.plogginglovers.Model.RecyclingManager;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.R;
+
+import java.util.List;
 
 public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
 
@@ -53,8 +58,8 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
     }
 
 
-    public ObjectListAdapter(@NonNull Context context, int resource/*, @NonNull List<Rubbish> objects*/) {
-        super(context, resource/*, objects*/);
+    public ObjectListAdapter(@NonNull Context context, int resource, @NonNull List<Rubbish> objects) {
+        super(context, resource, objects);
         this.mContext = context;
     }
 
@@ -62,6 +67,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder = null;
+        final Rubbish dataModel = getItem(position);
 
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
@@ -71,41 +77,75 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
+        final ViewHolder finalHolder = holder;
 
-        holder.quantity.setFilters(new InputFilter[]{new InputFilterMinMax("0", "100")});
+        holder.quantity.setFilters(new InputFilter[]{new InputFilterMinMax("0", "999")});
+
+        holder.name.setText(dataModel.getName());
+
+        holder.image.setImageResource(dataModel.getImage());
 
         if (holder.quantity.getText().toString().equals("0")){
             //todo set clickable false no botao menos
+            holder.buttonMinus.setEnabled(false);
         }
 
-        final ViewHolder finalHolder = holder;
-        holder.buttonPlus.setOnClickListener(new View.OnClickListener() {
+
+        holder.quantity.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                finalHolder.quantity.setText(String.valueOf(++qty));
-                System.out.println("Adicionei 100 pontos");
-                if (pointsListener != null){
-                    pointsListener.onPointsAddedListener(100);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                System.out.println(s);
+                if (s.length() > 0 && Integer.parseInt(s.toString()) > 0){
+                    finalHolder.buttonMinus.setEnabled(true);
+                } else {
+                    finalHolder.buttonMinus.setEnabled(false);
                 }
             }
-        });
 
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        /*
+
+        if (holder.quantity.getText().toString().equals("100")){
+            //todo set clickable false no botao plus
+            holder.buttonPlus.setEnabled(false);
+        }
+        */
         holder.buttonMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finalHolder.quantity.setText(String.valueOf(--qty));
+                int quantity = dataModel.getQuantity();
+                dataModel.setQuantity(--quantity);
+                finalHolder.quantity.setText(String.valueOf(quantity));
                 System.out.println("Removi 100 pontos");
-                if (pointsListener != null){
-                    pointsListener.onPointsRemovedListener(100);
+                if (pointsListener != null) {
+                    pointsListener.onPointsRemovedListener(dataModel.getScore());
                 }
             }
         });
 
-        return convertView;
-    }
+        holder.buttonPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int quantity = dataModel.getQuantity();
+                dataModel.setQuantity(++quantity);
+                finalHolder.quantity.setText(String.valueOf(quantity));
+                System.out.println("Adicionei 100 pontos");
+                if (pointsListener != null){
+                    pointsListener.onPointsAddedListener(dataModel.getScore());
+                }
+            }
+        });
 
-    @Override
-    public int getCount() {
-        return 5;
+
+
+        return convertView;
     }
 }

@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -102,7 +103,8 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-
+                                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+351917620681"));
+                                    startActivity(intent);
                                     Toast.makeText(getApplicationContext(), "Calling...", Toast.LENGTH_LONG).show();
                                 }
                             });

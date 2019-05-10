@@ -146,28 +146,31 @@ public class Home extends AppCompatActivity
         return new Intent(context, Home.class);
     }
 
-    //region On Click Methods method
+    //region On Click Methods
 
     public void onClickGoToActivities(View view){
+        mask.setVisibility(View.VISIBLE);
         startActivity(ActivitiesActivity.getIntent(this));
     }
 
     public void onClickGoToStatistics(View view) {
+        mask.setVisibility(View.VISIBLE);
         startActivity(StatisticsActivity.getIntent(this));
     }
 
     public void onClickGoToContacts(View view) {
+        mask.setVisibility(View.VISIBLE);
         startActivity(ContactsActivity.getIntent(this));
     }
 
     public void onClickGoToRankings(View view) {
+        mask.setVisibility(View.VISIBLE);
         startActivity(RankingActivity.getIntent(this));
     }
 
     public void onClickGoToAchievements(View view) {
-        if (clickable == 0)
-            System.out.println("yaaaaa " + clickable);
-            startActivity(AchievementsActivity.getIntent(this));
+        mask.setVisibility(View.VISIBLE);
+        startActivity(AchievementsActivity.getIntent(this));
     }
 
     public void onClickGoToEcopontos(View view) {
@@ -176,6 +179,7 @@ public class Home extends AppCompatActivity
     }
 
     public void onClickGoToFindGarbage(View view) {
+        mask.setVisibility(View.VISIBLE);
         startActivity(FindGarbageActivity.getIntent(this));
     }
 

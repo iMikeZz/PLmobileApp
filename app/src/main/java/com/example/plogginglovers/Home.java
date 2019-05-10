@@ -33,7 +33,6 @@ public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
-    private int clickable = 0;
     private LinearLayout mask;
 
     @Override
@@ -101,6 +100,7 @@ public class Home extends AppCompatActivity
         ActivityManager am = (ActivityManager)getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
         ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
         */
+
 
         if (id == R.id.nav_home && !item.isChecked()) {
            //fazer aqui o handle

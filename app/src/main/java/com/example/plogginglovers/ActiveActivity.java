@@ -65,7 +65,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         garbageList = new ArrayList<>();
 
         garbageList.add(new Rubbish("Garrafas", R.drawable.bootle, 100));
-        garbageList.add(new Rubbish("Garrafas", R.drawable.bootle, 200));
+        garbageList.add(new Rubbish("Ecopontos", R.drawable.ecoponto_amarelo, 200));
 
         countDownTimer = findViewById(R.id.countDownTimer);
 

@@ -54,7 +54,7 @@
                 android:checkable="true"/>
             <item
                 android:id="@+id/nav_onde_colocar"
-                android:icon="@drawable/ic_search_black_24dp"
+                android:icon="@drawable/ic_search_blue_24dp"
                 android:title="Onde Colocar ?"
                 android:checkable="true"/>
         </menu>

@@ -2,7 +2,10 @@
 
     <!-- Base application theme. -->
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar"/>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/blue_cenas</item>
+        <item name="android:fontFamily">@font/abc</item>
+    </style>
 
     <!--
 <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">

@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,9 @@ import com.example.plogginglovers.Model.Garbage;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
+
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private int numSteps;
     private int points = 0;
     private List<Rubbish> garbageList;
+    private EditText editTextQuantity;
 
     private NotificationManager mNotificationManager;
 
@@ -61,6 +66,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         txtCals = (TextView) findViewById(R.id.caloriesTxt);
         txtKilos = (TextView) findViewById(R.id.kilometersTxt);
         txtPoints = (TextView) findViewById(R.id.txtpoints);
+        editTextQuantity = findViewById(R.id.editTextNumber);
 
         garbageList = new ArrayList<>();
 
@@ -138,6 +144,26 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         TextView textView = findViewById(R.id.txtpoints);
         textView.setText(String.valueOf(RecyclingManager.INSTANCE.getPoints()));
         */
+
+        /*
+        KeyboardVisibilityEvent.setEventListener(this,
+                new KeyboardVisibilityEventListener() {
+                    @Override
+                    public void onVisibilityChanged(boolean isOpen) {
+                        // some code depending on keyboard visiblity status
+                        if (isOpen){
+                            System.out.println("1");
+                           // Toast.makeText(getApplicationContext(), "abri", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //Toast.makeText(getApplicationContext(), "fechei", Toast.LENGTH_SHORT).show();
+                            //finalHolder.quantity.clearFocus();
+                            System.out.println("0");
+                        }
+                    }
+                });
+
+        */
+
         objectListAdapter.setPointsListener(this);
     }
 
@@ -217,13 +243,13 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     }
 
     @Override
-    public void onPointsAddedListener(int points) {
+    public void onPointsAddedListener(long points) {
         this.points += points;
         txtPoints.setText(this.points + " pts");
     }
 
     @Override
-    public void onPointsRemovedListener(int points) {
+    public void onPointsRemovedListener(long points) {
         this.points -= points;
         txtPoints.setText(this.points + " pts");
     }

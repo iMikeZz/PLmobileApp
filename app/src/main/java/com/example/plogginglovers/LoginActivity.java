@@ -94,4 +94,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    public void onClickGoToResetPassword(View view) {
+        startActivity(ResetPasswordActivity.getIntent(this));
+        finish();
+    }
 }

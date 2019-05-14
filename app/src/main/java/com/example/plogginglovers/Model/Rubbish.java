@@ -5,7 +5,7 @@ public class Rubbish {
     private String name;
     private int image;
     private int score;
-    private int quantity;
+    private long quantity;
 
     public Rubbish(String name, int image, int score) {
         this.name = name;
@@ -38,11 +38,11 @@ public class Rubbish {
         this.image = image;
     }
 
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(long quantity) {
         this.quantity = quantity;
     }
 }

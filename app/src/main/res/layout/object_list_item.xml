@@ -25,13 +25,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/picker_card"
-        android:layout_width="112dp"
+        android:layout_width="105dp"
         android:layout_height="40dp"
+        android:layout_marginEnd="44dp"
         android:minHeight="200dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/txtObjectName"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -45,8 +45,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="86dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="81dp"
+                android:layout_marginTop="10dp"
                 app:srcCompat="@drawable/ic_add_black_24dp"
                 tools:layout_editor_absoluteX="193dp"
                 tools:layout_editor_absoluteY="36dp" />
@@ -58,7 +58,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="1dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 app:srcCompat="@drawable/ic_remove_black_24dp"
                 tools:layout_editor_absoluteX="295dp"
                 tools:layout_editor_absoluteY="36dp" />
@@ -82,7 +82,7 @@
 
             <EditText
                 android:id="@+id/editTextNumber"
-                android:layout_width="59dp"
+                android:layout_width="54dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
@@ -98,25 +98,41 @@
 
     <TextView
         android:id="@+id/txtObjectName"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="12dp"
         android:text="Garrafas"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/txtPointsObject"
         app:layout_constraintEnd_toStartOf="@+id/picker_card"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/objectImage"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <ImageView
         android:id="@+id/objectImage"
-        android:layout_width="63dp"
-        android:layout_height="61dp"
+        android:layout_width="66dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/txtObjectName"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bootle" />
+
+    <TextView
+        android:id="@+id/txtPointsObject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="13dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/picker_card"
+        app:layout_constraintStart_toEndOf="@+id/objectImage"
+        app:layout_constraintTop_toBottomOf="@+id/txtObjectName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

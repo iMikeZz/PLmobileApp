@@ -77,6 +77,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
             @Override
             //Handle a successful response//
             public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
+                //todo otimizar não é necessário lista auxiliar
                 System.out.println(response.body());
                 // Add a marker in Sydney and move the camera
                 dataModels = new ArrayList<>();

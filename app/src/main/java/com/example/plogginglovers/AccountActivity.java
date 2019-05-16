@@ -7,9 +7,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -18,10 +21,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccountActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -112,5 +111,37 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 .allowMultipleImages(false)
                 .enableDebuggingMode(true)
                 .build();
+    }
+
+    public void onClickAlterarPassword(View view) {
+        AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.change_password_dialog, null);
+        dialogBuilder.setTitle("Alterar Password");
+        dialogBuilder.setButton(DialogInterface.BUTTON_POSITIVE, "Alterar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //todo patch
+                dialog.dismiss();
+            }
+        });
+
+        dialogBuilder.setButton(DialogInterface.BUTTON_NEUTRAL, "Voltar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        /*
+        TextView txtNumber = (TextView) dialogView.findViewById(R.id.txtNumber);
+        TextView txtDescription = (TextView) dialogView.findViewById(R.id.txtDescription);
+
+        txtNumber.setText(String.valueOf(contact.getPhoneNumber()));
+        txtDescription.setText(contact.getDescription());
+        */
+
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.show();
     }
 }

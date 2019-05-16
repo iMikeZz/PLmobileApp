@@ -1,6 +1,7 @@
 package com.example.plogginglovers.Interfaces;
 
 import com.example.plogginglovers.Model.Contact;
+import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.Ecoponto;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
@@ -24,8 +25,8 @@ public interface GetData {
     @GET("ecopontos")
     Call<List<Ecoponto>> getAllEcopontos();
 
-    @GET("numbers")
-    Call<List<Contact>> getAllNumbers();
+    @GET("emergency-contacts")
+    Call<ContactList> getAllNumbers();
 
     @FormUrlEncoded
     @POST("login")

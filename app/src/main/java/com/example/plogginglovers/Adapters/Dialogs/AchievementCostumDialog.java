@@ -1,4 +1,4 @@
-package com.example.plogginglovers.Adapters;
+package com.example.plogginglovers.Adapters.Dialogs;
 
 import android.app.Dialog;
 import android.content.Context;

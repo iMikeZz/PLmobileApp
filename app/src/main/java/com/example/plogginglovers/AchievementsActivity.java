@@ -7,28 +7,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.plogginglovers.Adapters.AchievementCostumDialog;
+import com.example.plogginglovers.Adapters.Dialogs.AchievementCostumDialog;
 import com.example.plogginglovers.Adapters.AchievementsAdapter;
 import com.example.plogginglovers.Model.Achievement;
 import com.google.android.material.navigation.NavigationView;
@@ -65,7 +56,7 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
         final List<Achievement> achievements = new ArrayList<>();
         achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.yellow_achievement, 0));
         achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.grey_achievement, 1));
-        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.brown_achievement, 0));
+        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.brown_achievement, 1));
         achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.yellow_achievement,1));
 
         GridView gridView = findViewById(R.id.gridViewAchievements);

@@ -11,7 +11,8 @@
         android:id="@+id/scrollablContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false">
+        android:clickable="false"
+        >
 
         <LinearLayout
             android:id="@+id/content"
@@ -53,13 +54,13 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="122dp"
-                        android:enabled="true"
                         android:text="Actividades"
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_nature_people_white_24dp"
                         app:iconStartPadding="5dp"
-                        android:onClick="onClickGoToActivities"/>
+                        android:onClick="onClickGoToActivities"
+                        android:textAppearance="@style/chipTextAppearance"/>
 
                     <ImageView
                         android:id="@+id/imageView1"
@@ -112,7 +113,8 @@
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_stats_white_24dp"
                         app:iconStartPadding="5dp"
-                        android:onClick="onClickGoToStatistics"/>
+                        android:onClick="onClickGoToStatistics"
+                        android:textAppearance="@style/chipTextAppearance"/>
 
                     <ImageView
                         android:id="@+id/imageView2"
@@ -165,7 +167,8 @@
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_contact_phone_white_24dp"
                         app:iconStartPadding="5dp"
-                        android:onClick="onClickGoToContacts"/>
+                        android:onClick="onClickGoToContacts"
+                        android:textAppearance="@style/chipTextAppearance"/>
 
                     <ImageView
                         android:id="@+id/imageView4"
@@ -218,7 +221,8 @@
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_ranking_white_24dp"
                         app:iconStartPadding="5dp"
-                        android:onClick="onClickGoToRankings"/>
+                        android:onClick="onClickGoToRankings"
+                        android:textAppearance="@style/chipTextAppearance"/>
 
                     <ImageView
                         android:id="@+id/imageView5"
@@ -271,7 +275,8 @@
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_achievements_white_24dp"
                         app:iconStartPadding="5dp"
-                        android:onClick="onClickGoToAchievements"/>
+                        android:onClick="onClickGoToAchievements"
+                        android:textAppearance="@style/chipTextAppearance"/>
 
                     <ImageView
                         android:id="@+id/imageView6"
@@ -325,7 +330,8 @@
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/trash_can"
                         app:iconStartPadding="5dp"
-                        android:onClick="onClickGoToEcopontos"/>
+                        android:onClick="onClickGoToEcopontos"
+                        android:textAppearance="@style/chipTextAppearance"/>
 
                     <ImageView
                         android:id="@+id/imageView7"
@@ -379,7 +385,8 @@
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_search_white_24dp"
                         app:iconStartPadding="5dp"
-                        android:onClick="onClickGoToFindGarbage"/>
+                        android:onClick="onClickGoToFindGarbage"
+                        android:textAppearance="@style/chipTextAppearance"/>
 
                     <ImageView
                         android:id="@+id/imageView8"

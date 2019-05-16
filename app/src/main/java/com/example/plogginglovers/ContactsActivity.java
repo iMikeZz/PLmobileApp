@@ -27,6 +27,7 @@ import com.example.plogginglovers.Adapters.ContactsListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Contact;
+import com.example.plogginglovers.Model.ContactList;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -70,20 +71,20 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-        Call<List<Contact>> call = service.getAllNumbers();
+        Call<ContactList> call = service.getAllNumbers();
 
         //Execute the request asynchronously//
-        call.enqueue(new Callback<List<Contact>>() {
+        call.enqueue(new Callback<ContactList>() {
             @Override
             //Handle a successful response//
-            public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
+            public void onResponse(Call<ContactList> call, Response<ContactList> response) {
                 //todo otimizar não é necessário lista auxiliar
                 System.out.println(response.body());
                 // Add a marker in Sydney and move the camera
                 dataModels = new ArrayList<>();
 
                 if (response.body() != null) {
-                    dataModels.addAll(response.body());
+                    dataModels.addAll(response.body().getData());
 
                     adapter = new ContactsListAdapter(dataModels, getApplicationContext());
 
@@ -98,19 +99,19 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                             //new MaterialDialog(getApplicationContext());
                             LayoutInflater inflater = ContactsActivity.this.getLayoutInflater();
                             View dialogView = inflater.inflate(R.layout.contact_info_dialog, null);
-                            dialogBuilder.setTitle("Call " + contact.getName() + " ?");
+                            dialogBuilder.setTitle("Ligar para " + contact.getName() + " ?");
                             dialogBuilder.setIcon(R.drawable.call);
-                            dialogBuilder.setButton(DialogInterface.BUTTON_POSITIVE, "Call", new DialogInterface.OnClickListener() {
+                            dialogBuilder.setButton(DialogInterface.BUTTON_POSITIVE, "Ligar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+351917620681"));
+                                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+351917620681")); //todo change to the real number
                                     startActivity(intent);
-                                    Toast.makeText(getApplicationContext(), "Calling...", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "A Ligar...", Toast.LENGTH_LONG).show();
                                 }
                             });
 
-                            dialogBuilder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                            dialogBuilder.setButton(DialogInterface.BUTTON_NEUTRAL, "Voltar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -120,7 +121,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                             TextView txtNumber = (TextView) dialogView.findViewById(R.id.txtNumber);
                             TextView txtDescription = (TextView) dialogView.findViewById(R.id.txtDescription);
 
-                            txtNumber.setText(String.valueOf(contact.getNumber()));
+                            txtNumber.setText(String.valueOf(contact.getPhoneNumber()));
                             txtDescription.setText(contact.getDescription());
 
                             dialogBuilder.setView(dialogView);
@@ -132,31 +133,12 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
 
             @Override
             //Handle execution failures//
-            public void onFailure(Call<List<Contact>> call, Throwable throwable) {
+            public void onFailure(Call<ContactList> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
                 Toast.makeText(ContactsActivity.this, "Unable to load contacts", Toast.LENGTH_SHORT).show();
             }
         });
-
-        /*
-        dataModels = new ArrayList<>();
-
-        dataModels.add(new Contact("First Contact", 123456789, "sadlasdl"));
-        dataModels.add(new Contact("Second Contact", 123456789, "sadlasdl1"));
-        dataModels.add(new Contact("Third Contact", 123456789, "sadlasdl2"));
-        dataModels.add(new Contact("Fourth Contact", 123456789, "sadlasdl3"));
-        dataModels.add(new Contact("Fifth Contact", 123456789, "sadlasdl4"));
-        dataModels.add(new Contact("Sixth Contact", 123456789, "sadlasdl5"));
-        dataModels.add(new Contact("Seventh Contact", 123456789, "sadlasdl6"));
-        dataModels.add(new Contact("Eighth Contact", 123456789, "sadlasdl7"));
-        dataModels.add(new Contact("Ninth Contact", 123456789, "sadlasdl8"));
-        dataModels.add(new Contact("Tenth Contact", 123456789, "sadlasdl9"));
-        dataModels.add(new Contact("Eleventh Contact", 123456789, "sadlasdl10"));
-        dataModels.add(new Contact("Twelfth Contact", 123456789, "sadlasdl11"));
-        dataModels.add(new Contact("Thirteenth Contact", 123456789, "sadlasdl12"));
-        */
-
 
     }
 

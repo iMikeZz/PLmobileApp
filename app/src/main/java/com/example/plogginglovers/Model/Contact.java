@@ -1,24 +1,44 @@
 package com.example.plogginglovers.Model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Contact {
 
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("name")
+    @Expose
     private String name;
-    private int number;
+    @SerializedName("phoneNumber")
+    @Expose
+    private String phoneNumber;
+    @SerializedName("description")
+    @Expose
     private String description;
+    @SerializedName("created_at")
+    @Expose
+    private Object createdAt;
+    @SerializedName("updated_at")
+    @Expose
+    private Object updatedAt;
 
-    public Contact(String name, int number, String description) {
+    public Contact(Integer id, String name, String phoneNumber, String description, Object createdAt, Object updatedAt) {
+        this.id = id;
         this.name = name;
-        this.number = number;
+        this.phoneNumber = phoneNumber;
         this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "name='" + name + '\'' +
-                ", number=" + number +
-                ", description='" + description + '\'' +
-                '}';
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -29,12 +49,12 @@ public class Contact {
         this.name = name;
     }
 
-    public int getNumber() {
-        return number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getDescription() {
@@ -43,5 +63,21 @@ public class Contact {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Object getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Object createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Object getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Object updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

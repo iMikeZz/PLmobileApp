@@ -3,6 +3,7 @@ package com.example.plogginglovers.Interfaces;
 import com.example.plogginglovers.Model.Contact;
 import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.Ecoponto;
+import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.RetroUser;
@@ -23,7 +24,7 @@ public interface GetData {
     Call<List<RetroUser>> getAllUsers();
 
     @GET("ecopontos")
-    Call<List<Ecoponto>> getAllEcopontos();
+    Call<EcopontosList> getAllEcopontos(@Header("Authorization") String authHeader);
 
     @GET("emergency-contacts")
     Call<ContactList> getAllNumbers();

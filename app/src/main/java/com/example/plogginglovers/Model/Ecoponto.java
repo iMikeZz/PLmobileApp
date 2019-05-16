@@ -1,33 +1,31 @@
 package com.example.plogginglovers.Model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Ecoponto {
 
-    @SerializedName("lat")
-    private double lat;
+    @SerializedName("latitude")
+    @Expose
+    private Double latitude;
 
-    @SerializedName("lon")
-    private double lon;
+    @SerializedName("longitude")
+    @Expose
+    private Double longitude;
 
-    public Ecoponto(double lat, double lon) {
-        this.lat = lat;
-        this.lon = lon;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public double getLat() {
-        return lat;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
+    public Double getLongitude() {
+        return longitude;
     }
 
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -10,6 +10,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Ecoponto;
+import com.example.plogginglovers.Model.EcopontosList;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,6 +39,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
     private GoogleMap mMap;
     private FirebaseAuth mAuth;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,8 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
     }
 
 
@@ -81,18 +87,17 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-        Call<List<Ecoponto>> call = service.getAllEcopontos();
+        Call<EcopontosList> call = service.getAllEcopontos("Bearer " + pref.getString("token", null));
 
         //Execute the request asynchronously//
-        call.enqueue(new Callback<List<Ecoponto>>() {
+        call.enqueue(new Callback<EcopontosList>() {
             @Override
             //Handle a successful response//
-            public void onResponse(Call<List<Ecoponto>> call, Response<List<Ecoponto>> response) {
-                System.out.println(response.body());
+            public void onResponse(Call<EcopontosList> call, Response<EcopontosList> response) {
                 // Add a marker in Sydney and move the camera
                 if (response.body() != null){
-                    for (Ecoponto ecoponto : response.body()) {
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(ecoponto.getLat(), ecoponto.getLon())));
+                    for (Ecoponto ecoponto : response.body().getData()) {
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(ecoponto.getLatitude(), ecoponto.getLongitude())));
                     }
                 }
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.766466, -8.847941), 10));
@@ -100,10 +105,10 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
             @Override
             //Handle execution failures//
-            public void onFailure(Call<List<Ecoponto>> call, Throwable throwable) {
+            public void onFailure(Call<EcopontosList> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
-                Toast.makeText(EcopontosActivity.this, "Unable to load users", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EcopontosActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
             }
         });
     }

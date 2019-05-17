@@ -72,7 +72,7 @@ public class ContactsListAdapter extends ArrayAdapter<Contact>{
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Calling...", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+351917620681"));
-                getContext().startActivity(intent);
+                mContext.startActivity(intent);
             }
         });
         // Return the completed view to render on screen

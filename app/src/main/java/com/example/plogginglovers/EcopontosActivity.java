@@ -86,6 +86,8 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
         Call<EcopontosList> call = service.getAllEcopontos("Bearer " + pref.getString("token", null));

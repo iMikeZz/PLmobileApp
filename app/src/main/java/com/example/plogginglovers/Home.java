@@ -161,8 +161,6 @@ public class Home extends AppCompatActivity
                 public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
                     if (response.isSuccessful()){
                         SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("token", null);
-                        editor.remove("token");
                         editor.clear();
                         editor.commit();
                         Toast.makeText(Home.this, "Logged out", Toast.LENGTH_LONG).show();

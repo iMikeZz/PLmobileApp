@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Contact;
 import com.example.plogginglovers.Model.ContactList;
+import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -45,6 +47,8 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
     private ListView listView;
     private static ContactsListAdapter adapter;
     private FirebaseAuth mAuth;
+
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,8 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
         //navigationView.getMenu().getItem(4).setChecked(true);
         navigationView.getMenu().findItem(R.id.nav_contacts).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
         listView = (ListView)findViewById(R.id.contactsList);
 
@@ -185,10 +191,35 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
         }else if (id == R.id.nav_logout && !item.isChecked()){
+            /*
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
             startActivity(LoginActivity.getIntent(this));
             finish();
+            */
+            GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+            Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
+
+            //Execute the request asynchronously//
+            call.enqueue(new Callback<LogoutToken>() {
+                @Override
+                public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
+                    if (response.isSuccessful()){
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.clear();
+                        editor.commit();
+                        Toast.makeText(ContactsActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        startActivity(LoginActivity.getIntent(ContactsActivity.this));
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LogoutToken> call, Throwable t) {
+                    System.out.println(t.getMessage());
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

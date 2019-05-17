@@ -20,6 +20,7 @@ import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Ecoponto;
 import com.example.plogginglovers.Model.EcopontosList;
+import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -155,10 +156,35 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
         }else if (id == R.id.nav_logout && !item.isChecked()){
+            /*
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
             startActivity(LoginActivity.getIntent(this));
             finish();
+            */
+            GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+            Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
+
+            //Execute the request asynchronously//
+            call.enqueue(new Callback<LogoutToken>() {
+                @Override
+                public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
+                    if (response.isSuccessful()){
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.clear();
+                        editor.commit();
+                        Toast.makeText(EcopontosActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        startActivity(LoginActivity.getIntent(EcopontosActivity.this));
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LogoutToken> call, Throwable t) {
+                    System.out.println(t.getMessage());
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

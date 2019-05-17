@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,15 +18,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.plogginglovers.Client.RetrofitClient;
+import com.example.plogginglovers.Interfaces.GetData;
+import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ActivitiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ArrayList<String> dataModels;
     private FirebaseAuth mAuth;
+    private SharedPreferences pref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +46,8 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         setTitle("Actividades");
 
         mAuth = FirebaseAuth.getInstance();
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -109,10 +121,35 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
         }else if (id == R.id.nav_logout && !item.isChecked()){
+            /*
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
             startActivity(LoginActivity.getIntent(this));
             finish();
+            */
+            GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+            Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
+
+            //Execute the request asynchronously//
+            call.enqueue(new Callback<LogoutToken>() {
+                @Override
+                public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
+                    if (response.isSuccessful()){
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.clear();
+                        editor.commit();
+                        Toast.makeText(ActivitiesActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        startActivity(LoginActivity.getIntent(ActivitiesActivity.this));
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LogoutToken> call, Throwable t) {
+                    System.out.println(t.getMessage());
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

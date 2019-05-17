@@ -11,20 +11,38 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.plogginglovers.Client.RetrofitClient;
+import com.example.plogginglovers.Interfaces.GetData;
+import com.example.plogginglovers.Model.Ecoponto;
+import com.example.plogginglovers.Model.EcopontosList;
+import com.example.plogginglovers.Model.UserData;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AccountActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
+
+    private SharedPreferences pref;
+
+    private TextView txtName, txtEmail, txtEscola, txtTurma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +51,11 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Perfil");
+
+        txtName = findViewById(R.id.txtAccountName);
+        txtEmail = findViewById(R.id.txtAccountEmail);
+        txtEscola = findViewById(R.id.txtAccountEscola);
+        txtTurma = findViewById(R.id.txtAccountTurma);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -45,6 +68,35 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(2).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
+        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+        Call<UserData> call = service.getStudentInfo("Bearer " + pref.getString("token", null));
+
+        //Execute the request asynchronously//
+        call.enqueue(new Callback<UserData>() {
+            @Override
+            //Handle a successful response//
+            public void onResponse(Call<UserData> call, Response<UserData> response) {
+                // Add a marker in Sydney and move the camera
+                System.out.println(response.body().getData());
+
+                txtName.setText(response.body().getData().getName());
+                txtEmail.setText(response.body().getData().getEmail());
+                txtEscola.setText(response.body().getData().getSchoolName());
+                txtTurma.setText(response.body().getData().getYear()+ "º " +response.body().getData().getClass_());
+            }
+
+            @Override
+            //Handle execution failures//
+            public void onFailure(Call<UserData> call, Throwable throwable) {
+                //If the request fails, then display the following toast//
+                System.out.println(throwable.getMessage());
+                Toast.makeText(AccountActivity.this, "Unable to load user", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public static Intent getIntent(Context context){

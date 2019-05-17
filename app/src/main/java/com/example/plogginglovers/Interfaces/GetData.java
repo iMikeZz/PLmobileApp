@@ -1,12 +1,10 @@
 package com.example.plogginglovers.Interfaces;
 
-import com.example.plogginglovers.Model.Contact;
 import com.example.plogginglovers.Model.ContactList;
-import com.example.plogginglovers.Model.Ecoponto;
 import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
-import com.example.plogginglovers.Model.RetroUser;
+import com.example.plogginglovers.Model.UserData;
 
 import java.util.List;
 
@@ -19,9 +17,9 @@ import retrofit2.http.POST;
 
 public interface GetData {
 
-    @GET("users")
+    @GET("me")
     //Wrap the response in a Call object with the type of the expected result//
-    Call<List<RetroUser>> getAllUsers();
+    Call<UserData> getStudentInfo(@Header("Authorization") String authHeader);
 
     @GET("ecopontos")
     Call<EcopontosList> getAllEcopontos(@Header("Authorization") String authHeader);

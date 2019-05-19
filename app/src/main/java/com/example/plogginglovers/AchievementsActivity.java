@@ -46,6 +46,7 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         setTitle("Conquistas");
 
@@ -83,6 +84,12 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
                 dialog.show();
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     public static Intent getIntent(Context context){

@@ -13,6 +13,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.CountDownTimer;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.TaskStackBuilder;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,6 +55,13 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         setTitle("Atividade");
 
         // Get an instance of the SensorManager
@@ -165,6 +173,12 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         */
 
         objectListAdapter.setPointsListener(this);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void createNotificationChannel() {

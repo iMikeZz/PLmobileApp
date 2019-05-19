@@ -66,7 +66,8 @@ public class ContactsListAdapter extends ArrayAdapter<Contact>{
 
         viewHolder.txtName.setText(dataModel.getName());
         viewHolder.txtNumber.setText(String.valueOf(dataModel.getPhoneNumber()));
-        viewHolder.contact.setImageResource(R.drawable.call);
+        viewHolder.contact.setImageResource(R.drawable.ic_call_black_24dp);
+        /*
         viewHolder.contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +76,7 @@ public class ContactsListAdapter extends ArrayAdapter<Contact>{
                 mContext.startActivity(intent);
             }
         });
+        */
         // Return the completed view to render on screen
         return convertView;
     }

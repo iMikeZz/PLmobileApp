@@ -72,32 +72,10 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
-        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
-
-        Call<UserData> call = service.getStudentInfo("Bearer " + pref.getString("token", null));
-
-        //Execute the request asynchronously//
-        call.enqueue(new Callback<UserData>() {
-            @Override
-            //Handle a successful response//
-            public void onResponse(Call<UserData> call, Response<UserData> response) {
-                // Add a marker in Sydney and move the camera
-                System.out.println(response.body().getData());
-
-                txtName.setText(response.body().getData().getName());
-                txtEmail.setText(response.body().getData().getEmail());
-                txtEscola.setText(response.body().getData().getSchoolName());
-                txtTurma.setText(response.body().getData().getYear()+ "º " +response.body().getData().getClass_());
-            }
-
-            @Override
-            //Handle execution failures//
-            public void onFailure(Call<UserData> call, Throwable throwable) {
-                //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
-                Toast.makeText(AccountActivity.this, "Unable to load user", Toast.LENGTH_SHORT).show();
-            }
-        });
+        txtName.setText(pref.getString("studentName", null));
+        txtEmail.setText(pref.getString("studentEmail", null));
+        txtEscola.setText(pref.getString("studentSchool", null));
+        txtTurma.setText(pref.getString("studentClass", null));
     }
 
     public static Intent getIntent(Context context){

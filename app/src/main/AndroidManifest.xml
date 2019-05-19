@@ -55,7 +55,8 @@
         <activity
             android:name=".ChatActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ActiveActivity" />
+        <activity android:name=".ActiveActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Home"
             android:label="@string/title_activity_home"

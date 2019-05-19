@@ -3,12 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/camMenuItem"
-        android:icon="@drawable/cam"
+        android:icon="@drawable/ic_photo_camera_white_24dp"
         android:title=""
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/galleryMenuItem"
-        android:icon="@drawable/gallery"
+        android:icon="@drawable/ic_photo_library_white_24dp"
         android:title=""
         app:showAsAction="ifRoom"/>
 </menu>

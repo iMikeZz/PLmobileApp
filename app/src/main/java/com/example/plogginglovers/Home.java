@@ -13,6 +13,7 @@ import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
+import com.example.plogginglovers.Model.UserData;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,6 +30,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +47,8 @@ public class Home extends AppCompatActivity
     private LinearLayout mask;
 
     private SharedPreferences pref;
+
+    private TextView txtStudentName, txtStudentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +72,41 @@ public class Home extends AppCompatActivity
         mask = findViewById(R.id.mask);
         mask.setVisibility(View.GONE);
 
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
+        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+        Call<UserData> call = service.getStudentInfo("Bearer " + pref.getString("token", null));
+
+        //Execute the request asynchronously//
+        call.enqueue(new Callback<UserData>() {
+            @Override
+            //Handle a successful response//
+            public void onResponse(Call<UserData> call, Response<UserData> response) {
+                // Add a marker in Sydney and move the camera
+                System.out.println(response.body().getData());
+
+                SharedPreferences.Editor editor = pref.edit();
+                txtStudentName.setText(response.body().getData().getName());
+                txtStudentEmail.setText(response.body().getData().getEmail());
+                editor.putString("studentName", response.body().getData().getName());
+                editor.putString("studentEmail", response.body().getData().getEmail());
+                editor.putString("studentSchool", response.body().getData().getSchoolName());
+                editor.putString("studentClass", response.body().getData().getYear()+ "º " +response.body().getData().getClass_());
+                editor.commit();
+            }
+
+            @Override
+            //Handle execution failures//
+            public void onFailure(Call<UserData> call, Throwable throwable) {
+                //If the request fails, then display the following toast//
+                System.out.println(throwable.getMessage());
+                Toast.makeText(Home.this, "Unable to load user", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -106,7 +106,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                             LayoutInflater inflater = ContactsActivity.this.getLayoutInflater();
                             View dialogView = inflater.inflate(R.layout.contact_info_dialog, null);
                             dialogBuilder.setTitle("Ligar para " + contact.getName() + " ?");
-                            dialogBuilder.setIcon(R.drawable.call);
+                            dialogBuilder.setIcon(R.drawable.ic_call_black_24dp);
                             dialogBuilder.setButton(DialogInterface.BUTTON_POSITIVE, "Ligar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

@@ -32,6 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -70,8 +71,11 @@ public class FindGarbageActivity extends AppCompatActivity implements Navigation
         ListView listViewGarbage = (ListView) findViewById(R.id.listOfGarbage);
         editTextFilter = (EditText) findViewById(R.id.searchFilter);
 
+        ArrayList<String> garbagesArrayListAux = new ArrayList<>(RecyclingManager.INSTANCE.getGarbagesWithoutEcopontos());
 
-        adapter = new MyFindGarbageListAdapter(this, RecyclingManager.INSTANCE.getGarbagesWithoutEcopontos());
+        Collections.sort(garbagesArrayListAux);
+
+        adapter = new MyFindGarbageListAdapter(this, garbagesArrayListAux);
 
         /*
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, RecyclingManager.INSTANCE.getGarbages()){

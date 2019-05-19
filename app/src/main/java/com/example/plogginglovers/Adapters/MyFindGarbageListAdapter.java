@@ -90,4 +90,9 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
         }
         notifyDataSetChanged();
     }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
 }

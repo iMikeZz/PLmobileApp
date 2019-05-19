@@ -55,7 +55,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
     private class ViewHolder {
         private TextView name;
         private ImageView image;
-        private EditText quantity;
+        private TextView quantity;
         private ImageView buttonPlus;
         private ImageView buttonMinus;
         private TextView txtPoints;
@@ -63,7 +63,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
         public ViewHolder(View v) {
             name = (TextView) v.findViewById(R.id.txtObjectName);
             image = (ImageView) v.findViewById(R.id.objectImage);
-            quantity = (EditText) v.findViewById(R.id.editTextNumber);
+            quantity = (TextView) v.findViewById(R.id.editTextNumber);
             buttonPlus = (ImageView) v.findViewById(R.id.btnPlus);
             buttonMinus = (ImageView) v.findViewById(R.id.btnMinus);
             txtPoints = (TextView) v.findViewById(R.id.txtPointsObject);
@@ -272,5 +272,10 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
                 pointsListener.onPointsAddedListener(dataModel.getScore());
             }
         }
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
     }
 }

@@ -50,6 +50,8 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
 
     private SharedPreferences pref;
 
+    private TextView txtStudentName, txtStudentEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +74,13 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+        //nav header info
+        txtStudentName.setText(pref.getString("studentName", null));
+        txtStudentEmail.setText(pref.getString("studentEmail", null));
 
         listView = (ListView)findViewById(R.id.contactsList);
 

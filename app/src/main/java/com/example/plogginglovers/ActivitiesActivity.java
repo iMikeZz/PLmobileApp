@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plogginglovers.Client.RetrofitClient;
@@ -35,7 +36,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
     private ArrayList<String> dataModels;
     private FirebaseAuth mAuth;
     private SharedPreferences pref;
-
+    private TextView txtStudentName, txtStudentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,13 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         //navigationView.getMenu().getItem(4).setChecked(true);
         navigationView.getMenu().findItem(R.id.nav_activity).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
+
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+        //nav header info
+        txtStudentName.setText(pref.getString("studentName", null));
+        txtStudentEmail.setText(pref.getString("studentEmail", null));
 
         dataModels = new ArrayList<>();
         dataModels.add("Activity x");

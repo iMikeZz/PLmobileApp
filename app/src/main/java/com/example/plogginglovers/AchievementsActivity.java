@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plogginglovers.Adapters.Dialogs.AchievementCostumDialog;
@@ -40,6 +41,8 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
 
     private FirebaseAuth mAuth;
     private SharedPreferences pref;
+
+    private TextView txtStudentName, txtStudentEmail;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +68,18 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
         navigationView.getMenu().findItem(R.id.nav_achievements).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
 
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+        //nav header info
+        txtStudentName.setText(pref.getString("studentName", null));
+        txtStudentEmail.setText(pref.getString("studentEmail", null));
+
+
         final List<Achievement> achievements = new ArrayList<>();
         achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.yellow_achievement, 0));
         achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.grey_achievement, 1));
         achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.brown_achievement, 1));
-        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.yellow_achievement,1));
 
         GridView gridView = findViewById(R.id.gridViewAchievements);
         AchievementsAdapter achievementsAdapter = new AchievementsAdapter(this,achievements);

@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plogginglovers.Client.RetrofitClient;
@@ -41,6 +42,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
     private GoogleMap mMap;
     private FirebaseAuth mAuth;
     private SharedPreferences pref;
+    private TextView txtStudentName, txtStudentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,13 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         mapFragment.getMapAsync(this);
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+        //nav header info
+        txtStudentName.setText(pref.getString("studentName", null));
+        txtStudentEmail.setText(pref.getString("studentEmail", null));
     }
 
 

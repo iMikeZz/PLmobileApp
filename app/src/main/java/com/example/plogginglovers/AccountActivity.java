@@ -13,9 +13,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,8 @@ import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Ecoponto;
 import com.example.plogginglovers.Model.EcopontosList;
+import com.example.plogginglovers.Model.Errors;
+import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.UserData;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,7 +48,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
     private SharedPreferences pref;
 
-    private TextView txtName, txtEmail, txtEscola, txtTurma;
+    private TextView txtName, txtEmail, txtEscola, txtTurma, txtStudentName, txtStudentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +75,14 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         navigationView.getMenu().getItem(2).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
 
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
+        //nav header info
+        txtStudentName.setText(pref.getString("studentName", null));
+        txtStudentEmail.setText(pref.getString("studentEmail", null));
 
         txtName.setText(pref.getString("studentName", null));
         txtEmail.setText(pref.getString("studentEmail", null));
@@ -170,15 +182,37 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
     }
 
     public void onClickAlterarPassword(View view) {
-        AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.change_password_dialog, null);
+        final EditText txtOldPassword = (EditText) dialogView.findViewById(R.id.edtOldPassword);
+        final EditText txtNewPassword = (EditText) dialogView.findViewById(R.id.edtNewPassword);
+        final EditText txtNewPasswordConfirmation = (EditText) dialogView.findViewById(R.id.edtConfirmPassword);
+        final TextView txtErrorOldPassword = (TextView) dialogView.findViewById(R.id.txtErrorOldPassword);
         dialogBuilder.setTitle("Alterar Password");
         dialogBuilder.setButton(DialogInterface.BUTTON_POSITIVE, "Alterar", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //todo patch
-                dialog.dismiss();
+            public void onClick(final DialogInterface dialog, int which) {
+                GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+                Call<Errors> call = service.changePassword("Bearer "  + pref.getString("token", null),
+                        txtOldPassword.getText().toString(), txtNewPassword.getText().toString(), txtNewPasswordConfirmation.getText().toString());
+
+                //Execute the request asynchronously//
+                call.enqueue(new Callback<Errors>() {
+                    @Override
+                    public void onResponse(Call<Errors> call, Response<Errors> response) {
+                        if (response.isSuccessful()){
+                            dialog.dismiss();
+                        } else {
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Errors> call, Throwable t) {
+                        System.out.println(t.getMessage());
+                    }
+                });
             }
         });
 
@@ -189,6 +223,29 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
             }
         });
 
+
+        txtOldPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().trim().length() == 0){
+                    txtErrorOldPassword.setText("Required");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                } else {
+                    txtErrorOldPassword.setText("");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         /*
         TextView txtNumber = (TextView) dialogView.findViewById(R.id.txtNumber);
         TextView txtDescription = (TextView) dialogView.findViewById(R.id.txtDescription);

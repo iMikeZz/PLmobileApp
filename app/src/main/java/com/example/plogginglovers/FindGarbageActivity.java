@@ -47,6 +47,8 @@ public class FindGarbageActivity extends AppCompatActivity implements Navigation
 
     private SharedPreferences pref;
 
+    private TextView txtStudentName, txtStudentEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +120,13 @@ public class FindGarbageActivity extends AppCompatActivity implements Navigation
         });
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+        //nav header info
+        txtStudentName.setText(pref.getString("studentName", null));
+        txtStudentEmail.setText(pref.getString("studentEmail", null));
     }
 
 

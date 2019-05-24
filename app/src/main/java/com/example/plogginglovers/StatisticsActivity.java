@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plogginglovers.Client.RetrofitClient;
@@ -29,6 +30,8 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
     private FirebaseAuth mAuth;
 
     private SharedPreferences pref;
+
+    private TextView txtStudentName, txtStudentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,13 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
         setTitle("Estatísticas");
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+        //nav header info
+        txtStudentName.setText(pref.getString("studentName", null));
+        txtStudentEmail.setText(pref.getString("studentEmail", null));
     }
 
     public static Intent getIntent(Context context){

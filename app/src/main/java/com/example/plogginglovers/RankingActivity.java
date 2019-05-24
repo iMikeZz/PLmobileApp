@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plogginglovers.Adapters.RankingListAdapter;
@@ -38,6 +39,8 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
     private FirebaseAuth mAuth;
 
     private SharedPreferences pref;
+
+    private TextView txtStudentName, txtStudentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,13 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         activeActivitiesList.setAdapter(adapter);
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
+        txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
+        txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+        //nav header info
+        txtStudentName.setText(pref.getString("studentName", null));
+        txtStudentEmail.setText(pref.getString("studentEmail", null));
     }
 
 

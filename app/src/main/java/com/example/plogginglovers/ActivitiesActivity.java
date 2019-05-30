@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.plogginglovers.Adapters.ActivitiesListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.LogoutToken;
@@ -73,7 +74,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
 
         ListView activeActivitiesList = findViewById(R.id.activeActivityList);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dataModels);
+        ActivitiesListAdapter adapter = new ActivitiesListAdapter(this, R.layout.activity_list_item);
 
         activeActivitiesList.setAdapter(adapter);
 

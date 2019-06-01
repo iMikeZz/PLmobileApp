@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,9 +19,6 @@ import androidx.annotation.Nullable;
 import com.example.plogginglovers.Helpers.InputFilterMinMax;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.R;
-
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import java.util.List;
 

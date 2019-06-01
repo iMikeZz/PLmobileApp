@@ -16,5 +16,5 @@
     <color name="blue_cenas">#082b85</color>
     <color name="terminated_activity_red">#e82406</color>
     <color name="started_activity_green">#18bc26</color>
-    <color name="pending_activity_green">#ffbb00</color>
+    <color name="pending_activity_yellow">#ffbb00</color>
 </resources>

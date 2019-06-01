@@ -11,12 +11,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
-import android.os.CountDownTimer;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.TaskStackBuilder;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,20 +22,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.TaskStackBuilder;
+
 import com.example.plogginglovers.Adapters.ObjectListAdapter;
-import com.example.plogginglovers.Model.Garbage;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
-
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener {
-    private TextView TvSteps, countDownTimer, txtCals, txtKilos, txtPoints;
+    private TextView TvSteps, countDownTimer, txtCals, txtKilos, txtPoints, editTextQuantity, txtActivityDescription;
     private StepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
@@ -47,7 +43,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private int numSteps;
     private int points = 0;
     private List<Rubbish> garbageList;
-    private EditText editTextQuantity;
 
     private NotificationManager mNotificationManager;
 
@@ -74,7 +69,13 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         txtCals = (TextView) findViewById(R.id.caloriesTxt);
         txtKilos = (TextView) findViewById(R.id.kilometersTxt);
         txtPoints = (TextView) findViewById(R.id.txtpoints);
-        editTextQuantity = findViewById(R.id.editTextNumber);
+        txtActivityDescription = (TextView) findViewById(R.id.txtActivityDescription);
+        editTextQuantity = findViewById(R.id.editTextNumber); //todo é editText
+
+        System.out.println(getIntent().getExtras().getInt("id"));
+        System.out.println(getIntent().getExtras().getString("description"));
+
+        txtActivityDescription.setText(getIntent().getExtras().getString("description"));
 
         garbageList = new ArrayList<>();
 
@@ -238,6 +239,10 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 break;
             case R.id.camMenuItem:
                 Toast.makeText(getApplicationContext(), "Taking a pic", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.chatMenuItem:
+                //todo open chat
+                Toast.makeText(getApplicationContext(), "Chat", Toast.LENGTH_LONG).show();
                 break;
         }
 

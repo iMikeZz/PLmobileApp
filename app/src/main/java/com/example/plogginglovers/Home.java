@@ -1,44 +1,33 @@
 package com.example.plogginglovers;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.example.plogginglovers.Client.RetrofitClient;
-import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.LoginToken;
-import com.example.plogginglovers.Model.LogoutToken;
-import com.example.plogginglovers.Model.UserData;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.util.Log;
-import android.view.View;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.annotation.NonNull;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.example.plogginglovers.Client.RetrofitClient;
+import com.example.plogginglovers.Interfaces.GetData;
+import com.example.plogginglovers.Model.LogoutToken;
+import com.example.plogginglovers.Model.UserData;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -202,6 +191,7 @@ public class Home extends AppCompatActivity
                         editor.clear();
                         editor.commit();
                         Toast.makeText(Home.this, "Logged out", Toast.LENGTH_LONG).show();
+                        finishAffinity();
                         startActivity(LoginActivity.getIntent(Home.this));
                         finish();
                     }

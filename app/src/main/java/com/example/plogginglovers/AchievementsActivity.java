@@ -1,12 +1,5 @@
 package com.example.plogginglovers;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,8 +14,15 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.plogginglovers.Adapters.Dialogs.AchievementCostumDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.example.plogginglovers.Adapters.AchievementsAdapter;
+import com.example.plogginglovers.Adapters.Dialogs.AchievementCostumDialog;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Achievement;
@@ -163,6 +163,7 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
                         editor.clear();
                         editor.commit();
                         Toast.makeText(AchievementsActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        finishAffinity();
                         startActivity(LoginActivity.getIntent(AchievementsActivity.this));
                         finish();
                     }

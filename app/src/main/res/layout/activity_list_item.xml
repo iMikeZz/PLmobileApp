@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,11 +15,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -29,7 +30,8 @@
                 android:layout_marginTop="-126dp"
                 android:contentDescription="CardImageViewDesc"
                 android:scaleType="centerCrop"
-                android:src="@drawable/actividades" />
+                android:src="@drawable/actividades"
+                android:focusable="false"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/date_chip"
@@ -46,7 +48,8 @@
                 android:textColor="#FFFFFF"
                 app:chipBackgroundColor="#EB525252"
                 app:chipIcon="@drawable/ic_date_range_white_24dp"
-                app:iconStartPadding="5dp" />
+                app:iconStartPadding="5dp"
+                android:focusable="false"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/state_chip"
@@ -63,7 +66,8 @@
                 android:textColor="#FFFFFF"
                 app:chipBackgroundColor="#18bc26"
                 app:chipIcon="@drawable/ic_nature_people_white_24dp"
-                app:iconStartPadding="5dp" />
+                app:iconStartPadding="5dp"
+                android:focusable="false"/>
 
             <ImageView
                 android:id="@+id/imageView1"
@@ -73,7 +77,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="139dp"
                 android:layout_marginTop="126dp"
-                app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+                app:srcCompat="@drawable/ic_navigate_next_black_24dp"
+                android:focusable="false"/>
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>

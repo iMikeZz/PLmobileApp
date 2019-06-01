@@ -2,6 +2,11 @@ package com.example.plogginglovers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,13 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentActivity;
-
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
@@ -30,8 +28,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -186,6 +182,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                         editor.clear();
                         editor.commit();
                         Toast.makeText(EcopontosActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        finishAffinity();
                         startActivity(LoginActivity.getIntent(EcopontosActivity.this));
                         finish();
                     }

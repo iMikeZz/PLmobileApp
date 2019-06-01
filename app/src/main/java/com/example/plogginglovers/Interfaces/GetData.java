@@ -1,13 +1,12 @@
 package com.example.plogginglovers.Interfaces;
 
+import com.example.plogginglovers.Model.ActivityModel;
 import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.Errors;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.UserData;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -42,4 +41,7 @@ public interface GetData {
                                 @Field("old_password") String old_password,
                                 @Field("password") String password,
                                 @Field("password_confirmation") String password_confirmation);
+
+    @GET("student/activities")
+    Call<ActivityModel> getStudentActivities(@Header("Authorization") String authHeader);
 }

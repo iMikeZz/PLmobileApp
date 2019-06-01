@@ -1,51 +1,49 @@
 package com.example.plogginglovers.Adapters;
 
 import android.content.Context;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.plogginglovers.Model.Achievement;
-import com.example.plogginglovers.Model.ActivityModel;
-import com.example.plogginglovers.Model.Contact;
+import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.R;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class ActivitiesListAdapter extends ArrayAdapter<ActivityModel> {
+public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
 
-    private ArrayList<Contact> dataSet;
+    private ArrayList<Activity> dataSet;
     private Context mContext;
 
     private class ViewHolder {
         Chip chipState;
-        Chip txtNumber;
+        Chip date_chip;
 
         public ViewHolder(View v) {
             chipState = (Chip) v.findViewById(R.id.state_chip);
-            txtNumber = (Chip) v.findViewById(R.id.date_chip);
+            date_chip = (Chip) v.findViewById(R.id.date_chip);
         }
     }
 
-    public ActivitiesListAdapter(/*ArrayList<Contact> data*/Context context, int resource) {
-        super(context, resource);
+    public ActivitiesListAdapter(ArrayList<Activity> data, Context context, int resource) {
+        super(context, resource, data);
         this.mContext=context;
+        this.dataSet = data;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder = null;
+
+        Activity dataModel = getItem(position);
+
+        System.out.println(dataModel);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView != null) {
@@ -55,6 +53,10 @@ public class ActivitiesListAdapter extends ArrayAdapter<ActivityModel> {
             convertView = layoutInflater.inflate(R.layout.activity_list_item, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
+        }
+
+        if (dataModel.getState().equals("Pending")){
+            holder.chipState.setChipBackgroundColorResource(R.color.pending_activity_yellow);
         }
 
         /*
@@ -81,10 +83,5 @@ public class ActivitiesListAdapter extends ArrayAdapter<ActivityModel> {
         */
         // Return the completed view to render on screen
         return convertView;
-    }
-
-    @Override
-    public int getCount() {
-        return 10;
     }
 }

@@ -1,12 +1,5 @@
 package com.example.plogginglovers;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,17 +15,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.Ecoponto;
-import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.Errors;
-import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
-import com.example.plogginglovers.Model.UserData;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -152,6 +145,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                         editor.clear();
                         editor.commit();
                         Toast.makeText(AccountActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        finishAffinity();
                         startActivity(LoginActivity.getIntent(AccountActivity.this));
                         finish();
                     }

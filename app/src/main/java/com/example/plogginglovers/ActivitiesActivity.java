@@ -1,12 +1,5 @@
 package com.example.plogginglovers;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,14 +7,24 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.IntentCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.example.plogginglovers.Adapters.ActivitiesListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
+import com.example.plogginglovers.Model.Activity;
+import com.example.plogginglovers.Model.ActivityModel;
+import com.example.plogginglovers.Model.ActivityTeam;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,17 +75,52 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         dataModels = new ArrayList<>();
         dataModels.add("Activity x");
 
-        ListView activeActivitiesList = findViewById(R.id.activeActivityList);
+        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-        ActivitiesListAdapter adapter = new ActivitiesListAdapter(this, R.layout.activity_list_item);
+        Call<ActivityModel> call = service.getStudentActivities("Bearer " + pref.getString("token", null));
 
-        activeActivitiesList.setAdapter(adapter);
-
-        activeActivitiesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //Execute the request asynchronously//
+        call.enqueue(new Callback<ActivityModel>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //todo change add the information of the activity
-                startActivity(ActiveActivity.getIntent(ActivitiesActivity.this));
+            //Handle a successful response//
+            public void onResponse(Call<ActivityModel> call, Response<ActivityModel> response) {
+                System.out.println(response);
+                // Add a marker in Sydney and move the camera
+                if (response.body() != null) {
+                    ListView activeActivitiesList = findViewById(R.id.activeActivityList);
+
+                    System.out.println("lalalala");
+
+                    System.out.println(response.body());
+
+                    final ArrayList<Activity> activities = new ArrayList<>();
+
+                    for (ActivityTeam activityTeam : response.body().getData()){
+                        activities.addAll(activityTeam.getActivities());
+                    }
+
+                    ActivitiesListAdapter adapter = new ActivitiesListAdapter(activities, ActivitiesActivity.this, R.layout.activity_list_item);
+
+                    activeActivitiesList.setAdapter(adapter);
+
+                    activeActivitiesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            //todo change add the information of the activity
+                            startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
+                                    .putExtra("description", activities.get(position).getDescription())
+                                    .putExtra("id", activities.get(position).getId()));
+                        }
+                    });
+                }
+            }
+
+            @Override
+            //Handle execution failures//
+            public void onFailure(Call<ActivityModel> call, Throwable throwable) {
+                //If the request fails, then display the following toast//
+                System.out.println(throwable.getMessage());
+                Toast.makeText(ActivitiesActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -149,6 +187,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                         editor.clear();
                         editor.commit();
                         Toast.makeText(ActivitiesActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        finishAffinity();
                         startActivity(LoginActivity.getIntent(ActivitiesActivity.this));
                         finish();
                     }

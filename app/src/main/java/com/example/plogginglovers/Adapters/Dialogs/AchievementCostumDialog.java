@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 

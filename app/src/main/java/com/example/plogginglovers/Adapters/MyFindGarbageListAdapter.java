@@ -15,8 +15,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import androidx.core.content.ContextCompat;
-
 import io.github.tonnyl.light.Light;
 
 

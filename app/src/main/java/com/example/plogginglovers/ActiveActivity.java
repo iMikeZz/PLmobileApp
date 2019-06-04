@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,13 +27,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.TaskStackBuilder;
 
+import com.example.plogginglovers.Adapters.ActivitiesListAdapter;
 import com.example.plogginglovers.Adapters.ObjectListAdapter;
+import com.example.plogginglovers.Client.RetrofitClient;
+import com.example.plogginglovers.Interfaces.GetData;
+import com.example.plogginglovers.Model.Activity;
+import com.example.plogginglovers.Model.ActivityModel;
+import com.example.plogginglovers.Model.ActivityTeam;
 import com.example.plogginglovers.Model.Rubbish;
+import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener {
     private TextView TvSteps, countDownTimer, txtCals, txtKilos, txtPoints, editTextQuantity, txtActivityDescription;
@@ -46,6 +58,8 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
     private NotificationManager mNotificationManager;
 
+    private SharedPreferences pref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +71,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        setTitle("Atividade");
+        setTitle("Atividadeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
         // Get an instance of the SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -77,10 +93,12 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         txtActivityDescription.setText(getIntent().getExtras().getString("description"));
 
+        /*
         garbageList = new ArrayList<>();
 
         garbageList.add(new Rubbish("Garrafas", R.drawable.bootle, 100));
         garbageList.add(new Rubbish("Ecopontos", R.drawable.ecoponto_amarelo, 200));
+        */
 
         countDownTimer = findViewById(R.id.countDownTimer);
 
@@ -116,16 +134,45 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         numSteps = 0;
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
 
-        ListView listView = findViewById(R.id.objectList);
-        ObjectListAdapter objectListAdapter = new ObjectListAdapter(this, R.layout.object_list_item, garbageList);
-        listView.setAdapter(objectListAdapter);
 
+        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+        Call<RubbishModel> call = service.getActivityItems("Bearer " + pref.getString("token", null), getIntent().getExtras().getInt("id"));
+
+        //Execute the request asynchronously//
+        call.enqueue(new Callback<RubbishModel>() {
+            @Override
+            //Handle a successful response//
+            public void onResponse(Call<RubbishModel> call, Response<RubbishModel> response) {
+                // Add a marker in Sydney and move the camera
+                if (response.body() != null) {
+                    ListView listView = findViewById(R.id.objectList);
+                    ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, response.body().getData());
+                    listView.setAdapter(objectListAdapter);
+                    objectListAdapter.setPointsListener(ActiveActivity.this);
+                }
+            }
+
+            @Override
+            //Handle execution failures//
+            public void onFailure(Call<RubbishModel> call, Throwable throwable) {
+                //If the request fails, then display the following toast//
+                System.out.println(throwable.getMessage());
+                Toast.makeText(ActiveActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+        /*
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println(position);
             }
         });
+
+        */
 
         //NumberPicker numberPicker = findViewById(R.id.numberPicker);
 
@@ -173,7 +220,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         */
 
-        objectListAdapter.setPointsListener(this);
+
     }
 
     @Override

@@ -72,9 +72,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         txtStudentName.setText(pref.getString("studentName", null));
         txtStudentEmail.setText(pref.getString("studentEmail", null));
 
-        dataModels = new ArrayList<>();
-        dataModels.add("Activity x");
-
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
         Call<ActivityModel> call = service.getStudentActivities("Bearer " + pref.getString("token", null));
@@ -88,10 +85,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                 // Add a marker in Sydney and move the camera
                 if (response.body() != null) {
                     ListView activeActivitiesList = findViewById(R.id.activeActivityList);
-
-                    System.out.println("lalalala");
-
-                    System.out.println(response.body());
 
                     final ArrayList<Activity> activities = new ArrayList<>();
 

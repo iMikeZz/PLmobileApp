@@ -11,7 +11,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +28,10 @@ import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Errors;
 import com.example.plogginglovers.Model.LogoutToken;
+import com.example.plogginglovers.Model.Password;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 
@@ -43,6 +47,8 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
     private TextView txtName, txtEmail, txtEscola, txtTurma, txtStudentName, txtStudentEmail;
 
+    private ImageView profileImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,8 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         txtEmail = findViewById(R.id.txtAccountEmail);
         txtEscola = findViewById(R.id.txtAccountEscola);
         txtTurma = findViewById(R.id.txtAccountTurma);
+
+        profileImage = findViewById(R.id.profile_image);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -81,6 +89,9 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         txtEmail.setText(pref.getString("studentEmail", null));
         txtEscola.setText(pref.getString("studentSchool", null));
         txtTurma.setText(pref.getString("studentClass", null));
+
+
+        Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(profileImage);
     }
 
     public static Intent getIntent(Context context){
@@ -176,47 +187,62 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
     }
 
     public void onClickAlterarPassword(View view) {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.change_password_dialog, null);
+
         final EditText txtOldPassword = (EditText) dialogView.findViewById(R.id.edtOldPassword);
         final EditText txtNewPassword = (EditText) dialogView.findViewById(R.id.edtNewPassword);
         final EditText txtNewPasswordConfirmation = (EditText) dialogView.findViewById(R.id.edtConfirmPassword);
         final TextView txtErrorOldPassword = (TextView) dialogView.findViewById(R.id.txtErrorOldPassword);
-        dialogBuilder.setTitle("Alterar Password");
-        dialogBuilder.setButton(DialogInterface.BUTTON_POSITIVE, "Alterar", new DialogInterface.OnClickListener() {
+        final TextView txtErrorNewPassword = (TextView) dialogView.findViewById(R.id.txtErrorNewPassword);
+        final TextView txtErrorNewPasswordConfirmation = (TextView) dialogView.findViewById(R.id.txtErrorConfirmPassword);
+
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this)
+                .setPositiveButton("Alterar", null)
+                .setNeutralButton("Voltar", null)
+                .setTitle("Alterar Password")
+                .setView(dialogView)
+                .create();
+
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+
             @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+            public void onShow(DialogInterface dialogInterface) {
 
-                Call<Errors> call = service.changePassword("Bearer "  + pref.getString("token", null),
-                        txtOldPassword.getText().toString(), txtNewPassword.getText().toString(), txtNewPasswordConfirmation.getText().toString());
-
-                //Execute the request asynchronously//
-                call.enqueue(new Callback<Errors>() {
-                    @Override
-                    public void onResponse(Call<Errors> call, Response<Errors> response) {
-                        if (response.isSuccessful()){
-                            dialog.dismiss();
-                        } else {
-                        }
-                    }
+                Button button = dialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
 
                     @Override
-                    public void onFailure(Call<Errors> call, Throwable t) {
-                        System.out.println(t.getMessage());
+                    public void onClick(View view) {
+                        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+                        Password password = new Password(txtOldPassword.getText().toString(), txtNewPassword.getText().toString(), txtNewPasswordConfirmation.getText().toString());
+
+                        Call<Errors> call = service.changePassword("Bearer "  + pref.getString("token", null), password);
+
+                        //Execute the request asynchronously//
+                        call.enqueue(new Callback<Errors>() {
+                            @Override
+                            public void onResponse(Call<Errors> call, Response<Errors> response) {
+                                System.out.println(response);
+                                if (response.isSuccessful()){
+                                    dialogBuilder.dismiss();
+                                    Toast.makeText(AccountActivity.this, "Password alterada com sucesso", Toast.LENGTH_LONG).show();
+                                } else {
+                                    txtOldPassword.setText("");
+                                    txtErrorOldPassword.setText("Password antiga incorreta");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Errors> call, Throwable t) {
+                                System.out.println(t.getMessage());
+                            }
+                        });
                     }
                 });
             }
         });
-
-        dialogBuilder.setButton(DialogInterface.BUTTON_NEUTRAL, "Voltar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
 
         txtOldPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -226,12 +252,14 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().length() == 0){
-                    txtErrorOldPassword.setText("Required");
+                if (s.toString().length() == 0){
+                    txtErrorOldPassword.setText("Campo Obrigatório");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                } else if(!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")){
+                    txtErrorNewPassword.setText("");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
                 } else {
                     txtErrorOldPassword.setText("");
-                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
                 }
             }
 
@@ -240,15 +268,65 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
             }
         });
-        /*
-        TextView txtNumber = (TextView) dialogView.findViewById(R.id.txtNumber);
-        TextView txtDescription = (TextView) dialogView.findViewById(R.id.txtDescription);
 
-        txtNumber.setText(String.valueOf(contact.getPhoneNumber()));
-        txtDescription.setText(contact.getDescription());
-        */
+        txtNewPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        dialogBuilder.setView(dialogView);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().length() == 0) {
+                    txtErrorNewPassword.setText("Campo Obrigatório");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                } else if(s.toString().length() <= 3) {
+                    txtErrorNewPassword.setText("Password com menos de 3 carateres");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                } else if(!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")){
+                    txtErrorNewPassword.setText("");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                } else{
+                    txtErrorNewPassword.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        txtNewPasswordConfirmation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().length() == 0){
+                    txtErrorNewPasswordConfirmation.setText("Campo Obrigatório");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                } else if(!s.toString().equals(txtNewPassword.getText().toString())){
+                    txtErrorNewPasswordConfirmation.setText("Passwords têm de ser iguais");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                } else if(!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")){
+                    txtErrorNewPassword.setText("");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                } else {
+                    txtErrorNewPasswordConfirmation.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         dialogBuilder.show();
+
+        dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
     }
 }

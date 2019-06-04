@@ -6,7 +6,6 @@
         android:icon="@drawable/ic_forum_white_24dp"
         android:title=""
         app:showAsAction="ifRoom"/>
-
     <item
         android:id="@+id/camMenuItem"
         android:icon="@drawable/ic_photo_camera_white_24dp"

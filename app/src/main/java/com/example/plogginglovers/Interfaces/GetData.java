@@ -6,15 +6,20 @@ import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.Errors;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
+import com.example.plogginglovers.Model.Password;
+import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Model.UserData;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface GetData {
 
@@ -35,13 +40,13 @@ public interface GetData {
     @POST("logout")
     Call<LogoutToken> logout(@Header("Authorization") String authHeader);
 
-    @FormUrlEncoded
     @PATCH("me/password")
-    Call<Errors> changePassword(@Header("Authorization") String authHeader,
-                                @Field("old_password") String old_password,
-                                @Field("password") String password,
-                                @Field("password_confirmation") String password_confirmation);
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    Call<Errors> changePassword(@Header("Authorization") String authHeader, @Body Password password);
 
     @GET("student/activities")
     Call<ActivityModel> getStudentActivities(@Header("Authorization") String authHeader);
+
+    @GET("activities/{activity}/items")
+    Call<RubbishModel> getActivityItems(@Header("Authorization") String authHeader, @Path("activity") int activity_id);
 }

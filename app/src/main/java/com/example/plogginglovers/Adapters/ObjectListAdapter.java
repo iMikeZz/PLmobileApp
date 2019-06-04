@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import com.example.plogginglovers.Helpers.InputFilterMinMax;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -94,7 +95,9 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
 
         holder.name.setText(dataModel.getName());
 
-        holder.image.setImageResource(dataModel.getImage());
+        //todo change photo here (concat with the datamodel.getImage)
+        Picasso.get().load("http://46.101.15.61/storage/misc/item-default.jpg").into(holder.image);
+        //holder.image.setImageResource(R.drawable.bootle);
 
         holder.txtPoints.setText(dataModel.getScore() + " pts");
 
@@ -243,7 +246,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
     }
 
     private void decrement(ViewHolder holder, Rubbish dataModel) {
-        long quantity = dataModel.getQuantity();
+        int quantity = dataModel.getQuantity();
         if (quantity == 0){
             mAutoDecrement = false;
         } else {
@@ -257,7 +260,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
     }
 
     private void increment(ViewHolder holder, Rubbish dataModel){
-        long quantity = dataModel.getQuantity();
+        int quantity = dataModel.getQuantity();
         if (quantity == 999){
             mAutoIncrement = false;
         } else {

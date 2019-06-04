@@ -105,6 +105,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                 // Add a marker in Sydney and move the camera
                 if (response.body() != null){
                     for (Ecoponto ecoponto : response.body().getData()) {
+                        System.out.println(ecoponto.getLatitude() + ecoponto.getLongitude());
                         mMap.addMarker(new MarkerOptions().position(new LatLng(ecoponto.getLatitude(), ecoponto.getLongitude())));
                     }
                 }

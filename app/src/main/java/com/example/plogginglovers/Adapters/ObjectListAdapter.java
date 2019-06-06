@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
 
-    private static final long REP_DELAY = 50;
+    private static final long REP_DELAY = 50; //aumentar ou diminuir o rate
 
     //region Interface
     private PointsListener pointsListener;
@@ -114,7 +114,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //System.out.println(s);
-                if (s.length() > 0 && Integer.parseInt(s.toString()) > 0){
+                if (s.length() > 0 && Integer.parseInt(s.toString()) > 0 && Integer.parseInt(s.toString()) <= 999){
                     finalHolder.buttonMinus.setEnabled(true);
                 } else {
                     finalHolder.buttonMinus.setEnabled(false);
@@ -123,46 +123,8 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0 && Integer.parseInt(s.toString()) > 0){
-                    dataModel.setQuantity(Integer.parseInt(s.toString()));
-                    /*
-                    if (pointsListener != null){
-                        pointsListener.onPointsAddedListener(dataModel.getScore() * Integer.parseInt(s.toString()));
-                    }
-                    */
-                }
             }
         });
-
-        //System.out.println(holder.quantity.getText().toString());
-        /*
-
-        if (holder.quantity.getText().toString().equals("100")){
-            //todo set clickable false no botao plus
-            holder.buttonPlus.setEnabled(false);
-        }
-        */
-
-        /*
-        KeyboardVisibilityEvent.setEventListener(mContext,
-                new KeyboardVisibilityEventListener() {
-                    @Override
-                    public void onVisibilityChanged(boolean isOpen) {
-                        // some code depending on keyboard visiblity status
-                        if (isOpen){
-                            System.out.println("1");
-                            // Toast.makeText(getApplicationContext(), "abri", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Toast.makeText(getApplicationContext(), "fechei", Toast.LENGTH_SHORT).show();
-                            //finalHolder.quantity.clearFocus();
-                            System.out.println("0 " + position + " " + finalHolder.quantity.getText() + " " + dataModel.getQuantity());
-                            if (pointsListener != null){
-                                pointsListener.onPointsAddedListener(dataModel.getScore() * dataModel.getQuantity());
-                            }
-                        }
-                    }
-                });
-                */
 
 
         holder.buttonMinus.setOnClickListener(new View.OnClickListener() {

@@ -44,7 +44,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private SensorManager sensorManager;
     private Sensor accel;
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
-    private int numSteps;
+    private int numSteps, activity_id;
     private int points = 0;
     private List<Rubbish> garbageList;
 
@@ -78,8 +78,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         txtKilos = (TextView) findViewById(R.id.kilometersTxt);
         txtPoints = (TextView) findViewById(R.id.txtpoints);
         txtActivityDescription = (TextView) findViewById(R.id.txtActivityDescription);
-        editTextQuantity = findViewById(R.id.editTextNumber); //todo é editText
+        editTextQuantity = findViewById(R.id.editTextNumber); //todo é textView fazer refactor
 
+        activity_id = getIntent().getExtras().getInt("id");
         System.out.println(getIntent().getExtras().getInt("id"));
         System.out.println(getIntent().getExtras().getString("description"));
 
@@ -129,7 +130,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-        Call<RubbishModel> call = service.getActivityItems("Bearer " + pref.getString("token", null), getIntent().getExtras().getInt("id"));
+        Call<RubbishModel> call = service.getActivityItems("Bearer " + pref.getString("token", null), activity_id);
 
         //Execute the request asynchronously//
         call.enqueue(new Callback<RubbishModel>() {
@@ -279,8 +280,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 Toast.makeText(getApplicationContext(), "Taking a pic", Toast.LENGTH_LONG).show();
                 break;
             case R.id.chatMenuItem:
-                //todo open chat
-                Toast.makeText(getApplicationContext(), "Chat", Toast.LENGTH_LONG).show();
+                startActivity(ChatActivity.getIntent(this).putExtra("id", activity_id));
                 break;
         }
 

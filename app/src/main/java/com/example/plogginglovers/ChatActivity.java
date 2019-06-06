@@ -2,6 +2,7 @@ package com.example.plogginglovers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.plogginglovers.Model.Message;
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -26,81 +28,50 @@ public class ChatActivity extends AppCompatActivity {
 
     private EditText input;
     private FloatingActionButton fab;
-    // ...
+
+    private SharedPreferences pref;
+
+    private String activity_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        setTitle("Chat");
+
         input = (EditText)findViewById(R.id.input);
         fab = (FloatingActionButton)findViewById(R.id.fab);
 
-        //if(FirebaseAuth.getInstance().getCurrentUser() == null) {
-            // Start sign in/sign up activity
-            /*startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .build(),
-                    SIGN_IN_REQUEST_CODE
-            );
-            */
-            /*
-            mAuth = FirebaseAuth.getInstance();
-            mAuth.signInAnonymously()
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInAnonymously:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                System.out.println(user.toString());//updateUI(user);
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
-                                displayChatMessages();
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInAnonymously:failure", task.getException());
-                                Toast.makeText(ChatActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                //updateUI(null);
-                            }
+        activity_id = String.valueOf(getIntent().getExtras().getInt("id"));
 
-                            // ...
-                        }
-                    });
-                    */
-        //} else {
-            // User is already signed in. Therefore, display
-            // a welcome Toast
-            Toast.makeText(this,
-                    "Welcome " + FirebaseAuth.getInstance()
-                            .getCurrentUser()
-                            .getDisplayName(),
-                    Toast.LENGTH_LONG)
-                    .show();
+        final String studentName = pref.getString("studentName", null);
 
-            // Load chat room contents
-            displayChatMessages();
-        //}
+        Toast.makeText(this, "Bem vindo " + studentName, Toast.LENGTH_LONG).show();
+
+        // Load chat room contents
+        displayChatMessages();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                input = (EditText) findViewById(R.id.input);
-
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database
                 if (!input.getText().toString().trim().equals("")) {
                     FirebaseDatabase.getInstance()
                             .getReference()
+                            .child(activity_id)
                             .push()
-                            .setValue(new Message("Name goes here",
+                            .setValue(new Message(studentName,
                                             input.getText().toString())
-                        /*.setValue(new Message(input.getText().toString(),
-                                FirebaseAuth.getInstance()
-                                        .getCurrentUser()
-                                        .getDisplayName())*/
                             );
 
                     // Clear the input
@@ -114,7 +85,7 @@ public class ChatActivity extends AppCompatActivity {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
         adapter = new FirebaseListAdapter<Message>(this, Message.class,
-                R.layout.message, FirebaseDatabase.getInstance().getReference()) {
+                R.layout.message, FirebaseDatabase.getInstance().getReference().child(activity_id)) {
 
             @Override
             protected void populateView(View v, Message model, int position) {
@@ -134,6 +105,12 @@ public class ChatActivity extends AppCompatActivity {
         };
 
         listOfMessages.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     public static Intent getIntent(Context context){

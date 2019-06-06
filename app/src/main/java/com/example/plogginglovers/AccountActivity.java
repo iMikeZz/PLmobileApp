@@ -1,11 +1,17 @@
 package com.example.plogginglovers;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -29,12 +36,29 @@ import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Errors;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.Password;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
-import net.alhazmy13.mediapicker.Image.ImagePicker;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
+import id.zelory.compressor.Compressor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +71,14 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
     private TextView txtName, txtEmail, txtEscola, txtTurma, txtStudentName, txtStudentEmail;
 
-    private ImageView profileImage;
+    private ImageView profileImage, nav_profile_image;
+
+    private BottomSheetDialog dialog;
+
+    private static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int REQUEST_GALLERY_PHOTO = 2;
+
+    private File mPhotoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +110,8 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
         txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
 
+        nav_profile_image = navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile);
+
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
         //nav header info
@@ -90,11 +123,18 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         txtEscola.setText(pref.getString("studentSchool", null));
         txtTurma.setText(pref.getString("studentClass", null));
 
+        String photo_url = pref.getString("studentPhoto", null);
 
-        Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(profileImage);
+        if (photo_url != null){
+            Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(profileImage);
+            Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(nav_profile_image);
+        }else {
+            Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(profileImage);
+            Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
+        }
     }
 
-    public static Intent getIntent(Context context){
+    public static Intent getIntent(Context context) {
         return new Intent(context, AccountActivity.class);
     }
 
@@ -130,13 +170,13 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         } else if (id == R.id.nav_stats && !item.isChecked()) {
             startActivity(StatisticsActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_ecopontos && !item.isChecked()){
+        } else if (id == R.id.nav_ecopontos && !item.isChecked()) {
             startActivity(EcopontosActivity.getIntent(this));
             finish();
-        } else if(id == R.id.nav_onde_colocar && !item.isChecked()){
+        } else if (id == R.id.nav_onde_colocar && !item.isChecked()) {
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
-        }else if (id == R.id.nav_logout && !item.isChecked()){
+        } else if (id == R.id.nav_logout && !item.isChecked()) {
             /*
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
@@ -145,13 +185,13 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
             */
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-            Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
+            Call<LogoutToken> call = service.logout("Bearer " + pref.getString("token", null));
 
             //Execute the request asynchronously//
             call.enqueue(new Callback<LogoutToken>() {
                 @Override
                 public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
@@ -175,15 +215,11 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
     }
 
     public void onClickShowPicker(View view) {
-        new ImagePicker.Builder(this)
-                .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                .directory(ImagePicker.Directory.DEFAULT)
-                .extension(ImagePicker.Extension.PNG)
-                .scale(600, 600)
-                .allowMultipleImages(false)
-                .enableDebuggingMode(true)
-                .build();
+        View inflated_view = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+
+        dialog = new BottomSheetDialog(this);
+        dialog.setContentView(inflated_view);
+        dialog.show();
     }
 
     public void onClickAlterarPassword(View view) {
@@ -199,7 +235,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this)
                 .setPositiveButton("Alterar", null)
-                .setNeutralButton("Voltar", null)
+                .setNeutralButton("Cancelar", null)
                 .setTitle("Alterar Password")
                 .setView(dialogView)
                 .create();
@@ -218,14 +254,14 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
                         Password password = new Password(txtOldPassword.getText().toString(), txtNewPassword.getText().toString(), txtNewPasswordConfirmation.getText().toString());
 
-                        Call<Errors> call = service.changePassword("Bearer "  + pref.getString("token", null), password);
+                        Call<Errors> call = service.changePassword("Bearer " + pref.getString("token", null), password);
 
                         //Execute the request asynchronously//
                         call.enqueue(new Callback<Errors>() {
                             @Override
                             public void onResponse(Call<Errors> call, Response<Errors> response) {
                                 System.out.println(response);
-                                if (response.isSuccessful()){
+                                if (response.isSuccessful()) {
                                     dialogBuilder.dismiss();
                                     Toast.makeText(AccountActivity.this, "Password alterada com sucesso", Toast.LENGTH_LONG).show();
                                 } else {
@@ -252,10 +288,10 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() == 0){
+                if (s.toString().length() == 0) {
                     txtErrorOldPassword.setText("Campo Obrigatório");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if(!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")){
+                } else if (!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")) {
                     txtErrorNewPassword.setText("");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
                 } else {
@@ -280,13 +316,13 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 if (s.toString().length() == 0) {
                     txtErrorNewPassword.setText("Campo Obrigatório");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if(s.toString().length() <= 3) {
+                } else if (s.toString().length() <= 3) {
                     txtErrorNewPassword.setText("Password com menos de 3 carateres");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if(!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")){
+                } else if (!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")) {
                     txtErrorNewPassword.setText("");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                } else{
+                } else {
                     txtErrorNewPassword.setText("");
                 }
             }
@@ -305,14 +341,14 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() == 0){
+                if (s.toString().length() == 0) {
                     txtErrorNewPasswordConfirmation.setText("Campo Obrigatório");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if(!s.toString().equals(txtNewPassword.getText().toString())){
+                } else if (!s.toString().equals(txtNewPassword.getText().toString())) {
                     txtErrorNewPasswordConfirmation.setText("Passwords têm de ser iguais");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if(!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")){
-                    txtErrorNewPassword.setText("");
+                } else if (!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")) {
+                    txtErrorNewPasswordConfirmation.setText("");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
                 } else {
                     txtErrorNewPasswordConfirmation.setText("");
@@ -328,5 +364,247 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         dialogBuilder.show();
 
         dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+    }
+
+    private void requestStoragePermission(final boolean isCamera) {
+        Dexter.withActivity(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                            if (isCamera) {
+                                dispatchTakePictureIntent();
+                            } else {
+                                dispatchGalleryIntent();
+                            }
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // show alert dialog navigating to Settings
+                            showSettingsDialog();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                            Toast.makeText(getApplicationContext(), "Error occurred! ", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .onSameThread()
+                .check();
+    }
+
+
+    /**
+     * Showing Alert Dialog with Settings option
+     * Navigates user to app settings
+     * NOTE: Keep proper title and message depending on your app
+     */
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Need Permissions");
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+    }
+
+    // navigating user to app settings
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
+    }
+
+
+    /**
+     * Create file with current timestamp name
+     *
+     * @return
+     * @throws IOException
+     */
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String mFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File mFile = File.createTempFile(mFileName, ".jpg", storageDir);
+        return mFile;
+    }
+
+    /**
+     * Capture image from camera
+     */
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                // Error occurred while creating the File
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        photoFile);
+
+                mPhotoFile = photoFile;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    /**
+     * Select image from gallery
+     */
+    private void dispatchGalleryIntent() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(pickPhoto, REQUEST_GALLERY_PHOTO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_TAKE_PHOTO) {
+
+                try {
+                    profilePictureDialogConfirmation();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (requestCode == REQUEST_GALLERY_PHOTO) {
+                Uri selectedImage = data.getData();
+
+                mPhotoFile = new File(getRealPathFromUri(selectedImage));
+
+                try {
+                    profilePictureDialogConfirmation();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void profilePictureDialogConfirmation() throws IOException {
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.confirm_profile_photo_dialog, null);
+
+        ImageView profile_image_confirm = dialogView.findViewById(R.id.profile_image_confirm);
+
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this)
+                .setPositiveButton("Confirmar", null)
+                .setNeutralButton("Cancelar", null)
+                .setTitle("Pré-vizualização da foto de perfil")
+                .setView(dialogView)
+                .create();
+
+
+        final File compressedImageFile = new Compressor(AccountActivity.this).compressToFile(mPhotoFile);
+
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button button = dialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+                        // Create a request body with file and image media type
+                        RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), compressedImageFile);
+                        // Create MultipartBody.Part using file request-body,file name and part name
+                        MultipartBody.Part part = MultipartBody.Part.createFormData("photo", compressedImageFile.getName(), fileReqBody);
+
+                        System.out.println(part.toString());
+
+                        Call<ResponseBody> call = service.uploadProfilePicture("Bearer " + pref.getString("token", null), part);
+
+                        //Execute the request asynchronously//
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                System.out.println(response);
+                                if (response.isSuccessful()) {
+                                    dialogBuilder.dismiss();
+                                    Toast.makeText(AccountActivity.this, "Foto alterada com sucesso", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                System.out.println(t.getMessage());
+                            }
+                        });
+                        Picasso.get().load(compressedImageFile).into(profileImage);
+                        dialogBuilder.dismiss();
+                    }
+                });
+            }
+        });
+
+        dialogBuilder.show();
+        Picasso.get().load(compressedImageFile).into(profile_image_confirm);
+    }
+
+    /**
+     * Get real file path from URI
+     *
+     * @param contentUri
+     * @return
+     */
+    public String getRealPathFromUri(Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = getContentResolver().query(contentUri, proj, null, null, null);
+            assert cursor != null;
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public void onClickTakePhoto(View view) {
+        requestStoragePermission(true);
+        dialog.cancel();
+    }
+
+    public void onClickOpenGallery(View view) {
+        requestStoragePermission(false);
+        dialog.cancel();
     }
 }

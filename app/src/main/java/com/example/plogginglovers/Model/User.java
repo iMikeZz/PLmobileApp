@@ -12,7 +12,7 @@ public class User {
     private String email;
     @SerializedName("photo")
     @Expose
-    private Object photo;
+    private String photo;
     @SerializedName("school_name")
     @Expose
     private String schoolName;
@@ -39,11 +39,11 @@ public class User {
         this.email = email;
     }
 
-    public Object getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Object photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 

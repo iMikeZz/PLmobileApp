@@ -16,9 +16,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,19 +24,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.TaskStackBuilder;
 
-import com.example.plogginglovers.Adapters.ActivitiesListAdapter;
 import com.example.plogginglovers.Adapters.ObjectListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.Activity;
-import com.example.plogginglovers.Model.ActivityModel;
-import com.example.plogginglovers.Model.ActivityTeam;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -71,7 +63,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        setTitle("Atividadeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        setTitle("Atividade");
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
@@ -219,7 +211,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 });
 
         */
-
 
     }
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -47,6 +49,8 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
     private SharedPreferences pref;
 
     private TextView txtStudentName, txtStudentEmail;
+
+    private ImageView nav_profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,8 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
 
         txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
         txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+        nav_profile_image = navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile);
 
         //nav header info
         txtStudentName.setText(pref.getString("studentName", null));
@@ -150,6 +156,14 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                 Toast.makeText(ContactsActivity.this, "Unable to load contacts", Toast.LENGTH_SHORT).show();
             }
         });
+
+        String photo_url = pref.getString("studentPhoto", null);
+
+        if (photo_url != null){
+            Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(nav_profile_image);
+        }else {
+            Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
+        }
 
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +34,8 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
     private SharedPreferences pref;
 
     private TextView txtStudentName, txtStudentEmail;
+
+    private ImageView nav_profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +64,19 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
         txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
         txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
 
+        nav_profile_image = navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile);
+
         //nav header info
         txtStudentName.setText(pref.getString("studentName", null));
         txtStudentEmail.setText(pref.getString("studentEmail", null));
+
+        String photo_url = pref.getString("studentPhoto", null);
+
+        if (photo_url != null){
+            Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(nav_profile_image);
+        }else {
+            Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
+        }
     }
 
     public static Intent getIntent(Context context){

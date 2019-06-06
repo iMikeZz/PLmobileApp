@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.IntentCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -28,6 +28,7 @@ import com.example.plogginglovers.Model.ActivityTeam;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
     private FirebaseAuth mAuth;
     private SharedPreferences pref;
     private TextView txtStudentName, txtStudentEmail;
+    private ImageView nav_profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,9 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
 
         txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
         txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
+
+
+        nav_profile_image = navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile);
 
         //nav header info
         txtStudentName.setText(pref.getString("studentName", null));
@@ -116,6 +121,14 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                 Toast.makeText(ActivitiesActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
             }
         });
+
+        String photo_url = pref.getString("studentPhoto", null);
+
+        if (photo_url != null){
+            Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(nav_profile_image);
+        }else {
+            Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
+        }
     }
 
 

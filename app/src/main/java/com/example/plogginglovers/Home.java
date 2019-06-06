@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.UserData;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +43,8 @@ public class Home extends AppCompatActivity
     private SharedPreferences pref;
 
     private TextView txtStudentName, txtStudentEmail;
+
+    private ImageView nav_profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,8 @@ public class Home extends AppCompatActivity
         txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
         txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
 
+        nav_profile_image = navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile);
+
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
@@ -103,6 +109,12 @@ public class Home extends AppCompatActivity
                 editor.putString("studentEmail", response.body().getData().getEmail());
                 editor.putString("studentSchool", response.body().getData().getSchoolName());
                 editor.putString("studentClass", response.body().getData().getYear()+ "º " +response.body().getData().getClass_());
+                editor.putString("studentPhoto", response.body().getData().getPhoto());
+                if (response.body().getData().getPhoto() != null){
+                    Picasso.get().load("http://46.101.15.61/storage/profiles/" + response.body().getData().getPhoto()).into(nav_profile_image);
+                }else {
+                    Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
+                }
                 editor.commit();
             }
 

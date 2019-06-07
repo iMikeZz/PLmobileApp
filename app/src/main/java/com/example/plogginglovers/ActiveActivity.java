@@ -1,21 +1,42 @@
 package com.example.plogginglovers;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.RectF;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +44,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.FileProvider;
 
 import com.example.plogginglovers.Adapters.ObjectListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
@@ -31,7 +53,20 @@ import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -51,6 +86,10 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private NotificationManager mNotificationManager;
 
     private SharedPreferences pref;
+
+    private static final int REQUEST_TAKE_PHOTO = 1;
+
+    private File mPhotoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,7 +316,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 Toast.makeText(getApplicationContext(), "Showing gallery", Toast.LENGTH_LONG).show();
                 break;
             case R.id.camMenuItem:
-                Toast.makeText(getApplicationContext(), "Taking a pic", Toast.LENGTH_LONG).show();
+                requestStoragePermission();
                 break;
             case R.id.chatMenuItem:
                 startActivity(ChatActivity.getIntent(this).putExtra("id", activity_id));
@@ -309,5 +348,218 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     public void onPointsRemovedListener(long points) {
         this.points -= points;
         txtPoints.setText(this.points + " pts");
+    }
+
+
+    private void requestStoragePermission() {
+        Dexter.withActivity(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                            dispatchTakePictureIntent();
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // show alert dialog navigating to Settings
+                            showSettingsDialog();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Toast.makeText(getApplicationContext(), "Error occurred! ", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .onSameThread()
+                .check();
+    }
+
+    private void showSettingsDialog() {
+        //todo change to portuguese
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Need Permissions");
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings();
+            }
+        });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+    }
+
+    // navigating user to app settings
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                // Error occurred while creating the File
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        photoFile);
+
+                mPhotoFile = photoFile;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_TAKE_PHOTO) {
+                profilePictureDialogConfirmation();
+            }
+        }
+    }
+
+    /**
+     * Create file with current timestamp name
+     *
+     * @return
+     * @throws IOException
+     */
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String mFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File mFile = File.createTempFile(mFileName, ".jpg", storageDir);
+        return mFile;
+    }
+
+
+    private void profilePictureDialogConfirmation() {
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.share_image_preview_dialog, null);
+
+        ImageView share_image = dialogView.findViewById(R.id.share_image);
+
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this)
+                .setPositiveButton("Partilhar", null)
+                .setNeutralButton("Cancelar", null)
+                .setTitle("Pré-vizualização da foto")
+                .setView(dialogView)
+                .create();
+
+        String filePath = mPhotoFile.getPath();
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+
+        final Bitmap mark = addWatermark(getResources(),bitmap);
+
+        //final File compressedImageFile = new Compressor(AccountActivity.this).compressToFile(mPhotoFile);
+
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button button = dialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent share = new Intent(Intent.ACTION_SEND);
+                        share.setType("image/jpeg");
+
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.Images.Media.TITLE, "title");
+                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                        Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                values);
+
+
+                        OutputStream outstream;
+                        try {
+                            outstream = getContentResolver().openOutputStream(uri);
+                            mark.compress(Bitmap.CompressFormat.JPEG, 100, outstream);
+                            outstream.close();
+                        } catch (Exception e) {
+                            System.err.println(e.toString());
+                        }
+
+                        share.putExtra(Intent.EXTRA_STREAM, uri);
+                        startActivity(Intent.createChooser(share, "Partilhar imagem"));
+
+                        dialogBuilder.dismiss();
+                    }
+                });
+            }
+        });
+
+        dialogBuilder.show();
+
+        share_image.setImageBitmap(mark);
+    }
+
+    public static Bitmap addWatermark(Resources res, Bitmap source) {
+        int w, h;
+        Canvas c;
+        Paint paint;
+        Bitmap bmp, watermark;
+        Matrix matrix;
+        float scale;
+        RectF r;
+        w = source.getWidth();
+        h = source.getHeight();
+        // Create the new bitmap
+        bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
+        // Copy the original bitmap into the new one
+        c = new Canvas(bmp);
+        c.drawBitmap(source, 0, 0, paint);
+        // Load the watermark
+        watermark = BitmapFactory.decodeResource(res, R.drawable.watermark_v2);
+        // Scale the watermark to be approximately 40% of the source image height
+        scale = (float) (((float) h * 0.60) / (float) watermark.getHeight());
+        // Create the matrix
+        matrix = new Matrix();
+        matrix.postScale(scale, scale);
+        // Determine the post-scaled size of the watermark
+        r = new RectF(0, 0, watermark.getWidth(), watermark.getHeight());
+        matrix.mapRect(r);
+        // Move the watermark to the bottom right corner
+        System.out.println("w: "+ w + " h: "+ h);
+        float cenas = w - r.width();
+        float cenas1 = h - r.height();
+        System.out.println("w: "+ cenas + " h: " + cenas1);
+        matrix.postTranslate(w - r.width(), h - r.height());
+        // Draw the watermark
+        c.drawBitmap(watermark, matrix, paint);
+        // Free up the bitmap memory
+        watermark.recycle();
+        return bmp;
     }
 }

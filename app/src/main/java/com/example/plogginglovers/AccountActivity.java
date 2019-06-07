@@ -407,6 +407,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
      * NOTE: Keep proper title and message depending on your app
      */
     private void showSettingsDialog() {
+        //todo change to portuguese
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Need Permissions");
         builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
@@ -417,7 +418,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 openSettings();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

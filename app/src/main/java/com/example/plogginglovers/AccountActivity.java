@@ -316,8 +316,8 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 if (s.toString().length() == 0) {
                     txtErrorNewPassword.setText("Campo Obrigatório");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if (s.toString().length() <= 3) {
-                    txtErrorNewPassword.setText("Password com menos de 3 carateres");
+                } else if (s.toString().length() < 6) {
+                    txtErrorNewPassword.setText("Password com menos de 6 carateres");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
                 } else if (!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")) {
                     txtErrorNewPassword.setText("");
@@ -567,6 +567,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                             }
                         });
                         Picasso.get().load(compressedImageFile).into(profileImage);
+                        Picasso.get().load(compressedImageFile).into(nav_profile_image);
                         dialogBuilder.dismiss();
                     }
                 });

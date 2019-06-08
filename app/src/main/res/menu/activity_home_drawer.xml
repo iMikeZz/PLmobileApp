@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/menu_1">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home_black_24dp"
@@ -11,7 +11,7 @@
         <item
             android:id="@+id/nav_activity"
             android:icon="@drawable/ic_activity_black_24dp"
-            android:title="Actividades"/>
+            android:title="Actividades" />
         <item
             android:id="@+id/nav_account"
             android:icon="@drawable/ic_account_circle_black_24dp"
@@ -19,56 +19,58 @@
 
     </group>
 
-    <item android:title="Informações">
-        <menu>
-            <item
-                android:id="@+id/nav_achievements"
-                android:icon="@drawable/ic_achievements_black_24dp"
-                android:title="Conquistas"
-                android:checkable="true"/>
-            <item
-                android:id="@+id/nav_stats"
-                android:icon="@drawable/ic_stats_black_24dp"
-                android:title="Estatísticas"
-                android:checkable="true"/>
-        </menu>
-    </item>
-
-    <item android:title="Comunidade">
-        <menu>
-            <item
-                android:id="@+id/nav_rankings"
-                android:icon="@drawable/ic_ranking_black_24dp"
-                android:title="Rankings"
-                android:checkable="true"/>
-            <item
-                android:id="@+id/nav_contacts"
-                android:icon="@drawable/ic_contact_phone_black_24dp"
-                android:title="Contactos"
-                android:checkable="true"/>
-            <item
-                android:id="@+id/nav_ecopontos"
-                android:icon="@drawable/trash_can_black"
-                android:title="Ecopontos"
-                android:checkable="true"/>
-            <item
-                android:id="@+id/nav_onde_colocar"
-                android:icon="@drawable/ic_search_blue_24dp"
-                android:title="Onde Colocar ?"
-                android:checkable="true"/>
-        </menu>
-    </item>
-
-    <item android:title="Ações">
-        <menu>
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/shutdown"
-                android:title="Logout"
-                android:checkable="true"/>
-        </menu>
-    </item>
+    <group android:id="@+id/menu_2">
+        <item android:title="Informações">
+            <menu>
+                <item
+                    android:id="@+id/nav_achievements"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_achievements_black_24dp"
+                    android:title="Conquistas" />
+                <item
+                    android:id="@+id/nav_stats"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_stats_black_24dp"
+                    android:title="Estatísticas" />
+            </menu>
+        </item>
+    </group>
 
 
+    <group android:id="@+id/menu_3">
+        <item android:title="Comunidade">
+            <menu>
+                <item
+                    android:id="@+id/nav_rankings"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_ranking_black_24dp"
+                    android:title="Rankings" />
+                <item
+                    android:id="@+id/nav_contacts"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_contact_phone_black_24dp"
+                    android:title="Contactos" />
+                <item
+                    android:id="@+id/nav_ecopontos"
+                    android:checkable="true"
+                    android:icon="@drawable/trash_can_black"
+                    android:title="Ecopontos" />
+                <item
+                    android:id="@+id/nav_onde_colocar"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_search_blue_24dp"
+                    android:title="Onde Colocar ?" />
+            </menu>
+        </item>
+    </group>
+
+
+    <group android:id="@+id/menu_4">
+        <item
+            android:id="@+id/nav_logout"
+            android:checkable="true"
+            android:icon="@drawable/shutdown"
+            android:title="Logout" />
+    </group>
 
 </menu>

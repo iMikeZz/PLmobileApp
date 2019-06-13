@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -97,6 +98,23 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         }else {
             Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.ranking_select_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.select_activity) {
+            Toast.makeText(getApplicationContext(), "Select activity dialog", Toast.LENGTH_LONG).show();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

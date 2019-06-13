@@ -1,6 +1,7 @@
 package com.example.plogginglovers.Interfaces;
 
 import com.example.plogginglovers.Model.ActivityModel;
+import com.example.plogginglovers.Model.Captain;
 import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.Errors;
@@ -57,4 +58,11 @@ public interface GetData {
     @Multipart
     @POST("me/photo")
     Call<ResponseBody> uploadProfilePicture(@Header("Authorization") String authHeader, @Part MultipartBody.Part file);
+
+    @GET("student/teams/{team}/captain")
+    Call<Captain> isStudentTeamCaptain(@Header("Authorization") String authHeader, @Path("team") int team_id);
+
+    @Multipart
+    @POST("activities/{activity}/{team}/status")
+    Call<ResponseBody> updateActivityTeamStatus(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id, @Part MultipartBody.Part file);
 }

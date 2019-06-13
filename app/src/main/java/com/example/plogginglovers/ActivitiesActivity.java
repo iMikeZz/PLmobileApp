@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.plogginglovers.Adapters.ActivitiesListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
@@ -36,13 +37,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActivitiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ActivitiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private ArrayList<String> dataModels;
     private FirebaseAuth mAuth;
     private SharedPreferences pref;
     private TextView txtStudentName, txtStudentEmail;
     private ImageView nav_profile_image;
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +72,27 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         txtStudentName = navigationView.getHeaderView(0).findViewById(R.id.txtStudentN);
         txtStudentEmail = navigationView.getHeaderView(0).findViewById(R.id.txtStudentEmail);
 
-
         nav_profile_image = navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile);
 
         //nav header info
         txtStudentName.setText(pref.getString("studentName", null));
         txtStudentEmail.setText(pref.getString("studentEmail", null));
 
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeLayout.setOnRefreshListener(this);
+
+        getActivities();
+
+        String photo_url = pref.getString("studentPhoto", null);
+
+        if (photo_url != null) {
+            Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(nav_profile_image);
+        } else {
+            Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
+        }
+    }
+
+    private void getActivities() {
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
         Call<ActivityModel> call = service.getStudentActivities("Bearer " + pref.getString("token", null));
@@ -93,7 +109,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
 
                     final ArrayList<Activity> activities = new ArrayList<>();
 
-                    for (ActivityTeam activityTeam : response.body().getData()){
+                    for (ActivityTeam activityTeam : response.body().getData()) {
                         activities.addAll(activityTeam.getActivities());
                     }
 
@@ -101,13 +117,30 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
 
                     activeActivitiesList.setAdapter(adapter);
 
+                    swipeLayout.setRefreshing(false);
+
                     activeActivitiesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             //todo change add the information of the activity
-                            startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
-                                    .putExtra("description", activities.get(position).getDescription())
-                                    .putExtra("id", activities.get(position).getId()));
+                            if (activities.get(position).getState().equals("Pending") && activities.get(position).getPivot().getStatus().equals("invited")) {
+                                startActivity(PendingActivity.getIntent(ActivitiesActivity.this)
+                                        .putExtra("description", activities.get(position).getDescription())
+                                        .putExtra("id", activities.get(position).getId())
+                                        .putExtra("team_id", activities.get(position).getPivot().getTeamId()));
+                            } else if (activities.get(position).getState().equals("Pending") && activities.get(position).getPivot().getStatus().equals("accepted")) {
+                                startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
+                                        .putExtra("description", activities.get(position).getDescription())
+                                        .putExtra("id", activities.get(position).getId())
+                                        .putExtra("state", "pending_accepted"));
+                            } else if (activities.get(position).getState().equals("Started") && activities.get(position).getPivot().getStatus().equals("accepted")){
+                                startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
+                                        .putExtra("description", activities.get(position).getDescription())
+                                        .putExtra("id", activities.get(position).getId())
+                                        .putExtra("state", "started_accepted"));
+                            }else {
+                                Toast.makeText(ActivitiesActivity.this, "A atividade já terminou ou a sua equipa não aceitou, por favor refresque a aplicação", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }
@@ -121,18 +154,10 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                 Toast.makeText(ActivitiesActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
             }
         });
-
-        String photo_url = pref.getString("studentPhoto", null);
-
-        if (photo_url != null){
-            Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(nav_profile_image);
-        }else {
-            Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
-        }
     }
 
 
-    public static Intent getIntent(Context context){
+    public static Intent getIntent(Context context) {
         return new Intent(context, ActivitiesActivity.class);
     }
 
@@ -167,13 +192,13 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         } else if (id == R.id.nav_stats && !item.isChecked()) {
             startActivity(StatisticsActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_ecopontos && !item.isChecked()){
+        } else if (id == R.id.nav_ecopontos && !item.isChecked()) {
             startActivity(EcopontosActivity.getIntent(this));
             finish();
-        } else if(id == R.id.nav_onde_colocar && !item.isChecked()){
+        } else if (id == R.id.nav_onde_colocar && !item.isChecked()) {
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
-        }else if (id == R.id.nav_logout && !item.isChecked()){
+        } else if (id == R.id.nav_logout && !item.isChecked()) {
             /*
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
@@ -182,13 +207,13 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
             */
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-            Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
+            Call<LogoutToken> call = service.logout("Bearer " + pref.getString("token", null));
 
             //Execute the request asynchronously//
             call.enqueue(new Callback<LogoutToken>() {
                 @Override
                 public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
@@ -209,5 +234,10 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        getActivities();
     }
 }

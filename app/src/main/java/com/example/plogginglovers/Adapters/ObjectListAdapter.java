@@ -27,6 +27,8 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
 
     private static final long REP_DELAY = 50; //aumentar ou diminuir o rate
 
+    private String activity_state;
+
     //region Interface
     private PointsListener pointsListener;
 
@@ -70,9 +72,10 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
     //endregion
 
 
-    public ObjectListAdapter(@NonNull Activity context, int resource, @NonNull List<Rubbish> objects) {
+    public ObjectListAdapter(@NonNull Activity context, int resource, @NonNull List<Rubbish> objects, String activity_state) {
         super(context, resource, objects);
         this.mContext = context;
+        this.activity_state = activity_state;
     }
 
     @NonNull
@@ -100,6 +103,11 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
         //holder.image.setImageResource(R.drawable.bootle);
 
         holder.txtPoints.setText(dataModel.getScore() + " pts");
+
+        if (activity_state.equals("pending_accepted")){
+            holder.buttonMinus.setEnabled(false);
+            holder.buttonPlus.setEnabled(false);
+        }
 
         if (holder.quantity.getText().toString().equals("0")){
             holder.buttonMinus.setEnabled(false);

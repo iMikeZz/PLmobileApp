@@ -1,33 +1,20 @@
 package com.example.plogginglovers;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.RectF;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -37,23 +24,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.TaskStackBuilder;
-import androidx.core.content.FileProvider;
-
-import com.example.plogginglovers.Adapters.ObjectListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Helpers.ImageUtil;
 import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.Rubbish;
-import com.example.plogginglovers.Model.RubbishModel;
-import com.example.plogginglovers.Pedometer.StepDetector;
-import com.example.plogginglovers.Pedometer.StepListener;
+import com.example.plogginglovers.Model.Captain;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -70,32 +47,34 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener {
-    private TextView TvSteps, countDownTimer, txtCals, txtKilos, txtPoints, editTextQuantity, txtActivityDescription;
-    private StepDetector simpleStepDetector;
-    private SensorManager sensorManager;
-    private Sensor accel;
-    private static final String TEXT_NUM_STEPS = "Number of Steps: ";
-    private int numSteps, activity_id;
-    private int points = 0;
-    private List<Rubbish> garbageList;
-
-    private NotificationManager mNotificationManager;
+public class PendingActivity extends AppCompatActivity {
+    private TextView txtActivityDescription;
+    private int team_id, activity_id;
 
     private SharedPreferences pref;
 
     private static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int REQUEST_TAKE_TEAM_PHOTO = 2;
 
     private File mPhotoFile;
+
+    private Button btnStartPlogging;
+
+    private String activityDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_active);
+        setContentView(R.layout.activity_pending);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -107,152 +86,41 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
-        // Get an instance of the SensorManager
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        simpleStepDetector = new StepDetector();
-        simpleStepDetector.registerListener(this);
-
-        TvSteps = (TextView) findViewById(R.id.tv_steps);
-        txtCals = (TextView) findViewById(R.id.caloriesTxt);
-        txtKilos = (TextView) findViewById(R.id.kilometersTxt);
-        txtPoints = (TextView) findViewById(R.id.txtpoints);
         txtActivityDescription = (TextView) findViewById(R.id.txtActivityDescription);
-        editTextQuantity = findViewById(R.id.editTextNumber); //todo é textView fazer refactor
+
+        btnStartPlogging = findViewById(R.id.btnStartPlogging);
 
         activity_id = getIntent().getExtras().getInt("id");
+        team_id = getIntent().getExtras().getInt("team_id");
         System.out.println(getIntent().getExtras().getInt("id"));
         System.out.println(getIntent().getExtras().getString("description"));
 
-        txtActivityDescription.setText(getIntent().getExtras().getString("description"));
-
-        /*
-        garbageList = new ArrayList<>();
-
-        garbageList.add(new Rubbish("Garrafas", R.drawable.bootle, 100));
-        garbageList.add(new Rubbish("Ecopontos", R.drawable.ecoponto_amarelo, 200));
-        */
-
-        countDownTimer = findViewById(R.id.countDownTimer);
-
-        new CountDownTimer(30000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                countDownTimer.setText("00:" + millisUntilFinished / 1000);
-            }
-
-            public void onFinish() {
-                countDownTimer.setText("done!");
-                //createNotificationChannel(); needed if uses NotificationCompact.Builder that is depracated
-                Notification.Builder mBuilder = new Notification.Builder(ActiveActivity.this,"my_channel_01");
-                mBuilder.setSmallIcon(R.drawable.ic_activity_black_24dp);
-                mBuilder.setContentTitle("Acabou a atividade!");
-                //mBuilder.setContentText("Hi, This is Android Notification Detail!");
-                Intent resultIntent = new Intent(ActiveActivity.this, ActiveActivity.class);
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(ActiveActivity.this);
-                stackBuilder.addParentStack(ActiveActivity.class);
-
-                // Adds the Intent that starts the Activity to the top of the stack
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-                mBuilder.setContentIntent(resultPendingIntent);
-
-                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                // notificationID allows you to update the notification later on.
-                // mNotificationManager.createNotificationChannelGroup(new NotificationChannelGroup("888", "batata"));
-                mNotificationManager.notify(001, mBuilder.build());
-            }
-        }.start();
-
-        numSteps = 0;
-        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
-
+        activityDescription = getIntent().getExtras().getString("description");
+        txtActivityDescription.setText(activityDescription);
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-        Call<RubbishModel> call = service.getActivityItems("Bearer " + pref.getString("token", null), activity_id);
+        Call<Captain> call = service.isStudentTeamCaptain("Bearer " + pref.getString("token", null), team_id);
 
         //Execute the request asynchronously//
-        call.enqueue(new Callback<RubbishModel>() {
+        call.enqueue(new Callback<Captain>() {
             @Override
             //Handle a successful response//
-            public void onResponse(Call<RubbishModel> call, Response<RubbishModel> response) {
+            public void onResponse(Call<Captain> call, Response<Captain> response) {
                 // Add a marker in Sydney and move the camera
-                if (response.body() != null) {
-                    ListView listView = findViewById(R.id.objectList);
-                    ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, response.body().getData(), getIntent().getExtras().getString("state"));
-                    listView.setAdapter(objectListAdapter);
-                    objectListAdapter.setPointsListener(ActiveActivity.this);
+                if (!response.body().getCaptain()) {
+                    btnStartPlogging.setVisibility(View.INVISIBLE);
                 }
             }
 
             @Override
             //Handle execution failures//
-            public void onFailure(Call<RubbishModel> call, Throwable throwable) {
+            public void onFailure(Call<Captain> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
-                Toast.makeText(ActiveActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PendingActivity.this, "Unable to load", Toast.LENGTH_SHORT).show(); // todo change message
             }
         });
-
-
-
-        /*
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(position);
-            }
-        });
-
-        */
-
-        //NumberPicker numberPicker = findViewById(R.id.numberPicker);
-
-        //System.out.println(numberPicker);
-
-        /*numberPicker.setNumberPickerChangeListener(new NumberPicker.OnNumberPickerChangeListener() {
-            @Override
-            public void onProgressChanged(@NotNull NumberPicker numberPicker, int i, boolean b) {
-                System.out.println(i);
-            }
-
-            @Override
-            public void onStartTrackingTouch(@NotNull NumberPicker numberPicker) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(@NotNull NumberPicker numberPicker) {
-
-            }
-        });
-        */
-
-        /*
-        TextView textView = findViewById(R.id.txtpoints);
-        textView.setText(String.valueOf(RecyclingManager.INSTANCE.getPoints()));
-        */
-
-        /*
-        KeyboardVisibilityEvent.setEventListener(this,
-                new KeyboardVisibilityEventListener() {
-                    @Override
-                    public void onVisibilityChanged(boolean isOpen) {
-                        // some code depending on keyboard visiblity status
-                        if (isOpen){
-                            System.out.println("1");
-                           // Toast.makeText(getApplicationContext(), "abri", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Toast.makeText(getApplicationContext(), "fechei", Toast.LENGTH_SHORT).show();
-                            //finalHolder.quantity.clearFocus();
-                            System.out.println("0");
-                        }
-                    }
-                });
-
-        */
-
     }
 
     @Override
@@ -261,45 +129,8 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         return true;
     }
 
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            CharSequence name = "batata";
-            String description = "batata";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("my_channel_01", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            //NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            mNotificationManager.createNotificationChannel(channel);
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-            simpleStepDetector.updateAccel(
-                    event.timestamp, event.values[0], event.values[1], event.values[2]);
-        }
-    }
-
-    @Override
-    public void step(long timeNs) {
-        numSteps++;
-        TvSteps.setText(TEXT_NUM_STEPS + numSteps);
-        txtCals.setText(String.format("%.1f",(numSteps*0.04)));
-        txtKilos.setText(String.format("%.1f",(numSteps/1312.335)));
-    }
-
     public static Intent getIntent(Context context){
-        return new Intent(context, ActiveActivity.class);
+        return new Intent(context, PendingActivity.class);
     }
 
     @Override
@@ -317,7 +148,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 Toast.makeText(getApplicationContext(), "Showing gallery", Toast.LENGTH_LONG).show();
                 break;
             case R.id.camMenuItem:
-                requestStoragePermission();
+                requestStoragePermission(false);
                 break;
             case R.id.chatMenuItem:
                 startActivity(ChatActivity.getIntent(this).putExtra("id", activity_id));
@@ -327,39 +158,17 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onPause() {
-        sensorManager.unregisterListener(ActiveActivity.this);
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        sensorManager.unregisterListener(ActiveActivity.this);
-        super.onDestroy();
-    }
-
-    @Override
-    public void onPointsAddedListener(long points) {
-        this.points += points;
-        txtPoints.setText(this.points + " pts");
-    }
-
-    @Override
-    public void onPointsRemovedListener(long points) {
-        this.points -= points;
-        txtPoints.setText(this.points + " pts");
-    }
-
-
-    private void requestStoragePermission() {
+    private void requestStoragePermission(final boolean isTeamPhoto) {
         Dexter.withActivity(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            dispatchTakePictureIntent();
+                            if (!isTeamPhoto)
+                                dispatchTakePictureIntent(REQUEST_TAKE_PHOTO);
+                            else
+                                dispatchTakePictureIntent(REQUEST_TAKE_TEAM_PHOTO);
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
@@ -413,7 +222,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         startActivityForResult(intent, 101);
     }
 
-    private void dispatchTakePictureIntent() {
+    private void dispatchTakePictureIntent(int requestCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
@@ -431,7 +240,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
                 mPhotoFile = photoFile;
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                startActivityForResult(takePictureIntent, requestCode);
             }
         }
     }
@@ -442,6 +251,12 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO) {
                 sharePictureDialogConfirmation();
+            } else if (requestCode == REQUEST_TAKE_TEAM_PHOTO){
+                try {
+                    teamPictureDialogConfirmation();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -479,8 +294,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
 
         final Bitmap mark = ImageUtil.addWatermark(getResources(),bitmap);
-
-        //final File compressedImageFile = new Compressor(AccountActivity.this).compressToFile(mPhotoFile);
 
         dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
 
@@ -523,5 +336,77 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         dialogBuilder.show();
 
         share_image.setImageBitmap(mark);
+    }
+
+    private void teamPictureDialogConfirmation() throws IOException {
+        //todo layout is the same as the above one
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.share_image_preview_dialog, null);
+
+        ImageView team_image = dialogView.findViewById(R.id.share_image);
+
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this)
+                .setPositiveButton("Confirmar", null)
+                .setNeutralButton("Cancelar", null)
+                .setTitle("Pré-vizualização da foto de equipa")
+                .setView(dialogView)
+                .create();
+
+
+        final File compressedImageFile = new Compressor(this).compressToFile(mPhotoFile);
+
+        dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button button = dialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+                        // Create a request body with file and image media type
+                        RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), compressedImageFile);
+                        // Create MultipartBody.Part using file request-body,file name and part name
+                        MultipartBody.Part part = MultipartBody.Part.createFormData("photo", compressedImageFile.getName(), fileReqBody);
+
+                        Call<ResponseBody> call = service.updateActivityTeamStatus("Bearer " + pref.getString("token", null), activity_id, team_id, part);
+
+                        //Execute the request asynchronously//
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                System.out.println(response);
+                                if (response.isSuccessful()) {
+                                    dialogBuilder.dismiss();
+                                    Toast.makeText(PendingActivity.this, "Foto e estado alterados", Toast.LENGTH_LONG).show();
+
+                                    //todo start ActiveActivity
+                                    startActivity(ActiveActivity.getIntent(PendingActivity.this)
+                                            .putExtra("description", activityDescription)
+                                            .putExtra("id", activity_id)
+                                            .putExtra("state", "pending_accepted"));
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                System.out.println(t.getMessage());
+                            }
+                        });
+                        dialogBuilder.dismiss();
+                    }
+                });
+            }
+        });
+
+        dialogBuilder.show();
+        Picasso.get().load(compressedImageFile).into(team_image);
+    }
+
+    public void onClickStartPlogging(View view) {
+        requestStoragePermission(true);
     }
 }

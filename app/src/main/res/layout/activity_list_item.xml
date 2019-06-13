@@ -43,6 +43,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="121dp"
+                android:enabled="false"
                 android:text="31/05/2019"
                 android:textAppearance="@style/chipTextAppearance"
                 android:textColor="#FFFFFF"
@@ -61,7 +62,8 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="85dp"
-                android:text="ATIVA"
+                android:enabled="false"
+                android:text=""
                 android:textAppearance="@style/chipTextAppearance"
                 android:textColor="#FFFFFF"
                 app:chipBackgroundColor="#18bc26"
@@ -79,6 +81,17 @@
                 android:layout_marginTop="126dp"
                 app:srcCompat="@drawable/ic_navigate_next_black_24dp"
                 android:focusable="false"/>
+
+            <ImageView
+                android:id="@+id/team_status"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="272dp"
+                android:layout_marginTop="55dp"
+                app:srcCompat="@drawable/ic_check_black_24dp"
+                android:tint="@color/started_activity_green"/>
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>

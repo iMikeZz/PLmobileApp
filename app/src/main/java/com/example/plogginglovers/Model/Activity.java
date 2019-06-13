@@ -40,6 +40,9 @@ public class Activity {
     @SerializedName("state")
     @Expose
     private String state;
+    @SerializedName("pivot")
+    @Expose
+    private PivotActivityTeam pivot;
 
     public Integer getId() {
         return id;
@@ -135,5 +138,13 @@ public class Activity {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public PivotActivityTeam getPivot() {
+        return pivot;
+    }
+
+    public void setPivot(PivotActivityTeam pivot) {
+        this.pivot = pivot;
     }
 }

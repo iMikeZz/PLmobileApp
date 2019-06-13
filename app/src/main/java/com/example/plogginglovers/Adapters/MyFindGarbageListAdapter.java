@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.plogginglovers.Model.RecyclingManager;
 import com.example.plogginglovers.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,23 +34,35 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.my_list, null,true);
+        View rowView = inflater.inflate(R.layout.my_list, null, true);
 
         TextView titleText = (TextView) rowView.findViewById(R.id.title);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
         System.out.println(titleText.getText().toString());
         final String ecoponto = RecyclingManager.INSTANCE.getEcoponto(garbageList.get(position));
-        if (ecoponto.equals("Amarelo")){
+        if (ecoponto.equals("Amarelo")) {
             titleText.setText(garbageList.get(position));
             imageView.setImageResource(R.drawable.ecoponto_amarelo);
-        } else if (ecoponto.equals("Azul")){
+        } else if (ecoponto.equals("Azul")) {
             titleText.setText(garbageList.get(position));
             imageView.setImageResource(R.drawable.ecoponto_azul);
-        } else if (ecoponto.equals("Verde")){
+        } else if (ecoponto.equals("Verde")) {
             titleText.setText(garbageList.get(position));
             imageView.setImageResource(R.drawable.ecoponto_verde);
-        } else{
+        } else if (ecoponto.equals("Pilhão")) {
+            titleText.setText(garbageList.get(position));
+            imageView.setImageResource(R.drawable.ecoponto_verde);
+            imageView.setColorFilter(ContextCompat.getColor(getContext(), R.color.terminated_activity_red));
+        } else if (ecoponto.equals("Ecocentro")) {
+            titleText.setText(garbageList.get(position));
+            imageView.setImageResource(R.drawable.ecoponto_verde);
+            imageView.setColorFilter(ContextCompat.getColor(getContext(), R.color.black));
+        } else if (ecoponto.equals("Farmácia")) {
+            titleText.setText(garbageList.get(position));
+            imageView.setImageResource(R.drawable.ecoponto_verde);
+            imageView.setColorFilter(ContextCompat.getColor(getContext(), R.color.purpleEcoponto));
+        } else {
             titleText.setText(garbageList.get(position));
             imageView.setImageResource(R.drawable.lixo_comum);
         }
@@ -56,8 +70,13 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Light.make(v, "Ecoponto " + ecoponto, R.drawable.trash_can, R.color.material_grey /*backgroung*/, R.color.white /*textColor*/, Snackbar.LENGTH_SHORT).show();
-                //Light.normal(v, "Ecoponto " + ecoponto, Snackbar.LENGTH_SHORT);
+                if(ecoponto.equals("Amarelo") || ecoponto.equals("Verde") || ecoponto.equals("Azul")) {
+                    Light.make(v, "Ecoponto " + ecoponto, R.drawable.trash_can, R.color.material_grey /*backgroung*/, R.color.white /*textColor*/, Snackbar.LENGTH_SHORT).show();
+                } else if (ecoponto.equals("Comum")) {
+                    Light.make(v, "Lixo " + ecoponto, R.drawable.trash_can, R.color.material_grey /*backgroung*/, R.color.white /*textColor*/, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Light.make(v, ecoponto, R.drawable.trash_can, R.color.material_grey /*backgroung*/, R.color.white /*textColor*/, Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
 

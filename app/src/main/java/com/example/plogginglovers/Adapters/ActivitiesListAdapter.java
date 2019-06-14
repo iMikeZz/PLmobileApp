@@ -13,11 +13,16 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 
+import com.example.plogginglovers.Helpers.DateUtil;
 import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.R;
 import com.google.android.material.chip.Chip;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
 
@@ -49,8 +54,6 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
 
         Activity dataModel = getItem(position);
 
-        System.out.println(dataModel);
-
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
@@ -60,6 +63,8 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
+
+        holder.date_chip.setText(DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", dataModel.getStartTime()));
 
         if (dataModel.getState().equals("Pending")){
             holder.chipState.setText("Pendente");
@@ -72,17 +77,16 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
             holder.chipState.setChipBackgroundColorResource(R.color.terminated_activity_red);
         }
 
-        if (dataModel.getPivot().getStatus().equals("invited")){
+        if (dataModel.getTeamStatus().equals("invited")){
             holder.team_status.setImageResource(R.drawable.ic_more_horiz_black_24dp);
             holder.team_status.setColorFilter(ContextCompat.getColor(getContext(), R.color.pending_activity_yellow));
-        } else if(dataModel.getPivot().getStatus().equals("accepted")){
+        } else if(dataModel.getTeamStatus().equals("accepted")){
             holder.team_status.setImageResource(R.drawable.ic_check_black_24dp);
             holder.team_status.setColorFilter(ContextCompat.getColor(getContext(),R.color.started_activity_green));
         } else {
             holder.team_status.setImageResource(R.drawable.ic_close_black_24dp);
             holder.team_status.setColorFilter(ContextCompat.getColor(getContext(),R.color.terminated_activity_red));
         }
-        System.out.println(dataModel.getStartTime());
 
         /*
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);

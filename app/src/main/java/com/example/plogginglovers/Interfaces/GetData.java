@@ -1,5 +1,7 @@
 package com.example.plogginglovers.Interfaces;
 
+import com.example.plogginglovers.Model.Activity;
+import com.example.plogginglovers.Model.ActivitiesModel;
 import com.example.plogginglovers.Model.ActivityModel;
 import com.example.plogginglovers.Model.Captain;
 import com.example.plogginglovers.Model.ContactList;
@@ -50,7 +52,7 @@ public interface GetData {
     Call<Errors> changePassword(@Header("Authorization") String authHeader, @Body Password password);
 
     @GET("student/activities")
-    Call<ActivityModel> getStudentActivities(@Header("Authorization") String authHeader);
+    Call<ActivitiesModel> getStudentActivities(@Header("Authorization") String authHeader);
 
     @GET("activities/{activity}/items")
     Call<RubbishModel> getActivityItems(@Header("Authorization") String authHeader, @Path("activity") int activity_id);
@@ -65,4 +67,7 @@ public interface GetData {
     @Multipart
     @POST("activities/{activity}/{team}/status")
     Call<ResponseBody> updateActivityTeamStatus(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id, @Part MultipartBody.Part file);
+
+    @GET("activities/{activity}/{team}/status")
+    Call<ActivityModel> getActivityTeamStatus(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id);
 }

@@ -3,16 +3,18 @@ package com.example.plogginglovers.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ActivityModel {
+import java.util.List;
+
+public class ActivitiesModel {
     @SerializedName("data")
     @Expose
-    private Activity data;
+    private List<ActivityTeam> data = null;
 
-    public Activity getData() {
+    public List<ActivityTeam> getData() {
         return data;
     }
 
-    public void setData(Activity data) {
+    public void setData(List<ActivityTeam> data) {
         this.data = data;
     }
 }

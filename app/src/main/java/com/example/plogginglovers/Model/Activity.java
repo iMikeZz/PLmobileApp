@@ -25,24 +25,21 @@ public class Activity {
     @SerializedName("type")
     @Expose
     private String type;
-    @SerializedName("responsible_teacher_id")
+    @SerializedName("duration")
     @Expose
-    private Integer responsibleTeacherId;
-    @SerializedName("created_at")
-    @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
-    @SerializedName("deleted_at")
-    @Expose
-    private Object deletedAt;
+    private Integer duration;
     @SerializedName("state")
     @Expose
     private String state;
-    @SerializedName("pivot")
+    @SerializedName("team_status")
     @Expose
-    private PivotActivityTeam pivot;
+    private String teamStatus;
+    @SerializedName("team_id")
+    @Expose
+    private Integer teamId;
+    @SerializedName("responsible_teacher")
+    @Expose
+    private String responsibleTeacher;
 
     public Integer getId() {
         return id;
@@ -100,38 +97,6 @@ public class Activity {
         this.type = type;
     }
 
-    public Integer getResponsibleTeacherId() {
-        return responsibleTeacherId;
-    }
-
-    public void setResponsibleTeacherId(Integer responsibleTeacherId) {
-        this.responsibleTeacherId = responsibleTeacherId;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Object getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(Object deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
     public String getState() {
         return state;
     }
@@ -140,11 +105,35 @@ public class Activity {
         this.state = state;
     }
 
-    public PivotActivityTeam getPivot() {
-        return pivot;
+    public String getTeamStatus() {
+        return teamStatus;
     }
 
-    public void setPivot(PivotActivityTeam pivot) {
-        this.pivot = pivot;
+    public void setTeamStatus(String teamStatus) {
+        this.teamStatus = teamStatus;
+    }
+
+    public String getResponsibleTeacher() {
+        return responsibleTeacher;
+    }
+
+    public void setResponsibleTeacher(String responsibleTeacher) {
+        this.responsibleTeacher = responsibleTeacher;
+    }
+
+    public Integer getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -31,8 +32,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plogginglovers.Client.RetrofitClient;
+import com.example.plogginglovers.Helpers.DateUtil;
 import com.example.plogginglovers.Helpers.ImageUtil;
 import com.example.plogginglovers.Interfaces.GetData;
+import com.example.plogginglovers.Model.Activity;
+import com.example.plogginglovers.Model.ActivityModel;
+import com.example.plogginglovers.Model.ActivityParcelable;
 import com.example.plogginglovers.Model.Captain;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -59,9 +64,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PendingActivity extends AppCompatActivity {
-    private TextView txtActivityDescription;
-    private int team_id, activity_id;
+public class PendingActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    private TextView txtActivityDescription, activity_name, txtActivityLocation, txtActivityType, txtActivityDuration, txtActivityStartTime, txtActivityEndTime, txtActivityResponsibleTeacher;
 
     private SharedPreferences pref;
 
@@ -72,7 +76,9 @@ public class PendingActivity extends AppCompatActivity {
 
     private Button btnStartPlogging;
 
-    private String activityDescription;
+    private ActivityParcelable activity;
+
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,20 +110,33 @@ public class PendingActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
         txtActivityDescription = (TextView) findViewById(R.id.txtActivityDescription);
+        activity_name = findViewById(R.id.activity_name);
+        txtActivityLocation = findViewById(R.id.txtActivityLocation);
+        txtActivityType = findViewById(R.id.txtActivityType);
+        txtActivityDuration = findViewById(R.id.txtActivityDuration);
+        txtActivityStartTime = findViewById(R.id.txtActivityStartTime);
+        txtActivityEndTime = findViewById(R.id.txtActivityEndTime);
+        txtActivityResponsibleTeacher = findViewById(R.id.txtActivityResponsibleTeacher);
 
         btnStartPlogging = findViewById(R.id.btnStartPlogging);
 
-        activity_id = getIntent().getExtras().getInt("id");
-        team_id = getIntent().getExtras().getInt("team_id");
-        System.out.println(getIntent().getExtras().getInt("id"));
-        System.out.println(getIntent().getExtras().getString("description"));
+        activity = getIntent().getParcelableExtra("activity");
 
-        activityDescription = getIntent().getExtras().getString("description");
-        txtActivityDescription.setText(activityDescription);
+        activity_name.setText(activity.getName());
+        txtActivityDescription.setText(activity.getDescription());
+        txtActivityLocation.setText(activity.getLocation());
+        txtActivityType.setText(activity.getType());
+        txtActivityDuration.setText(activity.getDuration());
+        txtActivityStartTime.setText(DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy HH:mm:ss", activity.getStartTime()));
+        txtActivityEndTime.setText(DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy HH:mm:ss", activity.getEndTime()));
+        txtActivityResponsibleTeacher.setText(activity.getResponsibleTeacher());
+
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeLayout.setOnRefreshListener(this);
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-        Call<Captain> call = service.isStudentTeamCaptain("Bearer " + pref.getString("token", null), team_id);
+        Call<Captain> call = service.isStudentTeamCaptain("Bearer " + pref.getString("token", null), activity.getTeamId());
 
         //Execute the request asynchronously//
         call.enqueue(new Callback<Captain>() {
@@ -168,7 +187,7 @@ public class PendingActivity extends AppCompatActivity {
                 requestStoragePermission(false);
                 break;
             case R.id.chatMenuItem:
-                startActivity(ChatActivity.getIntent(this).putExtra("id", activity_id));
+                startActivity(ChatActivity.getIntent(this).putExtra("id", activity.getId()));
                 break;
         }
 
@@ -388,7 +407,7 @@ public class PendingActivity extends AppCompatActivity {
                         // Create MultipartBody.Part using file request-body,file name and part name
                         MultipartBody.Part part = MultipartBody.Part.createFormData("photo", compressedImageFile.getName(), fileReqBody);
 
-                        Call<ResponseBody> call = service.updateActivityTeamStatus("Bearer " + pref.getString("token", null), activity_id, team_id, part);
+                        Call<ResponseBody> call = service.updateActivityTeamStatus("Bearer " + pref.getString("token", null), activity.getId(), activity.getTeamId(), part);
 
                         //Execute the request asynchronously//
                         call.enqueue(new Callback<ResponseBody>() {
@@ -401,8 +420,8 @@ public class PendingActivity extends AppCompatActivity {
 
                                     //todo start ActiveActivity
                                     startActivity(ActiveActivity.getIntent(PendingActivity.this)
-                                            .putExtra("description", activityDescription)
-                                            .putExtra("id", activity_id)
+                                            .putExtra("description", activity.getDescription())
+                                            .putExtra("id", activity.getId())
                                             .putExtra("state", "pending_accepted"));
                                     finish();
                                 }
@@ -426,4 +445,37 @@ public class PendingActivity extends AppCompatActivity {
     public void onClickStartPlogging(View view) {
         requestStoragePermission(true);
     }
+
+    @Override
+    public void onRefresh() {
+        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+        Call<ActivityModel> call = service.getActivityTeamStatus("Bearer " + pref.getString("token", null), activity.getId(), activity.getTeamId());
+
+        //Execute the request asynchronously//
+        call.enqueue(new Callback<ActivityModel>() {
+            @Override
+            public void onResponse(Call<ActivityModel> call, Response<ActivityModel> response) {
+                //System.out.println(response);
+                if (response.isSuccessful() && response.body().getData().getTeamStatus().equals("accepted")) {
+                    swipeLayout.setRefreshing(false);
+                    Toast.makeText(PendingActivity.this, "A tua equipa está pronta!", Toast.LENGTH_LONG).show();
+                    startActivity(ActiveActivity.getIntent(PendingActivity.this)
+                            .putExtra("description", activity.getDescription())
+                            .putExtra("id", activity.getId())
+                            .putExtra("state", "pending_accepted"));
+                    finish();
+                } else {
+                    swipeLayout.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ActivityModel> call, Throwable t) {
+                System.out.println(t.getMessage());
+            }
+        });
+    }
+
+
 }

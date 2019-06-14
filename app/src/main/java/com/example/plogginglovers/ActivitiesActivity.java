@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,8 @@ import com.example.plogginglovers.Adapters.ActivitiesListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Activity;
-import com.example.plogginglovers.Model.ActivityModel;
+import com.example.plogginglovers.Model.ActivitiesModel;
+import com.example.plogginglovers.Model.ActivityParcelable;
 import com.example.plogginglovers.Model.ActivityTeam;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
@@ -48,6 +50,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
     private TextView txtStudentName, txtStudentEmail;
     private ImageView nav_profile_image;
     private SwipeRefreshLayout swipeLayout;
+    private LinearLayout mask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,9 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeLayout.setOnRefreshListener(this);
 
+        mask = findViewById(R.id.mask);
+        mask.setVisibility(View.GONE);
+
         getActivities();
 
         String photo_url = pref.getString("studentPhoto", null);
@@ -112,13 +118,13 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
     private void getActivities() {
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-        Call<ActivityModel> call = service.getStudentActivities("Bearer " + pref.getString("token", null));
+        Call<ActivitiesModel> call = service.getStudentActivities("Bearer " + pref.getString("token", null));
 
         //Execute the request asynchronously//
-        call.enqueue(new Callback<ActivityModel>() {
+        call.enqueue(new Callback<ActivitiesModel>() {
             @Override
             //Handle a successful response//
-            public void onResponse(Call<ActivityModel> call, Response<ActivityModel> response) {
+            public void onResponse(Call<ActivitiesModel> call, Response<ActivitiesModel> response) {
                 System.out.println(response);
                 // Add a marker in Sydney and move the camera
                 if (response.body() != null) {
@@ -140,17 +146,16 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             //todo change add the information of the activity
-                            if (activities.get(position).getState().equals("Pending") && activities.get(position).getPivot().getStatus().equals("invited")) {
+                            mask.setVisibility(View.VISIBLE);
+                            if (activities.get(position).getState().equals("Pending") && activities.get(position).getTeamStatus().equals("invited")) {
                                 startActivity(PendingActivity.getIntent(ActivitiesActivity.this)
-                                        .putExtra("description", activities.get(position).getDescription())
-                                        .putExtra("id", activities.get(position).getId())
-                                        .putExtra("team_id", activities.get(position).getPivot().getTeamId()));
-                            } else if (activities.get(position).getState().equals("Pending") && activities.get(position).getPivot().getStatus().equals("accepted")) {
+                                        .putExtra("activity", new ActivityParcelable(activities.get(position))));
+                            } else if (activities.get(position).getState().equals("Pending") && activities.get(position).getTeamStatus().equals("accepted")) {
                                 startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
                                         .putExtra("description", activities.get(position).getDescription())
                                         .putExtra("id", activities.get(position).getId())
                                         .putExtra("state", "pending_accepted"));
-                            } else if (activities.get(position).getState().equals("Started") && activities.get(position).getPivot().getStatus().equals("accepted")){
+                            } else if (activities.get(position).getState().equals("Started") && activities.get(position).getTeamStatus().equals("accepted")){
                                 startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
                                         .putExtra("description", activities.get(position).getDescription())
                                         .putExtra("id", activities.get(position).getId())
@@ -165,7 +170,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
 
             @Override
             //Handle execution failures//
-            public void onFailure(Call<ActivityModel> call, Throwable throwable) {
+            public void onFailure(Call<ActivitiesModel> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
                 Toast.makeText(ActivitiesActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
@@ -256,5 +261,11 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
     @Override
     public void onRefresh() {
         getActivities();
+    }
+
+    @Override
+    protected void onResume() {
+        mask.setVisibility(View.GONE);
+        super.onResume();
     }
 }

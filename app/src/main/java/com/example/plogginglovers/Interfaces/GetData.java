@@ -7,11 +7,18 @@ import com.example.plogginglovers.Model.Captain;
 import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.Errors;
+import com.example.plogginglovers.Model.InfoModel;
+import com.example.plogginglovers.Model.Item;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.Password;
 import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Model.UserData;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -70,4 +77,11 @@ public interface GetData {
 
     @GET("activities/{activity}/{team}/status")
     Call<ActivityModel> getActivityTeamStatus(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id);
+
+    @GET("activities/{activity}/{team}/info")
+    Call<InfoModel> checkStudentActivityGameInfo(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id);
+
+    @POST("activities/{activity}/{team}/info")
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    Call<ResponseBody> newStudentActivityGameInfo(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id, @Body JsonObject items);
 }

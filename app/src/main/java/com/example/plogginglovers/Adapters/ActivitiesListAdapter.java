@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,11 +34,13 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
         Chip chipState;
         Chip date_chip;
         ImageView team_status;
+        TextView txtActivityName;
 
         public ViewHolder(View v) {
             chipState = (Chip) v.findViewById(R.id.state_chip);
             date_chip = (Chip) v.findViewById(R.id.date_chip);
             team_status = v.findViewById(R.id.team_status);
+            txtActivityName = v.findViewById(R.id.txtActivityName);
         }
     }
 
@@ -65,12 +68,13 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
         }
 
         holder.date_chip.setText(DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", dataModel.getStartTime()));
+        holder.txtActivityName.setText(dataModel.getName());
 
         if (dataModel.getState().equals("Pending")){
             holder.chipState.setText("Pendente");
             holder.chipState.setChipBackgroundColorResource(R.color.pending_activity_yellow);
         } else if (dataModel.getState().equals("Started")){
-            holder.chipState.setText("Começada");
+            holder.chipState.setText("Ativa");
             holder.chipState.setChipBackgroundColorResource(R.color.started_activity_green);
         } else {
             holder.chipState.setText("Terminada");
@@ -83,6 +87,9 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
         } else if(dataModel.getTeamStatus().equals("accepted")){
             holder.team_status.setImageResource(R.drawable.ic_check_black_24dp);
             holder.team_status.setColorFilter(ContextCompat.getColor(getContext(),R.color.started_activity_green));
+        } else if(dataModel.getTeamStatus().equals("finished")){
+            holder.team_status.setImageResource(R.drawable.ic_done_all_black_24dp);
+            holder.team_status.setColorFilter(ContextCompat.getColor(getContext(),R.color.terminated_activity_red));
         } else {
             holder.team_status.setImageResource(R.drawable.ic_close_black_24dp);
             holder.team_status.setColorFilter(ContextCompat.getColor(getContext(),R.color.terminated_activity_red));
@@ -92,23 +99,6 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
         result.startAnimation(animation);
         lastPosition = position;
-        */
-
-        /*
-
-        viewHolder.txtName.setText(dataModel.getName());
-        viewHolder.txtNumber.setText(String.valueOf(dataModel.getPhoneNumber()));
-        viewHolder.contact.setImageResource(R.drawable.ic_call_black_24dp);
-        */
-        /*
-        viewHolder.contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Calling...", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+351917620681"));
-                mContext.startActivity(intent);
-            }
-        });
         */
         // Return the completed view to render on screen
         return convertView;

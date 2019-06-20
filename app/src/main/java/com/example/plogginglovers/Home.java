@@ -25,10 +25,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.LogoutToken;
+import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.Model.UserData;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -248,7 +251,7 @@ public class Home extends AppCompatActivity
 
     public void onClickGoToActivities(View view){
         mask.setVisibility(View.VISIBLE);
-        startActivity(ActivitiesActivity.getIntent(this));
+        startActivity(ActivitiesActivity.getIntent(this).putExtra("data", new ArrayList<RubbishParcelable>()));
     }
 
     public void onClickGoToStatistics(View view) {

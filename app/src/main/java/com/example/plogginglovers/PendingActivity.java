@@ -85,7 +85,6 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending);
 
-
         //mudar cor da status bar
         //----------------------
         Window window = this.getWindow();
@@ -134,6 +133,10 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeLayout.setOnRefreshListener(this);
 
+        isActivityTeamCaptain();
+    }
+
+    private void isActivityTeamCaptain() {
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
         Call<Captain> call = service.isStudentTeamCaptain("Bearer " + pref.getString("token", null), activity.getTeamId());
@@ -461,8 +464,7 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
                     swipeLayout.setRefreshing(false);
                     Toast.makeText(PendingActivity.this, "A tua equipa está pronta!", Toast.LENGTH_LONG).show();
                     startActivity(ActiveActivity.getIntent(PendingActivity.this)
-                            .putExtra("description", activity.getDescription())
-                            .putExtra("id", activity.getId())
+                            .putExtra("activity", new ActivityParcelable(response.body().getData()))
                             .putExtra("state", "pending_accepted"));
                     finish();
                 } else {

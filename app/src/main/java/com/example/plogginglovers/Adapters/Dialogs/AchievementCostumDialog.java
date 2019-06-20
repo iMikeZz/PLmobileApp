@@ -31,8 +31,7 @@ public class AchievementCostumDialog extends Dialog {
         ImageView image = findViewById(R.id.achievementImage_details);
         ImageView background_view = findViewById(R.id.backgroundImage_details);
 
-
-        if (achievement.getStatus() == 0){ // not done
+        if (achievement.getStatus() == 0){ //todo not done
             ColorMatrix matrix = new ColorMatrix();
             matrix.setSaturation(0);
 

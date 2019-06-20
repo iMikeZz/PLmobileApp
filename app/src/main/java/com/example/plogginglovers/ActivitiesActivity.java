@@ -60,7 +60,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         setSupportActionBar(toolbar);
         setTitle("Actividades");
 
-
         //mudar cor da status bar
         //----------------------
         Window window = this.getWindow();
@@ -71,7 +70,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.blue_cenas_escuro));
         //-----------------
 
         mAuth = FirebaseAuth.getInstance();
@@ -152,16 +151,25 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                                         .putExtra("activity", new ActivityParcelable(activities.get(position))));
                             } else if (activities.get(position).getState().equals("Pending") && activities.get(position).getTeamStatus().equals("accepted")) {
                                 startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
-                                        .putExtra("description", activities.get(position).getDescription())
-                                        .putExtra("id", activities.get(position).getId())
+                                        .putExtra("activity", new ActivityParcelable(activities.get(position)))
+                                        .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
                                         .putExtra("state", "pending_accepted"));
-                            } else if (activities.get(position).getState().equals("Started") && activities.get(position).getTeamStatus().equals("accepted")){
+                                finish();
+                            } else if (activities.get(position).getState().equals("Started") && activities.get(position).getTeamStatus().equals("accepted")) {
                                 startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
-                                        .putExtra("description", activities.get(position).getDescription())
-                                        .putExtra("id", activities.get(position).getId())
+                                        .putExtra("activity", new ActivityParcelable(activities.get(position)))
+                                        .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
                                         .putExtra("state", "started_accepted"));
-                            }else {
-                                Toast.makeText(ActivitiesActivity.this, "A atividade já terminou ou a sua equipa não aceitou, por favor refresque a aplicação", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else if (activities.get(position).getState().equals("Terminated") && activities.get(position).getTeamStatus().equals("accepted")) {
+                                startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
+                                        .putExtra("activity", new ActivityParcelable(activities.get(position)))
+                                        .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
+                                        .putExtra("state", "terminated_accepted"));
+                                finish();
+                            } else {
+                                //todo alert dialog "a sua equipa já terminou a atividade" ou então deixar o toast
+                                Toast.makeText(ActivitiesActivity.this, "A tua equipa já terminou a atividade", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

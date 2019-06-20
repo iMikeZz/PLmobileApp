@@ -18,12 +18,13 @@ import androidx.annotation.Nullable;
 
 import com.example.plogginglovers.Helpers.InputFilterMinMax;
 import com.example.plogginglovers.Model.Rubbish;
+import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
+public class ObjectListAdapter extends ArrayAdapter<RubbishParcelable> {
 
     private static final long REP_DELAY = 50; //aumentar ou diminuir o rate
 
@@ -72,7 +73,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
     //endregion
 
 
-    public ObjectListAdapter(@NonNull Activity context, int resource, @NonNull List<Rubbish> objects, String activity_state) {
+    public ObjectListAdapter(@NonNull Activity context, int resource, @NonNull List<RubbishParcelable> objects, String activity_state) {
         super(context, resource, objects);
         this.mContext = context;
         this.activity_state = activity_state;
@@ -82,7 +83,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder = null;
-        final Rubbish dataModel = getItem(position);
+        final RubbishParcelable dataModel = getItem(position);
 
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
@@ -98,13 +99,15 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
 
         holder.name.setText(dataModel.getName());
 
+        holder.quantity.setText(String.valueOf(dataModel.getQuantity()));
+
         //todo change photo here (concat with the datamodel.getImage)
         Picasso.get().load("http://46.101.15.61/storage/misc/item-default.jpg").into(holder.image);
         //holder.image.setImageResource(R.drawable.bootle);
 
         holder.txtPoints.setText(dataModel.getScore() + " pts");
 
-        if (activity_state.equals("pending_accepted")){
+        if (activity_state.equals("pending_accepted") || activity_state.equals("terminated_accepted")){
             holder.buttonMinus.setEnabled(false);
             holder.buttonPlus.setEnabled(false);
         }
@@ -196,9 +199,9 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
 
     public class RptUpdater implements Runnable {
         private ViewHolder holder;
-        private Rubbish dataModel;
+        private RubbishParcelable dataModel;
 
-        public RptUpdater(ViewHolder holder, Rubbish dataModel) {
+        public RptUpdater(ViewHolder holder, RubbishParcelable dataModel) {
             this.holder = holder;
             this.dataModel = dataModel;
         }
@@ -215,7 +218,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
         }
     }
 
-    private void decrement(ViewHolder holder, Rubbish dataModel) {
+    private void decrement(ViewHolder holder, RubbishParcelable dataModel) {
         int quantity = dataModel.getQuantity();
         if (quantity == 0){
             mAutoDecrement = false;
@@ -229,7 +232,7 @@ public class ObjectListAdapter extends ArrayAdapter<Rubbish> {
         }
     }
 
-    private void increment(ViewHolder holder, Rubbish dataModel){
+    private void increment(ViewHolder holder, RubbishParcelable dataModel){
         int quantity = dataModel.getQuantity();
         if (quantity == 999){
             mAutoIncrement = false;

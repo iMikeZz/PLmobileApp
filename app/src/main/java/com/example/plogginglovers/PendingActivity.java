@@ -39,6 +39,7 @@ import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.Model.ActivityModel;
 import com.example.plogginglovers.Model.ActivityParcelable;
 import com.example.plogginglovers.Model.Captain;
+import com.example.plogginglovers.Model.RubbishParcelable;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -52,6 +53,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -410,7 +412,9 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
                         // Create MultipartBody.Part using file request-body,file name and part name
                         MultipartBody.Part part = MultipartBody.Part.createFormData("photo", compressedImageFile.getName(), fileReqBody);
 
-                        Call<ResponseBody> call = service.updateActivityTeamStatus("Bearer " + pref.getString("token", null), activity.getId(), activity.getTeamId(), part);
+                        RequestBody status = RequestBody.create(MediaType.parse("text/plain"), "accepted");
+
+                        Call<ResponseBody> call = service.updateActivityTeamStatus("Bearer " + pref.getString("token", null), activity.getId(), activity.getTeamId(), part, status);
 
                         //Execute the request asynchronously//
                         call.enqueue(new Callback<ResponseBody>() {
@@ -421,10 +425,9 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
                                     dialogBuilder.dismiss();
                                     Toast.makeText(PendingActivity.this, "Foto e estado alterados", Toast.LENGTH_LONG).show();
 
-                                    //todo start ActiveActivity
                                     startActivity(ActiveActivity.getIntent(PendingActivity.this)
-                                            .putExtra("description", activity.getDescription())
-                                            .putExtra("id", activity.getId())
+                                            .putExtra("activity", activity)
+                                            .putExtra("data", new ArrayList<RubbishParcelable>())
                                             .putExtra("state", "pending_accepted"));
                                     finish();
                                 }
@@ -465,6 +468,7 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
                     Toast.makeText(PendingActivity.this, "A tua equipa está pronta!", Toast.LENGTH_LONG).show();
                     startActivity(ActiveActivity.getIntent(PendingActivity.this)
                             .putExtra("activity", new ActivityParcelable(response.body().getData()))
+                            .putExtra("data", new ArrayList<RubbishParcelable>())
                             .putExtra("state", "pending_accepted"));
                     finish();
                 } else {
@@ -478,6 +482,4 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
             }
         });
     }
-
-
 }

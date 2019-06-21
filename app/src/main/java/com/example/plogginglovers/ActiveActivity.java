@@ -86,7 +86,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener, SwipeRefreshLayout.OnRefreshListener{
+public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener, SwipeRefreshLayout.OnRefreshListener {
     private TextView TvSteps, countDownTimer, txtCals, txtKilos, txtPoints, editTextQuantity, txtActivityDescription;
     private StepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -133,7 +133,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.blue_cenas_escuro));
         //-----------------
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -169,12 +169,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         activity_state = getIntent().getExtras().getString("state");
 
-        if (getIntent().getExtras().getParcelableArrayList("data").isEmpty()){
-            dataParcelable = getIntent().getExtras().getParcelableArrayList("data");
-        }
         //dataParcelable = getIntent().getExtras().getParcelableArrayList("data");
 
-        if (activity_state.equals("started_accepted")){
+        btnEndPlogging.setVisibility(View.INVISIBLE);
+
+        if (activity_state.equals("started_accepted")) {
             btnEndPlogging.setVisibility(View.INVISIBLE);
             new CountDownTimer(30000, 1000) {
                 public void onTick(long millisUntilFinished) {
@@ -206,7 +205,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                     */
                 }
             }.start();
-        }else if (activity_state.equals("terminated_accepted")){
+        } else if (activity_state.equals("terminated_accepted")) {
             checkStudentActivityGameInfo();
             /*todo verificar se ainda não submeteu
                    se já submeteu e se for o capitão e se já todos os membros submeteram mostrar dialog para enviar a foto final
@@ -228,6 +227,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 @Override
                 //Handle a successful response//
                 public void onResponse(Call<RubbishModel> call, Response<RubbishModel> response) {
+                    System.out.println(response);
                     dataParcelable = new ArrayList<>();
                     // Add a marker in Sydney and move the camera
                     if (response.body() != null) {
@@ -278,14 +278,14 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 //System.out.println(response);
                 if (response.isSuccessful()) {
                     swipeLayout.setRefreshing(false);
-                    if (!response.body().getInfo().getStudentSend()){
+                    if (!response.body().getInfo().getStudentSend()) {
                         btnEndPlogging.setVisibility(View.VISIBLE);
-                    } else if (!response.body().getInfo().getCaptain() && response.body().getInfo().getStudentSend()){
+                    } else if (!response.body().getInfo().getCaptain() && response.body().getInfo().getStudentSend()) {
                         //todo vai entrar se for não capitão e se já tiver submetido
                         Toast.makeText(ActiveActivity.this, "Já submeteste a informação sobre a atividade", Toast.LENGTH_SHORT).show();
                         onBackPressed();
                         finish();
-                    } else if (!response.body().getInfo().getTeamReady()){
+                    } else if (!response.body().getInfo().getTeamReady()) {
                         //todo vai entrar se for capitão e se a equipa não tiver ready
                         //todo alert dialog com equipa ainda não esta pronta tentar outra vez
                         AlertDialog dialogBuilder = new AlertDialog.Builder(ActiveActivity.this)
@@ -307,7 +307,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                                 .setMessage("A Equipa ainda não esta pronta, tenta outra vez")
                                 .create();
                         dialogBuilder.show();
-                    } else{
+                    } else {
                         //todo vai entrar se for capitão e se a equipa tiver ready
                         //todo upload da foto
                         AlertDialog dialogBuilder = new AlertDialog.Builder(ActiveActivity.this)
@@ -409,11 +409,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     public void step(long timeNs) {
         numSteps++;
         TvSteps.setText(String.valueOf(numSteps));
-        txtCals.setText(String.format("%.1f",(numSteps*0.04)));
-        txtKilos.setText(String.format("%.1f",(numSteps/1312.335)));
+        txtCals.setText(String.format("%.1f", (numSteps * 0.04)));
+        txtKilos.setText(String.format("%.1f", (numSteps / 1312.335)));
     }
 
-    public static Intent getIntent(Context context){
+    public static Intent getIntent(Context context) {
         return new Intent(context, ActiveActivity.class);
     }
 
@@ -427,7 +427,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.galleryMenuItem:
                 Toast.makeText(getApplicationContext(), "Showing gallery", Toast.LENGTH_LONG).show();
                 break;
@@ -474,9 +474,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            if (isTeamEndActivityPhoto){
+                            if (isTeamEndActivityPhoto) {
                                 dispatchTakePictureIntent(REQUEST_TEAM_END_ACTIVITY_PHOTO);
-                            } else{
+                            } else {
                                 dispatchTakePictureIntent(REQUEST_TAKE_PHOTO);
                             }
                         }
@@ -564,7 +564,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO) {
                 sharePictureDialogConfirmation();
-            }else {
+            } else {
                 try {
                     teamPictureDialogConfirmation();
                 } catch (IOException e) {
@@ -606,7 +606,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         String filePath = mPhotoFile.getPath();
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
 
-        final Bitmap mark = ImageUtil.addWatermark(getResources(),bitmap);
+        final Bitmap mark = ImageUtil.addWatermark(getResources(), bitmap);
 
         //final File compressedImageFile = new Compressor(AccountActivity.this).compressToFile(mPhotoFile);
 
@@ -661,8 +661,8 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         ListView listViewItems = dialogView.findViewById(R.id.itemDialogConfirmationList);
         //System.out.println(dataParcelable.get(0).getName());
-        for (RubbishParcelable rubbishParcelable: dataParcelable) {
-            if (rubbishParcelable.getQuantity() > 0){
+        for (RubbishParcelable rubbishParcelable : dataParcelable) {
+            if (rubbishParcelable.getQuantity() > 0) {
                 rubbishPickedUp.add(rubbishParcelable);
             }
         }
@@ -692,11 +692,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                         //Mesmo que não apanhe nada o registo dele tem de aparecer na tabela
                         JsonObject jsonObject = new JsonObject();
                         JsonArray itemsArray = new JsonArray();
-                        for (RubbishParcelable rubbish: dataParcelable) {
+                        for (RubbishParcelable rubbish : dataParcelable) {
                             JsonObject jsonObject1 = new JsonObject();
                             jsonObject1.addProperty("activity_item_id", rubbish.getId());
                             jsonObject1.addProperty("item_quantity", rubbish.getQuantity());
-                            jsonObject1.addProperty("student_score", rubbish.getQuantity()*rubbish.getScore());
+                            jsonObject1.addProperty("student_score", rubbish.getQuantity() * rubbish.getScore());
                             itemsArray.add(jsonObject1);
                         }
 
@@ -765,7 +765,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                         // Create MultipartBody.Part using file request-body,file name and part name
                         MultipartBody.Part part = MultipartBody.Part.createFormData("photo", compressedImageFile.getName(), fileReqBody);
 
-                        Call<ResponseBody> call = service.updateActivityTeamStatus("Bearer " + pref.getString("token", null), activity.getId(), activity.getTeamId(), part);
+                        RequestBody status = RequestBody.create(MediaType.parse("text/plain"), "terminated");
+
+                        Call<ResponseBody> call = service.updateActivityTeamStatus("Bearer " + pref.getString("token", null), activity.getId(), activity.getTeamId(), part, status);
 
                         //Execute the request asynchronously//
                         call.enqueue(new Callback<ResponseBody>() {
@@ -805,11 +807,16 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         call.enqueue(new Callback<ActivityModel>() {
             @Override
             public void onResponse(Call<ActivityModel> call, Response<ActivityModel> response) {
-                if (response.isSuccessful() && response.body().getData().getState().equals("Terminated")) {
+                if (response.isSuccessful()) {
                     swipeLayout.setRefreshing(false);
-                    ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "terminated_accepted");
-                    listViewObjects.setAdapter(objectListAdapter);
-                    checkStudentActivityGameInfo();
+                    if (response.body().getData().getState().equals("Terminated")) {
+                        ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "terminated_accepted");
+                        listViewObjects.setAdapter(objectListAdapter);
+                        checkStudentActivityGameInfo();
+                    } else if (response.body().getData().getState().equals("Started")){
+                        ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "started_accepted");
+                        listViewObjects.setAdapter(objectListAdapter);
+                    }
                 } else {
                     swipeLayout.setRefreshing(false);
                 }
@@ -842,7 +849,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     */
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (Build.VERSION.SDK_INT > 5
                 && keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {

@@ -105,7 +105,7 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
         achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.brown_achievement, 1));
 
         GridView gridView = findViewById(R.id.gridViewAchievements);
-        AchievementsAdapter achievementsAdapter = new AchievementsAdapter(this,achievements);
+        AchievementsAdapter achievementsAdapter = new AchievementsAdapter(this, achievements);
         gridView.setAdapter(achievementsAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

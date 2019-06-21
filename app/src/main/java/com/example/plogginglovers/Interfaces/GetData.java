@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -73,7 +74,7 @@ public interface GetData {
 
     @Multipart
     @POST("activities/{activity}/{team}/status")
-    Call<ResponseBody> updateActivityTeamStatus(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id, @Part MultipartBody.Part file);
+    Call<ResponseBody> updateActivityTeamStatus(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id, @Part MultipartBody.Part file, @Part("status") RequestBody status);
 
     @GET("activities/{activity}/{team}/status")
     Call<ActivityModel> getActivityTeamStatus(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id);

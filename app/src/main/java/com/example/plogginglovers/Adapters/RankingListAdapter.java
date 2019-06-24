@@ -8,16 +8,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.plogginglovers.Model.Ranking;
 import com.example.plogginglovers.Model.Team;
 import com.example.plogginglovers.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class RankingListAdapter extends ArrayAdapter<Team> {
+public class RankingListAdapter extends ArrayAdapter<Ranking> {
     private Activity activity;
-    private int posAux = 4;
 
-    public RankingListAdapter(Activity activity, int resource, List<Team> objects) {
+    public RankingListAdapter(Activity activity, int resource, List<Ranking> objects) {
         super(activity, resource, objects);
         this.activity = activity;
     }
@@ -26,7 +27,7 @@ public class RankingListAdapter extends ArrayAdapter<Team> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
 
-        Team item = getItem(position);
+        Ranking item = getItem(position);
 
         // inflate layout from xml
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -39,38 +40,11 @@ public class RankingListAdapter extends ArrayAdapter<Team> {
             convertView.setTag(holder);
         }
 
-        holder.place.setText(String.valueOf(posAux++));
-        holder.name.setText(item.getName());
-        holder.points.setText(String.valueOf(item.getScore()) + " pontos");
+        holder.place.setText(String.valueOf(item.getPosition()));
+        holder.name.setText(item.getTeamName());
+        holder.points.setText(item.getPoints() + " pontos");
 
-        /*
-        // set data to views
-        if (getItem(position).isGender()) {
-            holder.gender.setImageResource(R.drawable.male);
-        } else {
-            holder.gender.setImageResource(R.drawable.female);
-        }
-        */
-
-/*
-        switch (position){
-            case 0:
-                holder.trophy.setImageResource(R.drawable.first);
-                break;
-            case 1:
-                holder.trophy.setImageResource(R.drawable.second);
-                break;
-            case 2:
-                holder.trophy.setImageResource(R.drawable.third);
-                break;
-            default:
-                holder.trophy.setImageDrawable(null);
-                holder.place.setText(String.valueOf(posAux++));
-                break;
-        }
-        */
-
-        //holder.name.setText(getItem(position).getName());
+        Picasso.get().load("http://46.101.15.61/storage/teams/" + item.getPhotoUrl()).into(holder.teamImage);
 
         return convertView;
     }

@@ -87,7 +87,7 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
         } else if(dataModel.getTeamStatus().equals("accepted")){
             holder.team_status.setImageResource(R.drawable.ic_check_black_24dp);
             holder.team_status.setColorFilter(ContextCompat.getColor(getContext(),R.color.started_activity_green));
-        } else if(dataModel.getTeamStatus().equals("finished")){
+        } else if(dataModel.getTeamStatus().equals("terminated")){
             holder.team_status.setImageResource(R.drawable.ic_done_all_black_24dp);
             holder.team_status.setColorFilter(ContextCompat.getColor(getContext(),R.color.terminated_activity_red));
         } else {

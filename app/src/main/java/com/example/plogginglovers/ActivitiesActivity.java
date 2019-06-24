@@ -1,6 +1,8 @@
 package com.example.plogginglovers;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -135,45 +137,61 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                         activities.addAll(activityTeam.getActivities());
                     }
 
-                    ActivitiesListAdapter adapter = new ActivitiesListAdapter(activities, ActivitiesActivity.this, R.layout.activity_list_item);
+                    if (activities.size() == 0){
+                        AlertDialog dialogBuilder = new AlertDialog.Builder(ActivitiesActivity.this)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        finish();
+                                    }
+                                })
+                                .setCancelable(false)
+                                .setTitle("Sem Atividades")
+                                .setMessage("A tua equipa não tem atividade.")
+                                .create();
+                        dialogBuilder.show();
+                    }else {
+                        ActivitiesListAdapter adapter = new ActivitiesListAdapter(activities, ActivitiesActivity.this, R.layout.activity_list_item);
 
-                    activeActivitiesList.setAdapter(adapter);
+                        activeActivitiesList.setAdapter(adapter);
 
-                    swipeLayout.setRefreshing(false);
+                        swipeLayout.setRefreshing(false);
 
-                    activeActivitiesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            //todo change add the information of the activity
-                            mask.setVisibility(View.VISIBLE);
-                            if (activities.get(position).getState().equals("pending") && activities.get(position).getTeamStatus().equals("invited")) {
-                                startActivity(PendingActivity.getIntent(ActivitiesActivity.this)
-                                        .putExtra("activity", new ActivityParcelable(activities.get(position))));
-                            } else if (activities.get(position).getState().equals("pending") && activities.get(position).getTeamStatus().equals("accepted")) {
-                                startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
-                                        .putExtra("activity", new ActivityParcelable(activities.get(position)))
-                                        .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
-                                        .putExtra("state", "pending_accepted"));
-                                finish();
-                            } else if (activities.get(position).getState().equals("started") && activities.get(position).getTeamStatus().equals("accepted")) {
-                                startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
-                                        .putExtra("activity", new ActivityParcelable(activities.get(position)))
-                                        .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
-                                        .putExtra("state", "started_accepted"));
-                                finish();
-                            } else if (activities.get(position).getState().equals("terminated") && activities.get(position).getTeamStatus().equals("accepted")) {
-                                startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
-                                        .putExtra("activity", new ActivityParcelable(activities.get(position)))
-                                        .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
-                                        .putExtra("state", "terminated_accepted"));
-                                finish();
-                            } else {
-                                mask.setVisibility(View.INVISIBLE);
-                                //todo alert dialog "a sua equipa já terminou a atividade" ou então deixar o toast
-                                Toast.makeText(ActivitiesActivity.this, "A tua equipa já terminou a atividade", Toast.LENGTH_SHORT).show();
+                        activeActivitiesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                //todo change add the information of the activity
+                                mask.setVisibility(View.VISIBLE);
+                                if (activities.get(position).getState().equals("pending") && activities.get(position).getTeamStatus().equals("invited")) {
+                                    startActivity(PendingActivity.getIntent(ActivitiesActivity.this)
+                                            .putExtra("activity", new ActivityParcelable(activities.get(position))));
+                                } else if (activities.get(position).getState().equals("pending") && activities.get(position).getTeamStatus().equals("accepted")) {
+                                    startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
+                                            .putExtra("activity", new ActivityParcelable(activities.get(position)))
+                                            .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
+                                            .putExtra("state", "pending_accepted"));
+                                    finish();
+                                } else if (activities.get(position).getState().equals("started") && activities.get(position).getTeamStatus().equals("accepted")) {
+                                    startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
+                                            .putExtra("activity", new ActivityParcelable(activities.get(position)))
+                                            .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
+                                            .putExtra("state", "started_accepted"));
+                                    finish();
+                                } else if (activities.get(position).getState().equals("terminated") && activities.get(position).getTeamStatus().equals("accepted")) {
+                                    startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
+                                            .putExtra("activity", new ActivityParcelable(activities.get(position)))
+                                            .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
+                                            .putExtra("state", "terminated_accepted"));
+                                    finish();
+                                } else {
+                                    mask.setVisibility(View.INVISIBLE);
+                                    //todo alert dialog "a sua equipa já terminou a atividade" ou então deixar o toast
+                                    Toast.makeText(ActivitiesActivity.this, "A tua equipa já terminou a atividade", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
 

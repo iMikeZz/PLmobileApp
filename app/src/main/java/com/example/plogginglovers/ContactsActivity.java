@@ -195,7 +195,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
     private void callIntent() {
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+351917620681")); //todo change to the real number
         startActivity(intent);
-        Toast.makeText(getApplicationContext(), "A Ligar...", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "A Ligar...", Toast.LENGTH_LONG).show();
     }
 
 

@@ -12,33 +12,34 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plogginglovers.Helpers.DateUtil;
+import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.R;
 import com.squareup.picasso.Picasso;
 
-public class ActivityRankingSelectListAdapter extends ArrayAdapter<Rubbish> /*todo change to the right class*/{
+import java.util.List;
+
+public class ActivityRankingSelectListAdapter extends ArrayAdapter<Activity>{
 
     private Context context;
 
     private int resource;
 
-    public ActivityRankingSelectListAdapter(@NonNull Context context, int resource) {
-        super(context, resource);
+    private int selectedPosition = 0;
+
+    public ActivityRankingSelectListAdapter(@NonNull Context context, int resource, List<Activity> activities) {
+        super(context, resource, activities);
         this.context = context;
         this.resource = resource;
-    }
-
-    @Override
-    public int getCount() {
-        return 10;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
 
-        //RubbishParcelable rubbish = getItem(position);
+        Activity activity = getItem(position);
 
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
@@ -48,6 +49,19 @@ public class ActivityRankingSelectListAdapter extends ArrayAdapter<Rubbish> /*to
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
+
+        holder.radioButton.setChecked(position == selectedPosition);
+        holder.radioButton.setTag(position);
+        holder.radioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedPosition = (Integer)view.getTag();
+                notifyDataSetChanged();
+            }
+        });
+
+        holder.txtActivityDate.setText(DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", activity.getStartTime()));
+        holder.txtActivityName.setText(activity.getName());
 
         return convertView;
     }
@@ -62,5 +76,9 @@ public class ActivityRankingSelectListAdapter extends ArrayAdapter<Rubbish> /*to
             txtActivityName = (TextView) v.findViewById(R.id.txtActivityRankingSelectName);
             txtActivityDate = (TextView) v.findViewById(R.id.txtActivityRankingSelectDate);
         }
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
     }
 }

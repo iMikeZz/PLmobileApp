@@ -12,6 +12,8 @@ import com.example.plogginglovers.Model.Item;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.Password;
+import com.example.plogginglovers.Model.RankingActivityModel;
+import com.example.plogginglovers.Model.RankingModel;
 import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Model.UserData;
 import com.google.gson.JsonObject;
@@ -89,4 +91,13 @@ public interface GetData {
     @POST("activities/{activity}/{team}/info")
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     Call<ResponseBody> newStudentActivityGameInfo(@Header("Authorization") String authHeader, @Path("activity") int activity_id, @Path("team") int team_id, @Body JsonObject items);
+
+    @GET("rankings/recent")
+    Call<RankingModel> getRankings(@Header("Authorization") String authHeader);
+
+    @GET("student/activities/except/{activity}")
+    Call<RankingActivityModel> getTerminatedActivitiesExceptSelected(@Header("Authorization") String authHeader, @Path("activity") int activity_id);
+
+    @GET("activities/{activity}/ranking")
+    Call<RankingModel> getActivityRanking(@Header("Authorization") String authHeader, @Path("activity") int activity_id);
 }

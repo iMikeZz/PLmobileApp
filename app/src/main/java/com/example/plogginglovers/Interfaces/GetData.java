@@ -42,6 +42,10 @@ public interface GetData {
     //Wrap the response in a Call object with the type of the expected result//
     Call<UserData> getStudentInfo(@Header("Authorization") String authHeader);
 
+    @FormUrlEncoded
+    @POST("password/create")
+    Call<ResponseBody> resetPassword(@Field("email") String email);
+
     @GET("ecopontos")
     Call<EcopontosList> getAllEcopontos(@Header("Authorization") String authHeader);
 

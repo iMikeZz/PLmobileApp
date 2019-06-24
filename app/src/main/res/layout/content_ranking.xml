@@ -6,13 +6,161 @@
     android:layout_height="match_parent"
     tools:context=".RankingActivity">
 
-    <ListView
-        android:id="@+id/rankingList"
-        android:layout_width="395dp"
-        android:layout_height="587dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="72dp"
-        android:divider="@null"
+    <TextView
+        android:id="@+id/txtActivityNameAndDate"
+        android:layout_width="289dp"
+        android:layout_height="17dp"
+        android:layout_marginTop="65dp"
+        android:text="TextView"
+        android:gravity="center"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/imageFirstTeam"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageFirstTeam"
+        android:layout_width="79dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="95dp"
+        android:src="@drawable/ic_account_circle_black_24dp"
+        app:civ_border_color="@color/green_app_light"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toTopOf="@id/podiumLayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/podiumLayout"
+        android:layout_width="350dp"
+        android:layout_height="214dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="125dp"
+        android:layout_marginEnd="25dp"
+        app:layout_constraintBottom_toTopOf="@id/rankingList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/podium" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageSecondTeam"
+            android:layout_width="79dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="35dp"
+            android:src="@drawable/ic_account_circle_black_24dp"
+            app:civ_border_color="@color/green_app_light"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/txtSecondTeamPoints"
+            app:layout_constraintEnd_toStartOf="@id/txtFirstTeamPoints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtSecondTeamPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35dp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/txtSecondTeamName"
+            app:layout_constraintEnd_toStartOf="@id/txtFirstTeamPoints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageSecondTeam" />
+
+        <TextView
+            android:id="@+id/txtSecondTeamName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35dp"
+            android:layout_marginBottom="100dp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/txtFirstTeamPoints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtSecondTeamPoints" />
+
+        <TextView
+            android:id="@+id/txtFirstTeamPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35dp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/txtFirstTeamName"
+            app:layout_constraintEnd_toStartOf="@id/imageThirdTeam"
+            app:layout_constraintStart_toEndOf="@id/imageSecondTeam"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtFirstTeamName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="140dp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageThirdTeam"
+            app:layout_constraintStart_toEndOf="@id/imageSecondTeam"
+            app:layout_constraintTop_toBottomOf="@id/txtFirstTeamPoints" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageThirdTeam"
+            android:layout_width="79dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/ic_account_circle_black_24dp"
+            app:civ_border_color="@color/green_app_light"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toTopOf="@id/txtThirdTeamPoints"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/txtFirstTeamPoints"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtThirdTeamPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/txtThirdTeamName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/txtFirstTeamPoints"
+            app:layout_constraintTop_toBottomOf="@id/imageThirdTeam" />
+
+        <TextView
+            android:id="@+id/txtThirdTeamName"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginBottom="65dp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/txtFirstTeamPoints"
+            app:layout_constraintTop_toBottomOf="@id/txtThirdTeamPoints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ListView
+        android:id="@+id/rankingList"
+        android:layout_width="397dp"
+        android:layout_height="268dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/podiumLayout" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

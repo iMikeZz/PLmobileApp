@@ -13,13 +13,11 @@
         android:layout_height="304dp"
         android:layout_marginTop="17dp"
         android:layout_marginBottom="17dp"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo_vertical_1" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="182dp">
-
-
 
         <EditText
             android:id="@+id/editTextEmail"

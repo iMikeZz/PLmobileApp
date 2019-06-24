@@ -23,43 +23,25 @@ public class RankingListAdapter extends ArrayAdapter<Team> {
     }
 
     @Override
-    public int getViewTypeCount() {
-        // return the total number of view types. this value should never change
-        // at runtime
-        return 2;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        // return a value between 0 and (getViewTypeCount - 1)
-        return position % 2;
-    }
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
+
+        Team item = getItem(position);
 
         // inflate layout from xml
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
-        int layoutResource = 0; // determined by view type
-        int viewType = getItemViewType(position);
-        switch (viewType) {
-            case 0:
-                layoutResource = R.layout.ranking_right_item;
-                break;
-            case 1:
-                layoutResource = R.layout.ranking_left_item;
-                break;
-        }
-
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
         } else {
-            convertView = inflater.inflate(layoutResource, parent, false);
+            convertView = inflater.inflate(R.layout.ranking_list_item, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
+
+        holder.place.setText(String.valueOf(posAux++));
+        holder.name.setText(item.getName());
+        holder.points.setText(String.valueOf(item.getScore()) + " pontos");
 
         /*
         // set data to views
@@ -68,8 +50,9 @@ public class RankingListAdapter extends ArrayAdapter<Team> {
         } else {
             holder.gender.setImageResource(R.drawable.female);
         }
-
         */
+
+/*
         switch (position){
             case 0:
                 holder.trophy.setImageResource(R.drawable.first);
@@ -85,8 +68,9 @@ public class RankingListAdapter extends ArrayAdapter<Team> {
                 holder.place.setText(String.valueOf(posAux++));
                 break;
         }
+        */
 
-        holder.name.setText(getItem(position).getName());
+        //holder.name.setText(getItem(position).getName());
 
         return convertView;
     }
@@ -99,14 +83,14 @@ public class RankingListAdapter extends ArrayAdapter<Team> {
     private class ViewHolder {
         private TextView name;
         private ImageView teamImage;
-        private ImageView trophy;
+        private TextView points;
         private TextView place;
 
         public ViewHolder(View v) {
-            name = (TextView) v.findViewById(R.id.txtViewName);
+            name = (TextView) v.findViewById(R.id.txtTeamName);
             teamImage = (ImageView) v.findViewById(R.id.teamImage);
-            trophy = (ImageView) v.findViewById(R.id.trophy);
-            place = (TextView) v.findViewById(R.id.txtPlace);
+            points = (TextView) v.findViewById(R.id.txtTeamPoints);
+            place = (TextView) v.findViewById(R.id.txtTeamPlace);
         }
     }
 }

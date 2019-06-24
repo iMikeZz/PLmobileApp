@@ -1,14 +1,19 @@
 package com.example.plogginglovers;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,17 +27,23 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.plogginglovers.Adapters.ActivityRankingSelectListAdapter;
+import com.example.plogginglovers.Adapters.ItemConfirmationListAdapter;
 import com.example.plogginglovers.Adapters.RankingListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.LogoutToken;
+import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.Model.Team;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,7 +78,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.green_app_dark));
         //-----------------
 
         mAuth = FirebaseAuth.getInstance();
@@ -93,7 +104,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
 
         ListView activeActivitiesList = findViewById(R.id.rankingList);
 
-        ArrayAdapter adapter = new RankingListAdapter(this, R.layout.ranking_left_item, teams);
+        ArrayAdapter adapter = new RankingListAdapter(this, R.layout.ranking_list_item, teams);
 
         activeActivitiesList.setAdapter(adapter);
 
@@ -128,7 +139,38 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
 
         if (id == R.id.select_activity) {
-            Toast.makeText(getApplicationContext(), "Select activity dialog", Toast.LENGTH_LONG).show();
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.activity_ranking_select_list_dialog, null);
+
+            ListView activityRankingList = dialogView.findViewById(R.id.activityRankingList);
+
+            ActivityRankingSelectListAdapter activityRankingSelectListAdapter = new ActivityRankingSelectListAdapter(this, R.layout.activity_ranking_select_list_item/*, rubbishPickedUp*/);
+            activityRankingList.setAdapter(activityRankingSelectListAdapter);
+
+            final AlertDialog dialogBuilder = new AlertDialog.Builder(this)
+                    .setPositiveButton("Confirmar", null)
+                    .setNeutralButton("Cancelar", null)
+                    .setTitle("Actividades")
+                    .setView(dialogView)
+                    .create();
+
+            dialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+
+                    Button button = dialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //Mesmo que não apanhe nada o registo dele tem de aparecer na tabela
+                            Toast.makeText(getApplicationContext(), "Select activity dialog", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+
+            dialogBuilder.show();
         }
 
         return super.onOptionsItemSelected(item);

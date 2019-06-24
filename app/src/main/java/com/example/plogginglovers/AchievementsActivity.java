@@ -68,7 +68,7 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.green_app_dark));
         //-----------------
 
         setSupportActionBar(toolbar);

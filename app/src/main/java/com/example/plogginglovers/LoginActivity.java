@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.green_app_dark));
         //-----------------
 
         inputEmail = findViewById(R.id.editTextEmail);
@@ -58,19 +58,19 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickLogin(final View view){
         if(inputEmail.getText().toString().isEmpty() && inputPassword.getText().toString().isEmpty() ){
-            showErrorMessage("Email and password fields are empty", view);
+            showErrorMessage("Email e password estão vazios", view);
             return;
         }
         if(inputEmail.getText().toString().isEmpty()){
-            showErrorMessage("Email field is empty", view);
+            showErrorMessage("Email está vazio", view);
             return;
         }
         if(inputPassword.getText().toString().isEmpty()){
-            showErrorMessage("Password field is empty", view);
+            showErrorMessage("Password está vazia", view);
             return;
         }
         if (!inputEmail.getText().toString().contains("@")){
-            showErrorMessage("Please insert a valid email", view);
+            showErrorMessage("Por favor insira um email válido", view);
             return;
         }
 
@@ -100,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginToken>() {
             @Override
             public void onResponse(Call<LoginToken> call, Response<LoginToken> response) {
+                System.out.println(response);
                 if (response.isSuccessful()){
                     SharedPreferences.Editor edit = pref.edit();
                     edit.putString("token", response.body().getAccessToken());
@@ -107,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(Home.getIntent(LoginActivity.this));
                     finish();
                 } else {
-                    showErrorMessage("Email or Password Incorrect", view);
+                    showErrorMessage("Email or Password Inválidos", view);
                 }
             }
 

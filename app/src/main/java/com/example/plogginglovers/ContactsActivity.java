@@ -1,5 +1,6 @@
 package com.example.plogginglovers;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,9 +36,17 @@ import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,7 +84,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.green_app_dark));
         //-----------------
 
         mAuth = FirebaseAuth.getInstance();
@@ -101,7 +111,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
         txtStudentName.setText(pref.getString("studentName", null));
         txtStudentEmail.setText(pref.getString("studentEmail", null));
 
-        listView = (ListView)findViewById(R.id.contactsList);
+        listView = (ListView) findViewById(R.id.contactsList);
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
@@ -139,9 +149,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+351917620681")); //todo change to the real number
-                                    startActivity(intent);
-                                    Toast.makeText(getApplicationContext(), "A Ligar...", Toast.LENGTH_LONG).show();
+                                    requestCallPermission();
                                 }
                             });
 
@@ -176,16 +184,22 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
 
         String photo_url = pref.getString("studentPhoto", null);
 
-        if (photo_url != null){
+        if (photo_url != null) {
             Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(nav_profile_image);
-        }else {
+        } else {
             Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
         }
 
     }
 
+    private void callIntent() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+351917620681")); //todo change to the real number
+        startActivity(intent);
+        Toast.makeText(getApplicationContext(), "A Ligar...", Toast.LENGTH_LONG).show();
+    }
 
-    public static Intent getIntent(Context context){
+
+    public static Intent getIntent(Context context) {
         return new Intent(context, ContactsActivity.class);
     }
 
@@ -220,13 +234,13 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
         } else if (id == R.id.nav_stats && !item.isChecked()) {
             startActivity(StatisticsActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_ecopontos && !item.isChecked()){
+        } else if (id == R.id.nav_ecopontos && !item.isChecked()) {
             startActivity(EcopontosActivity.getIntent(this));
             finish();
-        } else if(id == R.id.nav_onde_colocar && !item.isChecked()){
+        } else if (id == R.id.nav_onde_colocar && !item.isChecked()) {
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
-        }else if (id == R.id.nav_logout && !item.isChecked()){
+        } else if (id == R.id.nav_logout && !item.isChecked()) {
             /*
             mAuth.signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
@@ -235,13 +249,13 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
             */
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-            Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
+            Call<LogoutToken> call = service.logout("Bearer " + pref.getString("token", null));
 
             //Execute the request asynchronously//
             call.enqueue(new Callback<LogoutToken>() {
                 @Override
                 public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
@@ -262,5 +276,65 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void requestCallPermission() {
+        Dexter.withActivity(this).withPermissions(Manifest.permission.CALL_PHONE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                            callIntent();
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // show alert dialog navigating to Settings
+                            showSettingsDialog();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Toast.makeText(getApplicationContext(), "Error occurred! ", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .onSameThread()
+                .check();
+    }
+
+    private void showSettingsDialog() {
+        //todo change to portuguese
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Need Permissions");
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings();
+            }
+        });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+    }
+
+
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
     }
 }

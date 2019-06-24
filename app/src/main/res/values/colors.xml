@@ -19,4 +19,6 @@
     <color name="pending_activity_yellow">#ffbb00</color>
     <color name="purpleEcoponto">#673AB7</color>
     <color name="blue_cenas_escuro">#082269</color>
+    <color name="green_app_dark">#49853E</color>
+    <color name="green_app_light">#5AAB46</color>
 </resources>

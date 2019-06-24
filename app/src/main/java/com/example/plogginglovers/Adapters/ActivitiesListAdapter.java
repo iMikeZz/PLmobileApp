@@ -70,10 +70,10 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
         holder.date_chip.setText(DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", dataModel.getStartTime()));
         holder.txtActivityName.setText(dataModel.getName());
 
-        if (dataModel.getState().equals("Pending")){
+        if (dataModel.getState().equals("pending")){
             holder.chipState.setText("Pendente");
             holder.chipState.setChipBackgroundColorResource(R.color.pending_activity_yellow);
-        } else if (dataModel.getState().equals("Started")){
+        } else if (dataModel.getState().equals("started")){
             holder.chipState.setText("Ativa");
             holder.chipState.setChipBackgroundColorResource(R.color.started_activity_green);
         } else {

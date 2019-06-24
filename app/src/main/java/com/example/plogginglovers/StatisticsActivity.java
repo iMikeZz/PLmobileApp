@@ -58,7 +58,7 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.green_app_dark));
         //-----------------
 
         mAuth = FirebaseAuth.getInstance();

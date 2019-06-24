@@ -70,7 +70,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.green_app_dark));
         //-----------------
 
         mAuth = FirebaseAuth.getInstance();
@@ -146,28 +146,29 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             //todo change add the information of the activity
                             mask.setVisibility(View.VISIBLE);
-                            if (activities.get(position).getState().equals("Pending") && activities.get(position).getTeamStatus().equals("invited")) {
+                            if (activities.get(position).getState().equals("pending") && activities.get(position).getTeamStatus().equals("invited")) {
                                 startActivity(PendingActivity.getIntent(ActivitiesActivity.this)
                                         .putExtra("activity", new ActivityParcelable(activities.get(position))));
-                            } else if (activities.get(position).getState().equals("Pending") && activities.get(position).getTeamStatus().equals("accepted")) {
+                            } else if (activities.get(position).getState().equals("pending") && activities.get(position).getTeamStatus().equals("accepted")) {
                                 startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
                                         .putExtra("activity", new ActivityParcelable(activities.get(position)))
                                         .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
                                         .putExtra("state", "pending_accepted"));
                                 finish();
-                            } else if (activities.get(position).getState().equals("Started") && activities.get(position).getTeamStatus().equals("accepted")) {
+                            } else if (activities.get(position).getState().equals("started") && activities.get(position).getTeamStatus().equals("accepted")) {
                                 startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
                                         .putExtra("activity", new ActivityParcelable(activities.get(position)))
                                         .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
                                         .putExtra("state", "started_accepted"));
                                 finish();
-                            } else if (activities.get(position).getState().equals("Terminated") && activities.get(position).getTeamStatus().equals("accepted")) {
+                            } else if (activities.get(position).getState().equals("terminated") && activities.get(position).getTeamStatus().equals("accepted")) {
                                 startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
                                         .putExtra("activity", new ActivityParcelable(activities.get(position)))
                                         .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
                                         .putExtra("state", "terminated_accepted"));
                                 finish();
                             } else {
+                                mask.setVisibility(View.INVISIBLE);
                                 //todo alert dialog "a sua equipa já terminou a atividade" ou então deixar o toast
                                 Toast.makeText(ActivitiesActivity.this, "A tua equipa já terminou a atividade", Toast.LENGTH_SHORT).show();
                             }

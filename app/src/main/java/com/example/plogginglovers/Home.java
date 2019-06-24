@@ -64,7 +64,7 @@ public class Home extends AppCompatActivity
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.blue_cenas_escuro));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.green_app_dark));
         //-----------------
 
 
@@ -186,7 +186,7 @@ public class Home extends AppCompatActivity
             startActivity(AccountActivity.getIntent(this));
             finish();
         } else if (id == R.id.nav_activity && !item.isChecked()) {
-            startActivity(ActivitiesActivity.getIntent(this));
+            startActivity(ActivitiesActivity.getIntent(this).putExtra("data", new ArrayList<RubbishParcelable>()));
             finish();
         } else if (id == R.id.nav_contacts && !item.isChecked()) {
             startActivity(ContactsActivity.getIntent(this));

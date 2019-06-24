@@ -3,12 +3,12 @@
     <!-- Base application theme. -->
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimary">@color/blue_cenas</item>
-        <item name="android:fontFamily">@font/abc</item>
+        <item name="colorPrimary">@color/green_app_light</item>
+        <item name="android:fontFamily">@font/barlow_regular</item>
     </style>
 
     <style name="chipTextAppearance" parent="TextAppearance.MaterialComponents.Chip">
-        <item name="android:fontFamily">@font/abc</item>
+        <item name="android:fontFamily">@font/barlow_regular</item>
     </style>
 
     <!--

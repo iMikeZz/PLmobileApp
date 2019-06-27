@@ -1,10 +1,21 @@
 package com.example.plogginglovers;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -20,6 +31,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.plogginglovers.Client.RetrofitClient;
+import com.example.plogginglovers.Helpers.PermissionUtils;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Ecoponto;
 import com.example.plogginglovers.Model.EcopontosList;
@@ -32,7 +44,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +61,8 @@ import retrofit2.Response;
 
 public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int LOCATION_REFRESH_DISTANCE = 5; // 5 metros
+    private static final int LOCATION_REFRESH_TIME = 5000; // 5 seconds
     private GoogleMap mMap;
     private FirebaseAuth mAuth;
     private SharedPreferences pref;
@@ -47,6 +70,20 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
     private ImageView nav_profile_image;
 
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    /**
+     * Flag indicating whether a requested permission has been denied after returning in
+     * {@link #onRequestPermissionsResult(int, String[], int[])}.
+     */
+    private boolean mPermissionDenied = false;
+
+    private LocationListener mLocationListener;
+    private LocationManager mLocationManager;
+
+    private View map_view;
+
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +103,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.green_app_dark));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.green_app_dark));
         //-----------------
 
         mAuth = FirebaseAuth.getInstance();
@@ -77,6 +114,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //navigationView.getMenu().getItem(4).setChecked(true);
         navigationView.getMenu().findItem(R.id.nav_ecopontos).setChecked(true);
@@ -85,6 +123,9 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        map_view = findViewById(R.id.map);
+        map_view.setVisibility(View.INVISIBLE);
 
         mapFragment.getMapAsync(this);
 
@@ -101,11 +142,17 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
         String photo_url = pref.getString("studentPhoto", null);
 
-        if (photo_url != null){
+        if (photo_url != null) {
             Picasso.get().load("http://46.101.15.61/storage/profiles/" + photo_url).into(nav_profile_image);
-        }else {
+        } else {
             Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
         }
+
+        enableMyLocation();
+
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        //todo add loading
     }
 
 
@@ -118,39 +165,69 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    @SuppressLint("MissingPermission")
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    public void onMapReady(final GoogleMap googleMap) {
+        //mMap.setOnMyLocationButtonClickListener(this);
+        //mMap.setOnMyLocationClickListener(this);
+        //enableMyLocation();
 
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
-        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
-
-        Call<EcopontosList> call = service.getAllEcopontos("Bearer " + pref.getString("token", null));
-
-        //Execute the request asynchronously//
-        call.enqueue(new Callback<EcopontosList>() {
+        mLocationListener = new LocationListener() {
             @Override
-            //Handle a successful response//
-            public void onResponse(Call<EcopontosList> call, Response<EcopontosList> response) {
-                // Add a marker in Sydney and move the camera
-                if (response.body() != null){
-                    for (Ecoponto ecoponto : response.body().getData()) {
-                        System.out.println(ecoponto.getLatitude() + ecoponto.getLongitude());
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(ecoponto.getLatitude(), ecoponto.getLongitude())));
+            public void onLocationChanged(final Location location) {
+                mMap = googleMap;
+
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
+                map_view.setVisibility(View.VISIBLE);
+
+                enableMyLocation();
+
+                GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+                Call<EcopontosList> call = service.getAllEcopontos("Bearer " + pref.getString("token", null));
+
+                //Execute the request asynchronously//
+                call.enqueue(new Callback<EcopontosList>() {
+                    @Override
+                    //Handle a successful response//
+                    public void onResponse(Call<EcopontosList> call, Response<EcopontosList> response) {
+                        // Add a marker in Sydney and move the camera
+                        if (response.body() != null){
+                            for (Ecoponto ecoponto : response.body().getData()) {
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(ecoponto.getLatitude(), ecoponto.getLongitude())));
+                            }
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16));
+                        }
                     }
-                }
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.766466, -8.847941), 10));
+
+                    @Override
+                    //Handle execution failures//
+                    public void onFailure(Call<EcopontosList> call, Throwable throwable) {
+                        //If the request fails, then display the following toast//
+                        Toast.makeText(EcopontosActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
-            //Handle execution failures//
-            public void onFailure(Call<EcopontosList> call, Throwable throwable) {
-                //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
-                Toast.makeText(EcopontosActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
             }
-        });
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
+
     }
 
     public static Intent getIntent(Context context){
@@ -230,5 +307,72 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void enableMyLocation() {
+        Dexter.withActivity(this).withPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                            callIntent();
+                        }
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // show alert dialog navigating to Settings
+                            showSettingsDialog();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).withErrorListener(new PermissionRequestErrorListener() {
+            @Override
+            public void onError(DexterError error) {
+                Toast.makeText(getApplicationContext(), "Error occurred! ", Toast.LENGTH_SHORT).show();
+            }
+        })
+                .onSameThread()
+                .check();
+    }
+
+    private void showSettingsDialog() {
+        //todo change to portuguese
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Need Permissions");
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings();
+            }
+        });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void callIntent() {
+        if (mMap != null) {
+            // Access to the location has been granted to the app.
+            mMap.setMyLocationEnabled(true);
+        }
     }
 }

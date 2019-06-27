@@ -76,6 +76,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
@@ -177,7 +178,12 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             btnEndPlogging.setVisibility(View.INVISIBLE);
             new CountDownTimer(30000, 1000) {
                 public void onTick(long millisUntilFinished) {
-                    countDownTimer.setText("00:" + millisUntilFinished / 1000);
+                    //countDownTimer.setText("00:" + millisUntilFinished / 1000);
+                    //todo testar
+                    countDownTimer.setText(String.format("%d:%d",
+                            TimeUnit.MILLISECONDS.toMinutes( millisUntilFinished),
+                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
                 }
 
                 public void onFinish() {
@@ -697,6 +703,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                             jsonObject1.addProperty("activity_item_id", rubbish.getId());
                             jsonObject1.addProperty("item_quantity", rubbish.getQuantity());
                             jsonObject1.addProperty("student_score", rubbish.getQuantity() * rubbish.getScore());
+                            jsonObject1.addProperty("student_steps", Integer.parseInt(TvSteps.getText().toString()));
+                            jsonObject1.addProperty("student_kilometers", Float.parseFloat(txtKilos.getText().toString()));
+                            jsonObject1.addProperty("student_calories", Float.parseFloat(txtCals.getText().toString()));
                             itemsArray.add(jsonObject1);
                         }
 

@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -67,6 +68,8 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
     private ImageView imageFirstTeam, imageSecondTeam, imageThirdTeam;
 
     private TextView txtThirdTeamPoints, txtThirdTeamName;
+
+    private ConstraintLayout podiumLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +119,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         imageThirdTeam = findViewById(R.id.imageThirdTeam);
         txtThirdTeamPoints = findViewById(R.id.txtThirdTeamPoints);
         txtThirdTeamName = findViewById(R.id.txtThirdTeamName);
+        podiumLayout = findViewById(R.id.podiumLayout);
 
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
@@ -293,6 +297,10 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
 
         //todo verificar se existe a posição 0 1 2
         activity_id = response.body().getData().getActivityId();
+
+        imageFirstTeam.setVisibility(View.VISIBLE);
+        txtActivityNameAndDate.setVisibility(View.VISIBLE);
+        podiumLayout.setVisibility(View.VISIBLE);
 
         txtActivityNameAndDate.setText(response.body().getData().getActivityName() + " - " +
                 DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", response.body().getData().getActivityDate()));

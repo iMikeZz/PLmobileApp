@@ -7,13 +7,15 @@ public class Achievement {
     private int objectivo;
     private int background;
     private int status; //0 not done //1 done
+    private boolean viewed; //0 not done //1 done
 
-    public Achievement(String name, int img, int objectivo, int background, int status) {
+    public Achievement(String name, int img, int objectivo, int background, int status, boolean viewed) {
         this.name = name;
         this.img = img;
         this.objectivo = objectivo;
         this.background = background;
         this.status = status;
+        this.viewed = viewed;
     }
 
     public String getName() {
@@ -54,5 +56,13 @@ public class Achievement {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public boolean isViewed() {
+        return viewed;
+    }
+
+    public void setViewed(boolean viewed) {
+        this.viewed = viewed;
     }
 }

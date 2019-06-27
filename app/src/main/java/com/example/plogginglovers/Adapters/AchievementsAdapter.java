@@ -6,37 +6,27 @@ import android.graphics.ColorMatrixColorFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 
 import com.example.plogginglovers.Model.Achievement;
 import com.example.plogginglovers.R;
 
 import java.util.List;
 
-public class AchievementsAdapter extends BaseAdapter {
+public class AchievementsAdapter extends ArrayAdapter<Achievement> {
 
     private Context mContext;
     private List<Achievement> achievements;
 
     public AchievementsAdapter(Context context, List<Achievement> achievements) {
+        super(context, R.layout.achievement_card, achievements);
         this.mContext = context;
         this.achievements = achievements;
-    }
-
-    @Override
-    public int getCount() {
-        return achievements.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return achievements.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
     }
 
     @Override
@@ -52,6 +42,13 @@ public class AchievementsAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.achievement_card, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
+        }
+
+        holder.red_dot.setVisibility(View.INVISIBLE);
+
+        if (!achievement.isViewed()) {
+            holder.red_dot.setVisibility(View.VISIBLE);
+            ViewCompat.setTranslationZ(holder.red_dot, 10);
         }
 
         if (achievement.getStatus() == 0){ // not done
@@ -72,10 +69,12 @@ public class AchievementsAdapter extends BaseAdapter {
     private class ViewHolder {
         private ImageView background;
         private ImageView achievementImage;
+        private ImageView red_dot;
 
         public ViewHolder(View v) {
             background = (ImageView) v.findViewById(R.id.backgroundImage);
             achievementImage = (ImageView) v.findViewById(R.id.achievementImage);
+            red_dot = (ImageView) v.findViewById(R.id.red_dot);
         }
     }
 }

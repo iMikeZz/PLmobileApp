@@ -70,7 +70,7 @@
             android:name=".EcopontosActivity"
             android:label="@string/title_activity_ecopontos"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ChatActivity"
             android:theme="@style/AppTheme.NoActionBar" />

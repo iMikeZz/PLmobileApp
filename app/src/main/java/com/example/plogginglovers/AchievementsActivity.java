@@ -100,12 +100,12 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
 
 
         final List<Achievement> achievements = new ArrayList<>();
-        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.yellow_achievement, 0));
-        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.grey_achievement, 1));
-        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.brown_achievement, 1));
+        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.yellow_achievement, 0, true));
+        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.grey_achievement, 1, true));
+        achievements.add(new Achievement("sakdmaskdm", R.drawable.bootle, 1, R.color.brown_achievement, 1, false));
 
-        GridView gridView = findViewById(R.id.gridViewAchievements);
-        AchievementsAdapter achievementsAdapter = new AchievementsAdapter(this, achievements);
+        final GridView gridView = findViewById(R.id.gridViewAchievements);
+        final AchievementsAdapter achievementsAdapter = new AchievementsAdapter(this, achievements);
         gridView.setAdapter(achievementsAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -114,6 +114,8 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
                 Achievement achievement = achievements.get(position);
                 Dialog dialog = new AchievementCostumDialog(AchievementsActivity.this, achievement);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                achievement.setViewed(true);
+                achievementsAdapter.notifyDataSetChanged();
                 dialog.show();
             }
         });

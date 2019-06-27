@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +21,18 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.plogginglovers.Adapters.RankingListAdapter;
+import com.example.plogginglovers.Adapters.StatisticsListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.LogoutToken;
+import com.example.plogginglovers.Model.Statistic;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,6 +102,24 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
         }else {
             Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
         }
+
+        List<Statistic> statistics = new ArrayList<>();
+        statistics.add(new Statistic(R.drawable.foot_with_background, "Total de passos", 0));
+        statistics.add(new Statistic(R.drawable.calorias, "Total de calorias", 0));
+        statistics.add(new Statistic(R.drawable.kilometros, "Total quilómetros", 0));
+        statistics.add(new Statistic(R.drawable.objetos, "Total objetos", 0));
+        statistics.add(new Statistic(R.drawable.objetos, "Média de objetos por atividade", 0));
+        statistics.add(new Statistic(R.drawable.ecopontos_icons, "Número de ecopontos no sistema", 0));
+        statistics.add(new Statistic(R.drawable.kilometros, "Número de quilómetros totais", 0));
+        statistics.add(new Statistic(R.drawable.objetos, "Total de objetos recolhidos (global)", 0));
+        statistics.add(new Statistic(R.drawable.escola, "Total de escolas", 0));
+        statistics.add(new Statistic(R.drawable.pessoas, "Total de utilizadores", 0));
+        
+        ListView statisticsList = findViewById(R.id.statisticsList);
+
+        ArrayAdapter adapter = new StatisticsListAdapter(this, R.layout.statistics_item_list, statistics);
+
+        statisticsList.setAdapter(adapter);
     }
 
     public static Intent getIntent(Context context){

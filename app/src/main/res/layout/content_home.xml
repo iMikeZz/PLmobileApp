@@ -270,7 +270,7 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="122dp"
-                        android:text="Onde colocar ?"
+                        android:text="EcoDuvida"
                         android:textColor="#FFFFFF"
                         app:chipBackgroundColor="#EB525252"
                         app:chipIcon="@drawable/ic_search_white_24dp"

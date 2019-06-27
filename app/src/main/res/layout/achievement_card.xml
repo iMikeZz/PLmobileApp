@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/achievements_card"
@@ -15,7 +17,6 @@
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -35,14 +36,13 @@
                 android:contentDescription="CardImageViewDesc"
                 android:scaleType="centerCrop" />
 
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/achievement_image_card"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_alignStart="@+id/backgroundImage"
                 android:layout_alignTop="@+id/backgroundImage"
-                android:layout_marginStart="11dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:minHeight="200dp"
                 app:cardCornerRadius="10dp"
@@ -72,4 +72,16 @@
             </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <ImageView
+        android:id="@+id/red_dot"
+        android:layout_width="14dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="65dp"
+        android:layout_marginBottom="66dp"
+        android:visibility="invisible"
+        android:contentDescription="CardImageViewDesc"
+        android:src="@drawable/red_dot"
+        app:layout_constraintBottom_toBottomOf="@+id/achievements_card"
+        app:layout_constraintStart_toStartOf="@+id/achievements_card" />
 </androidx.constraintlayout.widget.ConstraintLayout>

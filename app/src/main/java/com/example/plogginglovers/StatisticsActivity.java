@@ -1,13 +1,19 @@
 package com.example.plogginglovers;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,12 +27,17 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.plogginglovers.Adapters.AchievementsAdapter;
+import com.example.plogginglovers.Adapters.Dialogs.AchievementCostumDialog;
 import com.example.plogginglovers.Adapters.RankingListAdapter;
 import com.example.plogginglovers.Adapters.StatisticsListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
+import com.example.plogginglovers.Model.Achievement;
+import com.example.plogginglovers.Model.AchievementModel;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.Statistic;
+import com.example.plogginglovers.Model.StatisticModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
@@ -103,23 +114,45 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
             Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
         }
 
-        List<Statistic> statistics = new ArrayList<>();
-        statistics.add(new Statistic(R.drawable.foot_with_background, "Total de passos", 0));
-        statistics.add(new Statistic(R.drawable.calorias, "Total de calorias", 0));
-        statistics.add(new Statistic(R.drawable.kilometros, "Total quilómetros", 0));
-        statistics.add(new Statistic(R.drawable.objetos, "Total objetos", 0));
-        statistics.add(new Statistic(R.drawable.objetos, "Média de objetos por atividade", 0));
-        statistics.add(new Statistic(R.drawable.ecopontos_icons, "Número de ecopontos no sistema", 0));
-        statistics.add(new Statistic(R.drawable.kilometros, "Número de quilómetros totais", 0));
-        statistics.add(new Statistic(R.drawable.objetos, "Total de objetos recolhidos (global)", 0));
-        statistics.add(new Statistic(R.drawable.escola, "Total de escolas", 0));
-        statistics.add(new Statistic(R.drawable.pessoas, "Total de utilizadores", 0));
-        
-        ListView statisticsList = findViewById(R.id.statisticsList);
+        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-        ArrayAdapter adapter = new StatisticsListAdapter(this, R.layout.statistics_item_list, statistics);
+        Call<StatisticModel> call = service.getStatistics("Bearer " + pref.getString("token", null));
 
-        statisticsList.setAdapter(adapter);
+        //Execute the request asynchronously//
+        call.enqueue(new Callback<StatisticModel>() {
+            @Override
+            //Handle a successful response//
+            public void onResponse(Call<StatisticModel> call, final Response<StatisticModel> response) {
+                // Add a marker in Sydney and move the camera
+                System.out.println(response);
+                if (response.isSuccessful()){
+                    final List<Statistic> statistics = new ArrayList<>();
+                    statistics.add(new Statistic(R.drawable.foot_with_background, "Total de passos", Integer.parseInt(response.body().getSteps())));
+                    statistics.add(new Statistic(R.drawable.calorias, "Total de calorias", response.body().getCalories()));
+                    statistics.add(new Statistic(R.drawable.kilometros, "Total quilómetros", response.body().getKilometers()));
+                    statistics.add(new Statistic(R.drawable.objetos, "Total objetos", Integer.parseInt(response.body().getObjects())));
+                    statistics.add(new Statistic(R.drawable.objetos, "Média de objetos por atividade", response.body().getObjectsActivityAverage()));
+                    statistics.add(new Statistic(R.drawable.ecopontos_icons, "Número de ecopontos no sistema", response.body().getEcopontos()));
+                    statistics.add(new Statistic(R.drawable.kilometros, "Número de quilómetros totais", response.body().getKilometersGlobal()));
+                    statistics.add(new Statistic(R.drawable.objetos, "Total de objetos recolhidos (global)", response.body().getObjectsGlobal()));
+                    statistics.add(new Statistic(R.drawable.escola, "Total de escolas", response.body().getSchools()));
+                    statistics.add(new Statistic(R.drawable.pessoas, "Total de utilizadores", response.body().getUsers()));
+
+                    ListView statisticsList = findViewById(R.id.statisticsList);
+
+                    ArrayAdapter adapter = new StatisticsListAdapter(StatisticsActivity.this, R.layout.statistics_item_list, statistics);
+
+                    statisticsList.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            //Handle execution failures//
+            public void onFailure(Call<StatisticModel> call, Throwable throwable) {
+                //If the request fails, then display the following toast//
+                Toast.makeText(StatisticsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public static Intent getIntent(Context context){

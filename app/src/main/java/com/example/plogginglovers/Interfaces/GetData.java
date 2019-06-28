@@ -1,5 +1,6 @@
 package com.example.plogginglovers.Interfaces;
 
+import com.example.plogginglovers.Model.AchievementModel;
 import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.Model.ActivitiesModel;
 import com.example.plogginglovers.Model.ActivityModel;
@@ -15,6 +16,7 @@ import com.example.plogginglovers.Model.Password;
 import com.example.plogginglovers.Model.RankingActivityModel;
 import com.example.plogginglovers.Model.RankingModel;
 import com.example.plogginglovers.Model.RubbishModel;
+import com.example.plogginglovers.Model.StatisticModel;
 import com.example.plogginglovers.Model.UserData;
 import com.google.gson.JsonObject;
 
@@ -100,4 +102,13 @@ public interface GetData {
 
     @GET("activities/{activity}/ranking")
     Call<RankingModel> getActivityRanking(@Header("Authorization") String authHeader, @Path("activity") int activity_id);
+
+    @GET("statistics")
+    Call<StatisticModel> getStatistics(@Header("Authorization") String authHeader);
+
+    @GET("achievements")
+    Call<AchievementModel> getAchievements(@Header("Authorization") String authHeader);
+
+    @PATCH("achievements/{achievement}")
+    Call<ResponseBody> updateAchievement(@Header("Authorization") String authHeader, @Path("achievement") int achievement_id);
 }

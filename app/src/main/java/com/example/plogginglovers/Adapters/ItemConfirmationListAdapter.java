@@ -57,7 +57,11 @@ public class ItemConfirmationListAdapter extends ArrayAdapter<RubbishParcelable>
             convertView.setTag(holder);
         }
 
-        Picasso.get().load("http://46.101.15.61/storage/misc/item-default.jpg").into(holder.item_image); //todo change
+        if (rubbish.getImage() == null){
+            Picasso.get().load("http://46.101.15.61/storage/misc/item-default.jpg").into(holder.item_image);
+        }else {
+            Picasso.get().load("http://46.101.15.61/storage/items/" + rubbish.getImage()).into(holder.item_image);
+        }
 
         holder.txtItemNameAndQuantity.setText(rubbish.getName() + " x" + rubbish.getQuantity());
 

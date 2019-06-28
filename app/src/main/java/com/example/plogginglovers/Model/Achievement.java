@@ -1,21 +1,40 @@
 package com.example.plogginglovers.Model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Achievement {
-
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("name")
+    @Expose
     private String name;
-    private int img;
-    private int objectivo;
-    private int background;
-    private int status; //0 not done //1 done
-    private boolean viewed; //0 not done //1 done
+    @SerializedName("category")
+    @Expose
+    private String category;
+    @SerializedName("goal")
+    @Expose
+    private Integer goal;
+    @SerializedName("status")
+    @Expose
+    private Integer status;
+    @SerializedName("viewed")
+    @Expose
+    private Integer viewed;
+    @SerializedName("progress")
+    @Expose
+    private Integer progress;
+    @SerializedName("item_image_url")
+    @Expose
+    private String itemImageUrl;
 
-    public Achievement(String name, int img, int objectivo, int background, int status, boolean viewed) {
-        this.name = name;
-        this.img = img;
-        this.objectivo = objectivo;
-        this.background = background;
-        this.status = status;
-        this.viewed = viewed;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -26,43 +45,51 @@ public class Achievement {
         this.name = name;
     }
 
-    public int getImg() {
-        return img;
+    public String getCategory() {
+        return category;
     }
 
-    public void setImg(int img) {
-        this.img = img;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public int getObjectivo() {
-        return objectivo;
+    public Integer getGoal() {
+        return goal;
     }
 
-    public void setObjectivo(int objectivo) {
-        this.objectivo = objectivo;
+    public void setGoal(Integer goal) {
+        this.goal = goal;
     }
 
-    public int getBackground() {
-        return background;
-    }
-
-    public void setBackground(int background) {
-        this.background = background;
-    }
-
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public boolean isViewed() {
+    public Integer getViewed() {
         return viewed;
     }
 
-    public void setViewed(boolean viewed) {
+    public void setViewed(Integer viewed) {
         this.viewed = viewed;
+    }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
+    }
+
+    public String getItemImageUrl() {
+        return itemImageUrl;
+    }
+
+    public void setItemImageUrl(String itemImageUrl) {
+        this.itemImageUrl = itemImageUrl;
     }
 }

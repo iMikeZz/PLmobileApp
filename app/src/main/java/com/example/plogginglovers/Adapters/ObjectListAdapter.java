@@ -101,8 +101,13 @@ public class ObjectListAdapter extends ArrayAdapter<RubbishParcelable> {
 
         holder.quantity.setText(String.valueOf(dataModel.getQuantity()));
 
+        if (dataModel.getImage() == null){
+            Picasso.get().load("http://46.101.15.61/storage/misc/item-default.jpg").into(holder.image);
+        }else {
+            Picasso.get().load("http://46.101.15.61/storage/items/" + dataModel.getImage()).into(holder.image);
+        }
         //todo change photo here (concat with the datamodel.getImage)
-        Picasso.get().load("http://46.101.15.61/storage/misc/item-default.jpg").into(holder.image);
+        //Picasso.get().load("http://46.101.15.61/storage/misc/item-default.jpg").into(holder.image);
         //holder.image.setImageResource(R.drawable.bootle);
 
         holder.txtPoints.setText(dataModel.getScore() + " pts");

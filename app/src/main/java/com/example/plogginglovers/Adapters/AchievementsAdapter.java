@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat;
 
 import com.example.plogginglovers.Model.Achievement;
 import com.example.plogginglovers.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class AchievementsAdapter extends ArrayAdapter<Achievement> {
 
         holder.red_dot.setVisibility(View.INVISIBLE);
 
-        if (!achievement.isViewed()) {
+        if (achievement.getStatus() != 0 && achievement.getViewed() == 0) {
             holder.red_dot.setVisibility(View.VISIBLE);
             ViewCompat.setTranslationZ(holder.red_dot, 10);
         }
@@ -56,11 +57,19 @@ public class AchievementsAdapter extends ArrayAdapter<Achievement> {
             matrix.setSaturation(0);
 
             ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+            Picasso.get().load("http://46.101.15.61/storage/items/" + achievement.getItemImageUrl()).into(holder.achievementImage);
             holder.achievementImage.setColorFilter(filter);
             holder.background.setBackgroundResource(R.color.grey_achievement);
         }else {
-            holder.achievementImage.setImageResource(achievement.getImg());
-            holder.background.setBackgroundResource(achievement.getBackground());
+            System.out.println(achievement.getItemImageUrl());
+            Picasso.get().load("http://46.101.15.61/storage/items/" + achievement.getItemImageUrl()).into(holder.achievementImage);
+            if (achievement.getCategory().equals("bronze")){
+                holder.background.setBackgroundResource(R.color.brown_achievement);
+            }else if (achievement.getCategory().equals("silver")){
+                holder.background.setBackgroundResource(R.color.grey_achievement);
+            }else {
+                holder.background.setBackgroundResource(R.color.yellow_achievement);
+            }
         }
 
         return convertView;

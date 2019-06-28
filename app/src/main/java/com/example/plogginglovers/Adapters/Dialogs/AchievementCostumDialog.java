@@ -5,13 +5,16 @@ import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.example.plogginglovers.Model.Achievement;
 import com.example.plogginglovers.R;
+import com.squareup.picasso.Picasso;
 
 public class AchievementCostumDialog extends Dialog {
 
@@ -30,17 +33,31 @@ public class AchievementCostumDialog extends Dialog {
 
         ImageView image = findViewById(R.id.achievementImage_details);
         ImageView background_view = findViewById(R.id.backgroundImage_details);
+        TextView txtAchievementObjetivo = findViewById(R.id.txtAchievementObjetivo);
+        TextView txtAchievementProgresso = findViewById(R.id.txtAchievementProgresso);
+        TextView txtAchievementTitle = findViewById(R.id.txtAchievementTitle);
 
-        if (achievement.getStatus() == 0){ //todo not done
+        txtAchievementTitle.setText(achievement.getName());
+        txtAchievementObjetivo.setText(String.valueOf(achievement.getGoal()));
+        txtAchievementProgresso.setText(String.valueOf(achievement.getProgress()));
+
+        if (achievement.getStatus() == 0){ // todo not done
             ColorMatrix matrix = new ColorMatrix();
             matrix.setSaturation(0);
 
             ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
             image.setColorFilter(filter);
+            Picasso.get().load("http://46.101.15.61/storage/items/" + achievement.getItemImageUrl()).into(image);
             background_view.setBackgroundResource(R.color.grey_achievement);
         }else {
-            image.setImageResource(achievement.getImg());
-            background_view.setBackgroundResource(achievement.getBackground());
+            Picasso.get().load("http://46.101.15.61/storage/items/" + achievement.getItemImageUrl()).into(image);
+            if (achievement.getCategory().equals("bronze")){
+                background_view.setBackgroundResource(R.color.brown_achievement);
+            }else if (achievement.getCategory().equals("silver")){
+                background_view.setBackgroundResource(R.color.grey_achievement);
+            }else {
+                background_view.setBackgroundResource(R.color.yellow_achievement);
+            }
         }
 
     }

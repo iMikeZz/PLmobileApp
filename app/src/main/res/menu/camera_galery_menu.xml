@@ -11,9 +11,11 @@
         android:icon="@drawable/ic_photo_camera_white_24dp"
         android:title=""
         app:showAsAction="ifRoom"/>
+ <!--
     <item
         android:id="@+id/galleryMenuItem"
         android:icon="@drawable/ic_photo_library_white_24dp"
         android:title=""
         app:showAsAction="ifRoom"/>
+        -->
 </menu>

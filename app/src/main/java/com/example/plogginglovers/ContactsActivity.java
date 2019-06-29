@@ -178,7 +178,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
             public void onFailure(Call<ContactList> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
-                Toast.makeText(ContactsActivity.this, "Unable to load contacts", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ContactsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -269,6 +269,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    Toast.makeText(ContactsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         }

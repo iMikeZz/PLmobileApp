@@ -2,8 +2,11 @@ package com.example.plogginglovers;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,6 +41,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -50,14 +54,11 @@ import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.ActivityModel;
 import com.example.plogginglovers.Model.ActivityParcelable;
 import com.example.plogginglovers.Model.InfoModel;
-import com.example.plogginglovers.Model.Item;
-import com.example.plogginglovers.Model.ItemModel;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.karumi.dexter.Dexter;
@@ -92,7 +93,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private StepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
-    private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
     private int points = 0;
 
@@ -118,6 +118,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private SwipeRefreshLayout swipeLayout;
 
     private ListView listViewObjects;
+
+    private double calories, kilometers;
+    private long milisleft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,45 +175,66 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         //dataParcelable = getIntent().getExtras().getParcelableArrayList("data");
 
+        if (activity.getDuration().equals("N/A")) {
+            countDownTimer.setText(activity.getDuration());
+        }else
+            countDownTimer.setText(Integer.parseInt(activity.getDuration()) + ":00");
+
+
         btnEndPlogging.setVisibility(View.INVISIBLE);
 
         if (activity_state.equals("started_accepted")) {
             btnEndPlogging.setVisibility(View.INVISIBLE);
-            new CountDownTimer(30000, 1000) {
-                public void onTick(long millisUntilFinished) {
-                    //countDownTimer.setText("00:" + millisUntilFinished / 1000);
-                    //todo testar
-                    countDownTimer.setText(String.format("%d:%d",
-                            TimeUnit.MILLISECONDS.toMinutes( millisUntilFinished),
-                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+
+            if (getIntent().getExtras().getInt("steps") != 0) {
+                numSteps = getIntent().getExtras().getInt("steps");
+                calories = getIntent().getExtras().getDouble("calories");
+                kilometers = getIntent().getExtras().getDouble("kilometers");
+                TvSteps.setText(String.valueOf(numSteps));
+                txtCals.setText(String.format("%.1f", (calories)));
+                txtKilos.setText(String.format("%.2f", Math.round((kilometers)*100.0)/100.0));
+                sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+            } else{
+                numSteps = 0;
+                sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+            }
+
+            if (activity.getDuration().equals("N/A")){
+                countDownTimer.setText(activity.getDuration());
+            } else {
+                createNotification("O tempo está a contar!", "Apanha o maior número de objetos possível");
+                if (getIntent().getExtras().getLong("milisUntilFinished") != 0){
+                    new CountDownTimer(/*Integer.parseInt(activity.getDuration())*60000*/getIntent().getExtras().getLong("milisUntilFinished"), 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            milisleft = millisUntilFinished;
+                            ActiveActivity.this.countDownTimer.setText(String.format("%d:%d",
+                                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                        }
+
+                        public void onFinish() {
+                            ActiveActivity.this.countDownTimer.setText("done!");
+                            createNotification("Acabou o tempo!", null);
+                        }
+                    }.start();
+                }else {
+                    new CountDownTimer(/*Integer.parseInt(activity.getDuration())*60000*/30000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            milisleft = millisUntilFinished;
+                            ActiveActivity.this.countDownTimer.setText(String.format("%d:%d",
+                                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                        }
+
+                        public void onFinish() {
+                            ActiveActivity.this.countDownTimer.setText("done!");
+                            createNotification("Acabou o tempo!", null);
+                        }
+                    }.start();
                 }
-
-                public void onFinish() {
-                    countDownTimer.setText("done!");
-                    /* todo notifications
-                    createNotificationChannel(); //needed if uses NotificationCompact.Builder that is depracated
-                    Notification.Builder mBuilder = new Notification.Builder(ActiveActivity.this, "my_channel_02");
-                    mBuilder.setSmallIcon(R.drawable.ic_activity_black_24dp);
-                    mBuilder.setContentTitle("Acabou a atividade!");
-                    mBuilder.setContentText("Hi, This is Android Notification Detail!");
-                    Intent resultIntent = new Intent(ActiveActivity.this, ActiveActivity.class);
-                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(ActiveActivity.this);
-                    stackBuilder.addParentStack(ActiveActivity.class);
-
-                    // Adds the Intent that starts the Activity to the top of the stack
-                    stackBuilder.addNextIntent(resultIntent);
-                    PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                    mBuilder.setContentIntent(resultPendingIntent);
-
-                    mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                    // notificationID allows you to update the notification later on.
-                    // mNotificationManager.createNotificationChannelGroup(new NotificationChannelGroup("888", "batata"));
-                    mNotificationManager.notify(1, mBuilder.build());
-                    */
-                }
-            }.start();
+            }
         } else if (activity_state.equals("terminated_accepted")) {
             checkStudentActivityGameInfo();
             /*todo verificar se ainda não submeteu
@@ -252,7 +276,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 public void onFailure(Call<RubbishModel> call, Throwable throwable) {
                     //If the request fails, then display the following toast//
                     System.out.println(throwable.getMessage());
-                    Toast.makeText(ActiveActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -266,10 +290,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             listViewObjects.setAdapter(objectListAdapter);
             objectListAdapter.setPointsListener(ActiveActivity.this);
         }
-
-        //isActivityTeamCaptain();
-        numSteps = 0;
-        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void checkStudentActivityGameInfo() {
@@ -342,6 +362,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             @Override
             public void onFailure(Call<InfoModel> call, Throwable t) {
                 System.out.println(t.getMessage());
+                Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -353,20 +374,38 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         return true;
     }
 
-    private void createNotificationChannel() {
+    private void createNotification(String title, String content_text) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            CharSequence name = "batata";
-            String description = "batata";
+            CharSequence name = "Notification Channel";
+            String id = "channel_id";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("my_channel_01", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            //NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            NotificationChannel channel = new NotificationChannel(id, name, importance);
             mNotificationManager.createNotificationChannel(channel);
+
+            System.out.println("passei aqui");
+            Notification.Builder mBuilder = new Notification.Builder(ActiveActivity.this, id);
+            mBuilder.setSmallIcon(R.drawable.timer);
+            if (content_text != null){
+                mBuilder.setContentText(content_text);
+            }
+            mBuilder.setContentTitle(title);
+            Intent resultIntent = new Intent(ActiveActivity.this, ActiveActivity.class);
+            resultIntent.putExtra("data", dataParcelable);
+            resultIntent.putExtra("state", "started_accepted");
+            resultIntent.putExtra("activity", activity);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(ActiveActivity.this);
+            stackBuilder.addParentStack(ActiveActivity.class);
+
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(resultPendingIntent);
+
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(ActiveActivity.this);
+            notificationManagerCompat.notify(101, mBuilder.build());
         }
     }
 
@@ -414,9 +453,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     @Override
     public void step(long timeNs) {
         numSteps++;
+        calories = numSteps * 0.04;
+        kilometers = numSteps / 1312.335;
         TvSteps.setText(String.valueOf(numSteps));
-        txtCals.setText(String.format("%.1f", (numSteps * 0.04)));
-        txtKilos.setText(String.format("%.1f", (numSteps / 1312.335)));
+        txtCals.setText(String.format("%.1f", (calories)));
+        txtKilos.setText(String.format("%.2f", Math.round((kilometers)*100.0)/100.0));
     }
 
     public static Intent getIntent(Context context) {
@@ -434,9 +475,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         int id = item.getItemId();
 
         switch (id) {
+            /*
             case R.id.galleryMenuItem:
                 Toast.makeText(getApplicationContext(), "Showing gallery", Toast.LENGTH_LONG).show();
                 break;
+                */
             case R.id.camMenuItem:
                 requestStoragePermission(false);
                 break;
@@ -730,6 +773,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 System.out.println(t.getMessage());
+                                Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -794,6 +838,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 System.out.println(t.getMessage());
+                                Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
                         dialogBuilder.dismiss();
@@ -825,6 +870,28 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                     } else if (response.body().getData().getState().equals("Started")){
                         ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "started_accepted");
                         listViewObjects.setAdapter(objectListAdapter);
+                        numSteps = 0;
+                        sensorManager.registerListener(ActiveActivity.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+                        if (activity.getDuration().equals("N/A")){
+                            countDownTimer.setText(activity.getDuration());
+                        } else {
+                            createNotification("O tempo está a contar!", "Apanha o maior número de objetos possível");
+                            CountDownTimer countDownTimer = new CountDownTimer(/*Integer.parseInt(activity.getDuration())*60000*/30000, 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                    ActiveActivity.this.countDownTimer.setText(String.format("%d:%d",
+                                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                                }
+
+                                public void onFinish() {
+                                    ActiveActivity.this.countDownTimer.setText("done!");
+                                    createNotification("Acabou o tempo!", null);
+                                }
+                            }.start();
+                        }
+                        //todo start timer
+                        //todo start step listener
                     }
                 } else {
                     swipeLayout.setRefreshing(false);
@@ -834,6 +901,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             @Override
             public void onFailure(Call<ActivityModel> call, Throwable t) {
                 System.out.println(t.getMessage());
+                Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -873,7 +941,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");
-        startActivity(ActivitiesActivity.getIntent(this).putParcelableArrayListExtra("data", dataParcelable));
+        startActivity(ActivitiesActivity.getIntent(this).putParcelableArrayListExtra("data", dataParcelable)
+        .putExtra("steps", numSteps)
+        .putExtra("kilometers", kilometers)
+        .putExtra("calories", calories)
+        .putExtra("milisUntilFinished", milisleft));
         finish();
     }
 

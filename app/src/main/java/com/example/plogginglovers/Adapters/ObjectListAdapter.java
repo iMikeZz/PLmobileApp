@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.plogginglovers.Helpers.InputFilterMinMax;
-import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.R;
 import com.squareup.picasso.Picasso;

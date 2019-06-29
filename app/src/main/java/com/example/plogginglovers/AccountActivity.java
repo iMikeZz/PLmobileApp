@@ -222,7 +222,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                    System.out.println(t.getMessage());
+                    Toast.makeText(AccountActivity.this, "Verifique ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -291,6 +291,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                             @Override
                             public void onFailure(Call<Errors> call, Throwable t) {
                                 System.out.println(t.getMessage());
+                                Toast.makeText(AccountActivity.this, "Verifique ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -582,6 +583,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 System.out.println(t.getMessage());
+                                Toast.makeText(AccountActivity.this, "Verifique ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
                         Picasso.get().load(compressedImageFile).into(profileImage);

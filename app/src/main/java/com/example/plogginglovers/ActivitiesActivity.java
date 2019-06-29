@@ -29,8 +29,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.plogginglovers.Adapters.ActivitiesListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.Model.ActivitiesModel;
+import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.Model.ActivityParcelable;
 import com.example.plogginglovers.Model.ActivityTeam;
 import com.example.plogginglovers.Model.LogoutToken;
@@ -170,18 +170,30 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                                     startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
                                             .putExtra("activity", new ActivityParcelable(activities.get(position)))
                                             .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
+                                            .putExtra("steps", getIntent().getExtras().getInt("steps"))
+                                            .putExtra("kilometers", getIntent().getExtras().getDouble("kilometers"))
+                                            .putExtra("calories", getIntent().getExtras().getDouble("calories"))
+                                            .putExtra("milisUntilFinished", getIntent().getExtras().getLong("milisUntilFinished"))
                                             .putExtra("state", "pending_accepted"));
                                     finish();
                                 } else if (activities.get(position).getState().equals("started") && activities.get(position).getTeamStatus().equals("accepted")) {
                                     startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
                                             .putExtra("activity", new ActivityParcelable(activities.get(position)))
                                             .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
+                                            .putExtra("steps", getIntent().getExtras().getInt("steps"))
+                                            .putExtra("kilometers", getIntent().getExtras().getDouble("kilometers"))
+                                            .putExtra("calories", getIntent().getExtras().getDouble("calories"))
+                                            .putExtra("milisUntilFinished", getIntent().getExtras().getLong("milisUntilFinished"))
                                             .putExtra("state", "started_accepted"));
                                     finish();
                                 } else if (activities.get(position).getState().equals("terminated") && activities.get(position).getTeamStatus().equals("accepted")) {
                                     startActivity(ActiveActivity.getIntent(ActivitiesActivity.this)
                                             .putExtra("activity", new ActivityParcelable(activities.get(position)))
                                             .putExtra("data", getIntent().getExtras().getParcelableArrayList("data"))
+                                            .putExtra("steps", getIntent().getExtras().getInt("steps"))
+                                            .putExtra("kilometers", getIntent().getExtras().getDouble("kilometers"))
+                                            .putExtra("calories", getIntent().getExtras().getDouble("calories"))
+                                            .putExtra("milisUntilFinished", getIntent().getExtras().getLong("milisUntilFinished"))
                                             .putExtra("state", "terminated_accepted"));
                                     finish();
                                 } else {
@@ -200,7 +212,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
             public void onFailure(Call<ActivitiesModel> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
-                Toast.makeText(ActivitiesActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivitiesActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -276,6 +288,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    Toast.makeText(ActivitiesActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         }

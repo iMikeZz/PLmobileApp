@@ -1,7 +1,6 @@
 package com.example.plogginglovers.Adapters;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.ImageViewCompat;
 
 import com.example.plogginglovers.Helpers.DateUtil;
 import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.R;
 import com.google.android.material.chip.Chip;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
 

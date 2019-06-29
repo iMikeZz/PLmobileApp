@@ -1,7 +1,6 @@
 package com.example.plogginglovers.Interfaces;
 
 import com.example.plogginglovers.Model.AchievementModel;
-import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.Model.ActivitiesModel;
 import com.example.plogginglovers.Model.ActivityModel;
 import com.example.plogginglovers.Model.Captain;
@@ -9,7 +8,6 @@ import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.Errors;
 import com.example.plogginglovers.Model.InfoModel;
-import com.example.plogginglovers.Model.Item;
 import com.example.plogginglovers.Model.LoginToken;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.Password;
@@ -19,10 +17,6 @@ import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Model.StatisticModel;
 import com.example.plogginglovers.Model.UserData;
 import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

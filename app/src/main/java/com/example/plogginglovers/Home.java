@@ -126,7 +126,7 @@ public class Home extends AppCompatActivity
             public void onFailure(Call<UserData> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
-                Toast.makeText(Home.this, "Unable to load user", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -233,6 +233,7 @@ public class Home extends AppCompatActivity
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    Toast.makeText(Home.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -251,7 +252,11 @@ public class Home extends AppCompatActivity
 
     public void onClickGoToActivities(View view){
         mask.setVisibility(View.VISIBLE);
-        startActivity(ActivitiesActivity.getIntent(this).putExtra("data", new ArrayList<RubbishParcelable>()));
+        startActivity(ActivitiesActivity.getIntent(this).putExtra("data", new ArrayList<RubbishParcelable>())
+                .putExtra("steps", 0)
+                .putExtra("kilometers", 0.0)
+                .putExtra("calories", 0.0)
+                .putExtra("milisUntilFinished", 0));
     }
 
     public void onClickGoToStatistics(View view) {

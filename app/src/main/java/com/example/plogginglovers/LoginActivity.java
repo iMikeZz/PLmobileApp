@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -115,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<LoginToken> call, Throwable t) {
                 System.out.println(t.getMessage());
+                Toast.makeText(LoginActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
 

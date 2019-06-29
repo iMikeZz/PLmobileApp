@@ -1,11 +1,5 @@
 package com.example.plogginglovers;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -31,11 +25,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Helpers.DateUtil;
 import com.example.plogginglovers.Helpers.ImageUtil;
 import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.Activity;
 import com.example.plogginglovers.Model.ActivityModel;
 import com.example.plogginglovers.Model.ActivityParcelable;
 import com.example.plogginglovers.Model.Captain;
@@ -159,7 +158,7 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
             public void onFailure(Call<Captain> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
-                Toast.makeText(PendingActivity.this, "Unable to load", Toast.LENGTH_SHORT).show(); // todo change message
+                Toast.makeText(PendingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show(); // todo change message
             }
         });
     }
@@ -185,9 +184,11 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
         int id = item.getItemId();
 
         switch (id){
+            /*
             case R.id.galleryMenuItem:
                 Toast.makeText(getApplicationContext(), "Showing gallery", Toast.LENGTH_LONG).show();
                 break;
+                */
             case R.id.camMenuItem:
                 requestStoragePermission(false);
                 break;
@@ -428,7 +429,11 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
                                     startActivity(ActiveActivity.getIntent(PendingActivity.this)
                                             .putExtra("activity", activity)
                                             .putExtra("data", new ArrayList<RubbishParcelable>())
-                                            .putExtra("state", "pending_accepted"));
+                                            .putExtra("state", "pending_accepted")
+                                            .putExtra("steps", 0)
+                                            .putExtra("kilometers", 0.0)
+                                            .putExtra("calories", 0.0)
+                                            .putExtra("milisUntilFinished", Long.parseLong(activity.getDuration())));
                                     finish();
                                 }
                             }
@@ -436,6 +441,7 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 System.out.println(t.getMessage());
+                                Toast.makeText(PendingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
                         dialogBuilder.dismiss();
@@ -479,6 +485,7 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
             @Override
             public void onFailure(Call<ActivityModel> call, Throwable t) {
                 System.out.println(t.getMessage());
+                Toast.makeText(PendingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
     }

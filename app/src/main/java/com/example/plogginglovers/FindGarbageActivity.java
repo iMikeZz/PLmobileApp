@@ -228,6 +228,7 @@ public class FindGarbageActivity extends AppCompatActivity implements Navigation
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    Toast.makeText(FindGarbageActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
 

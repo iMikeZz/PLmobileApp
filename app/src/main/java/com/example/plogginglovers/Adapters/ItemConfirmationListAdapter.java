@@ -1,9 +1,6 @@
 package com.example.plogginglovers.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +10,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.plogginglovers.Model.Achievement;
-import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Model.RubbishParcelable;
-import com.example.plogginglovers.Model.Team;
 import com.example.plogginglovers.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemConfirmationListAdapter extends ArrayAdapter<RubbishParcelable> {

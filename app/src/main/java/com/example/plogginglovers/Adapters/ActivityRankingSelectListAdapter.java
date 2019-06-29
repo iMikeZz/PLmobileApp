@@ -5,19 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plogginglovers.Helpers.DateUtil;
 import com.example.plogginglovers.Model.Activity;
-import com.example.plogginglovers.Model.Rubbish;
-import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

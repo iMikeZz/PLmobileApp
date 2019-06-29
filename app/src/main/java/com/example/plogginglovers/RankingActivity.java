@@ -149,7 +149,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
             public void onFailure(Call<RankingModel> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
-                Toast.makeText(RankingActivity.this, "Verifique a sua ligação a internet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RankingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -254,7 +254,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
                 //Handle execution failures//
                 public void onFailure(Call<RankingActivityModel> call, Throwable throwable) {
                     //If the request fails, then display the following toast//
-                    Toast.makeText(RankingActivity.this, "Verifique a sua ligação a internet", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RankingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -286,7 +286,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
             //Handle execution failures//
             public void onFailure(Call<RankingModel> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
-                Toast.makeText(RankingActivity.this, "Verifique a sua ligação a internet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RankingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -295,7 +295,6 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         List<Ranking> rankings_podium = response.body().getData().getRankings().subList(0, 2);
         List<Ranking> rankings = response.body().getData().getRankings().subList(3, response.body().getData().getRankings().size());
 
-        //todo verificar se existe a posição 0 1 2
         activity_id = response.body().getData().getActivityId();
 
         imageFirstTeam.setVisibility(View.VISIBLE);
@@ -308,13 +307,17 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         txtFirstTeamPoints.setText(rankings_podium.get(0).getPoints());
         txtFirstTeamName.setText(rankings_podium.get(0).getPoints());
 
-        Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(1).getPhotoUrl()).into(imageSecondTeam);
-        txtSecondTeamPoints.setText(rankings_podium.get(1).getPoints());
-        txtSecondTeamName.setText(rankings_podium.get(1).getPoints());
+        if (rankings_podium.get(1) != null) {
+            Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(1).getPhotoUrl()).into(imageSecondTeam);
+            txtSecondTeamPoints.setText(rankings_podium.get(1).getPoints());
+            txtSecondTeamName.setText(rankings_podium.get(1).getPoints());
+        }
 
-        Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(2).getPhotoUrl()).into(imageThirdTeam);
-        txtThirdTeamPoints.setText(rankings_podium.get(2).getPoints());
-        txtThirdTeamName.setText(rankings_podium.get(2).getPoints());
+        if (rankings_podium.get(2) != null) {
+            Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(2).getPhotoUrl()).into(imageThirdTeam);
+            txtThirdTeamPoints.setText(rankings_podium.get(2).getPoints());
+            txtThirdTeamName.setText(rankings_podium.get(2).getPoints());
+        }
 
         ListView activeActivitiesList = findViewById(R.id.rankingList);
 
@@ -396,6 +399,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    Toast.makeText(RankingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         }

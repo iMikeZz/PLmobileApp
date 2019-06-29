@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.plogginglovers.Model.Ranking;
-import com.example.plogginglovers.Model.Team;
 import com.example.plogginglovers.R;
 import com.squareup.picasso.Picasso;
 

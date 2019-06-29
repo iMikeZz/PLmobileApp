@@ -31,18 +31,10 @@ import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Achievement;
 import com.example.plogginglovers.Model.AchievementModel;
-import com.example.plogginglovers.Model.Ecoponto;
-import com.example.plogginglovers.Model.EcopontosList;
 import com.example.plogginglovers.Model.LogoutToken;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -258,6 +250,7 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    Toast.makeText(AchievementsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         }

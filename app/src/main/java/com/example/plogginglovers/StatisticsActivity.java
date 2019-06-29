@@ -1,19 +1,13 @@
 package com.example.plogginglovers;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,14 +21,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.plogginglovers.Adapters.AchievementsAdapter;
-import com.example.plogginglovers.Adapters.Dialogs.AchievementCostumDialog;
-import com.example.plogginglovers.Adapters.RankingListAdapter;
 import com.example.plogginglovers.Adapters.StatisticsListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.Achievement;
-import com.example.plogginglovers.Model.AchievementModel;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.Statistic;
 import com.example.plogginglovers.Model.StatisticModel;
@@ -226,6 +215,7 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    Toast.makeText(StatisticsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         }

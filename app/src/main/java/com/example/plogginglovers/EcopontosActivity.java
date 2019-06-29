@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,7 +30,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.plogginglovers.Client.RetrofitClient;
-import com.example.plogginglovers.Helpers.PermissionUtils;
 import com.example.plogginglovers.Interfaces.GetData;
 import com.example.plogginglovers.Model.Ecoponto;
 import com.example.plogginglovers.Model.EcopontosList;
@@ -205,7 +203,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                     //Handle execution failures//
                     public void onFailure(Call<EcopontosList> call, Throwable throwable) {
                         //If the request fails, then display the following toast//
-                        Toast.makeText(EcopontosActivity.this, "Unable to load ecopontos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EcopontosActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -300,6 +298,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    Toast.makeText(EcopontosActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         }

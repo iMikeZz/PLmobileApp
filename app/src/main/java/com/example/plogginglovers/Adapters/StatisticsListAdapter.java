@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.plogginglovers.Model.Ranking;
 import com.example.plogginglovers.Model.Statistic;
 import com.example.plogginglovers.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

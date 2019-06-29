@@ -2,7 +2,6 @@ package com.example.plogginglovers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -15,7 +14,6 @@ import androidx.core.content.ContextCompat;
 
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.LoginToken;
 import com.google.android.material.snackbar.Snackbar;
 
 import io.github.tonnyl.light.Light;
@@ -89,6 +87,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 System.out.println(t.getMessage());
+                Toast.makeText(ResetPasswordActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.plogginglovers.Model.Ranking;
 import com.example.plogginglovers.R;
 import com.squareup.picasso.Picasso;
@@ -42,6 +44,13 @@ public class RankingListAdapter extends ArrayAdapter<Ranking> {
         holder.place.setText(String.valueOf(item.getPosition()));
         holder.name.setText(item.getTeamName());
         holder.points.setText(item.getPoints() + " pontos");
+        holder.points.setTextColor(ContextCompat.getColor(getContext(), android.R.color.tab_indicator_text));
+        holder.name.setTextColor(ContextCompat.getColor(getContext(), android.R.color.tab_indicator_text));
+
+        if (item.getStudentTeam()){
+            holder.points.setTextColor(ContextCompat.getColor(getContext(), R.color.green_app_dark));
+            holder.name.setTextColor(ContextCompat.getColor(getContext(), R.color.green_app_dark));
+        }
 
         Picasso.get().load("http://46.101.15.61/storage/teams/" + item.getPhotoUrl()).into(holder.teamImage);
 

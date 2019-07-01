@@ -16,6 +16,17 @@ public class Ranking {
     @SerializedName("photo_url")
     @Expose
     private Object photoUrl;
+    @SerializedName("student_team")
+    @Expose
+    private Boolean studentTeam;
+
+    public Boolean getStudentTeam() {
+        return studentTeam;
+    }
+
+    public void setStudentTeam(Boolean studentTeam) {
+        this.studentTeam = studentTeam;
+    }
 
     public String getTeamName() {
         return teamName;

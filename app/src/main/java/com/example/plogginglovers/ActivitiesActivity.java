@@ -161,7 +161,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                         activeActivitiesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                //todo change add the information of the activity
                                 mask.setVisibility(View.VISIBLE);
                                 if (activities.get(position).getState().equals("pending") && activities.get(position).getTeamStatus().equals("invited")) {
                                     startActivity(PendingActivity.getIntent(ActivitiesActivity.this)
@@ -226,13 +225,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        //todo tem de ser verificado qual é a atividade atual para não estar a criar atividades por cima de atividades
-        /*
-        ActivityManager am = (ActivityManager)getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-        */
         if (id == R.id.nav_home && !item.isChecked()) {
-            //fazer aqui o handle
             startActivity(Home.getIntent(this));
             finish();
         } else if (id == R.id.nav_achievements && !item.isChecked()) {
@@ -260,12 +253,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
         } else if (id == R.id.nav_logout && !item.isChecked()) {
-            /*
-            mAuth.signOut();
-            Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
-            startActivity(LoginActivity.getIntent(this));
-            finish();
-            */
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
             Call<LogoutToken> call = service.logout("Bearer " + pref.getString("token", null));

@@ -75,23 +75,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        /*
-        mAuth.signInWithEmailAndPassword(inputEmail.getText().toString(), inputPassword.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success
-                            startActivity(Home.getIntent(LoginActivity.this));
-                            finish();
-                        } else {
-                            // If sign in fails
-                            showErrorMessage("Email or Password Incorrect", view);
-                        }
-                    }
-                });
-                */
-
         //todo maybe add progress dialog (slow login)
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 

@@ -158,7 +158,7 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
             public void onFailure(Call<Captain> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
                 System.out.println(throwable.getMessage());
-                Toast.makeText(PendingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show(); // todo change message
+                Toast.makeText(PendingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -235,11 +235,10 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
     }
 
     private void showSettingsDialog() {
-        //todo change to portuguese
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Need Permissions");
-        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
-        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+        builder.setTitle("Permissões necessárias");
+        builder.setMessage("Esta aplicação precisa de permissões para usar esta funcionalidade. Podem ser dadas nas definições da aplicação.");
+        builder.setPositiveButton("Definições", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

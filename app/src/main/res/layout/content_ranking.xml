@@ -24,8 +24,7 @@
         android:id="@+id/imageFirstTeam"
         android:layout_width="79dp"
         android:layout_height="48dp"
-        android:layout_marginTop="95dp"
-        android:visibility="invisible"
+        android:layout_marginTop="100dp"
         android:src="@drawable/ic_account_circle_black_24dp"
         app:civ_border_color="@color/green_app_light"
         app:civ_border_width="2dp"
@@ -40,9 +39,8 @@
         android:layout_width="350dp"
         android:layout_height="214dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="130dp"
         android:layout_marginEnd="25dp"
-        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/rankingList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +56,6 @@
             android:id="@+id/imageSecondTeam"
             android:layout_width="79dp"
             android:layout_height="48dp"
-            android:layout_marginEnd="35dp"
             android:src="@drawable/ic_account_circle_black_24dp"
             app:civ_border_color="@color/green_app_light"
             app:civ_border_width="2dp"
@@ -69,9 +66,9 @@
 
         <TextView
             android:id="@+id/txtSecondTeamPoints"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="35dp"
+            android:gravity="center"
             android:text="TextView"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/txtSecondTeamName"
@@ -83,8 +80,8 @@
             android:id="@+id/txtSecondTeamName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="35dp"
             android:layout_marginBottom="100dp"
+            android:gravity="center"
             android:text="TextView"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -94,21 +91,22 @@
 
         <TextView
             android:id="@+id/txtFirstTeamPoints"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="35dp"
+            android:gravity="center"
             android:text="TextView"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@id/txtFirstTeamName"
             app:layout_constraintEnd_toStartOf="@id/imageThirdTeam"
             app:layout_constraintStart_toEndOf="@id/imageSecondTeam"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/txtFirstTeamName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="140dp"
+            android:gravity="center"
             android:text="TextView"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -131,9 +129,9 @@
 
         <TextView
             android:id="@+id/txtThirdTeamPoints"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
+            android:gravity="center"
             android:text="TextView"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@id/txtThirdTeamName"
@@ -143,10 +141,10 @@
 
         <TextView
             android:id="@+id/txtThirdTeamName"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="16dp"
-            android:layout_marginStart="35dp"
             android:layout_marginBottom="65dp"
+            android:gravity="center"
             android:text="TextView"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

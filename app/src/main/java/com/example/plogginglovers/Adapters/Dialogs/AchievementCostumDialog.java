@@ -40,7 +40,7 @@ public class AchievementCostumDialog extends Dialog {
         txtAchievementObjetivo.setText(String.valueOf(achievement.getGoal()));
         txtAchievementProgresso.setText(String.valueOf(achievement.getProgress()));
 
-        if (achievement.getStatus() == 0){ // todo not done
+        if (achievement.getStatus() == 0){
             ColorMatrix matrix = new ColorMatrix();
             matrix.setSaturation(0);
 

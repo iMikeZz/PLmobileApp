@@ -236,13 +236,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        //todo tem de ser verificado qual é a atividade atual para não estar a criar atividades por cima de atividades
-        /*
-        ActivityManager am = (ActivityManager)getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-        */
         if (id == R.id.nav_home && !item.isChecked()) {
-            //fazer aqui o handle
             startActivity(Home.getIntent(this));
             finish();
         } else if (id == R.id.nav_achievements && !item.isChecked()) {
@@ -270,12 +264,6 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
         }else if (id == R.id.nav_logout && !item.isChecked()){
-            /*
-            mAuth.signOut();
-            Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
-            startActivity(LoginActivity.getIntent(this));
-            finish();
-            */
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
             Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
@@ -339,11 +327,10 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void showSettingsDialog() {
-        //todo change to portuguese
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Need Permissions");
-        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
-        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+        builder.setTitle("Permissões necessárias");
+        builder.setMessage("Esta aplicação precisa de permissões para usar esta funcionalidade. Podem ser dadas nas definições da aplicação.");
+        builder.setPositiveButton("Definições", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

@@ -135,12 +135,12 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
                 System.out.println(response);
                 if (response.isSuccessful()) {
                     if (response.body().getData().getRankings().size() == 0){
-                        noActivitiesDialog("Ainda não existe nenhuma atividade terminada.", "Sem atividades");
+                        noActivitiesDialog("Ainda não existe nenhuma atividade terminada.", "Sem atividades", true);
                     } else {
                         populateRankingList(response);
                     }
                 } else{
-                    noActivitiesDialog("Ainda não existe nenhuma atividade terminada.", "Sem atividades");
+                    noActivitiesDialog("Ainda não existe nenhuma atividade terminada.", "Sem atividades", true);
                 }
             }
 
@@ -171,13 +171,14 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         }
     }
 
-    private void noActivitiesDialog(String message, String title) {
+    private void noActivitiesDialog(String message, String title, final boolean close_activity) {
         AlertDialog dialogBuilder = new AlertDialog.Builder(RankingActivity.this)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        finish();
+                        if (close_activity)
+                            finish();
                     }
                 })
                 .setCancelable(false)
@@ -212,7 +213,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
                     if (response.isSuccessful()) {
                         final List<Activity> data = response.body().getData();
                         if (data.size() == 0){
-                            noActivitiesDialog("Não existem mais atividades", "Sem atividades");
+                            noActivitiesDialog("Não existem mais atividades", "Sem atividades", false);
                         } else {
                             LayoutInflater inflater = getLayoutInflater();
                             View dialogView = inflater.inflate(R.layout.activity_ranking_select_list_dialog, null);
@@ -239,6 +240,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
                                         @Override
                                         public void onClick(View view) {
                                             getActivityRanking(activityRankingSelectListAdapter, data);
+                                            dialogBuilder.dismiss();
                                         }
                                     });
                                 }
@@ -246,7 +248,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
                             dialogBuilder.show();
                         }
                     } else {
-                        noActivitiesDialog("Não existem mais atividades", "Sem atividades");
+                        noActivitiesDialog("Não existem mais atividades", "Sem atividades", false);
                     }
                 }
 
@@ -278,7 +280,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
                 if (response.isSuccessful()) {
                     populateRankingList(response);
                 } else {
-                    noActivitiesDialog("Ranking não disponivel tente novamente mais tarde", "Ranking Indisponivel");
+                    noActivitiesDialog("Ranking não disponivel tente novamente mais tarde", "Ranking Indisponivel", false);
                 }
             }
 
@@ -292,7 +294,8 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
     }
 
     private void populateRankingList(Response<RankingModel> response) {
-        List<Ranking> rankings_podium = response.body().getData().getRankings().subList(0, 2);
+        System.out.println(response.body().getData().getRankings().size() + " tamanho da lista");
+        List<Ranking> rankings_podium = response.body().getData().getRankings().subList(0, 3);
         List<Ranking> rankings = response.body().getData().getRankings().subList(3, response.body().getData().getRankings().size());
 
         activity_id = response.body().getData().getActivityId();
@@ -300,22 +303,40 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         imageFirstTeam.setVisibility(View.VISIBLE);
         txtActivityNameAndDate.setVisibility(View.VISIBLE);
         podiumLayout.setVisibility(View.VISIBLE);
+        txtFirstTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.white));
+        txtFirstTeamName.setTextColor(ContextCompat.getColor(this, R.color.white));
+        txtSecondTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.white));
+        txtSecondTeamName.setTextColor(ContextCompat.getColor(this, R.color.white));
+        txtThirdTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.white));
+        txtThirdTeamName.setTextColor(ContextCompat.getColor(this, R.color.white));
 
         txtActivityNameAndDate.setText(response.body().getData().getActivityName() + " - " +
                 DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", response.body().getData().getActivityDate()));
         Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(0).getPhotoUrl()).into(imageFirstTeam);
-        txtFirstTeamPoints.setText(rankings_podium.get(0).getPoints());
+        if (rankings_podium.get(0).getStudentTeam()){
+            txtFirstTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+            txtFirstTeamName.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+        }
+        txtFirstTeamPoints.setText(rankings_podium.get(0).getTeamName());
         txtFirstTeamName.setText(rankings_podium.get(0).getPoints());
 
         if (rankings_podium.get(1) != null) {
+            if (rankings_podium.get(1).getStudentTeam()){
+                txtSecondTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+                txtSecondTeamName.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+            }
             Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(1).getPhotoUrl()).into(imageSecondTeam);
-            txtSecondTeamPoints.setText(rankings_podium.get(1).getPoints());
+            txtSecondTeamPoints.setText(rankings_podium.get(1).getTeamName());
             txtSecondTeamName.setText(rankings_podium.get(1).getPoints());
         }
 
         if (rankings_podium.get(2) != null) {
+            if (rankings_podium.get(1).getStudentTeam()){
+                txtThirdTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+                txtThirdTeamName.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+            }
             Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(2).getPhotoUrl()).into(imageThirdTeam);
-            txtThirdTeamPoints.setText(rankings_podium.get(2).getPoints());
+            txtThirdTeamPoints.setText(rankings_podium.get(2).getTeamName());
             txtThirdTeamName.setText(rankings_podium.get(2).getPoints());
         }
 
@@ -335,14 +356,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        //todo tem de ser verificado qual é a atividade atual para não estar a criar atividades por cima de atividades
-        /*
-        ActivityManager am = (ActivityManager)getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-        */
-
         if (id == R.id.nav_home && !item.isChecked()) {
-            //fazer aqui o handle
             startActivity(Home.getIntent(this));
             finish();
         } else if (id == R.id.nav_achievements && !item.isChecked()) {
@@ -370,12 +384,6 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
         }else if (id == R.id.nav_logout && !item.isChecked()){
-            /*
-            mAuth.signOut();
-            Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
-            startActivity(LoginActivity.getIntent(this));
-            finish();
-            */
 
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 

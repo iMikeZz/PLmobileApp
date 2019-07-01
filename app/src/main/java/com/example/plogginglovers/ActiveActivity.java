@@ -73,6 +73,9 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -409,35 +412,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         }
     }
 
-    /*
-    private void isActivityTeamCaptain() {
-        GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
-
-        Call<Captain> call = service.isStudentTeamCaptain("Bearer " + pref.getString("token", null), activity.getId());
-
-        //Execute the request asynchronously//
-        call.enqueue(new Callback<Captain>() {
-            @Override
-            //Handle a successful response//
-            public void onResponse(Call<Captain> call, Response<Captain> response) {
-                // Add a marker in Sydney and move the camera
-                if (response.isSuccessful()) {
-                    isActivityTeamCaptain = response.body().getCaptain();
-                }
-            }
-
-            @Override
-            //Handle execution failures//
-            public void onFailure(Call<Captain> call, Throwable throwable) {
-                //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
-                Toast.makeText(ActiveActivity.this, "Verifica a tua conecção á internet", Toast.LENGTH_SHORT).show(); // todo change message
-            }
-
-        });
-    }
-    */
-
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
@@ -454,10 +428,10 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     public void step(long timeNs) {
         numSteps++;
         calories = numSteps * 0.04;
-        kilometers = numSteps / 1312.335;
+        kilometers = Math.round((numSteps / 1312.335)*100.0)/100.0;
         TvSteps.setText(String.valueOf(numSteps));
-        txtCals.setText(String.format("%.1f", (calories)));
-        txtKilos.setText(String.format("%.2f", Math.round((kilometers)*100.0)/100.0));
+        txtCals.setText(String.format("%.1f", calories));
+        txtKilos.setText(String.format("%.2f", kilometers));
     }
 
     public static Intent getIntent(Context context) {
@@ -553,11 +527,10 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     }
 
     private void showSettingsDialog() {
-        //todo change to portuguese
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Need Permissions");
-        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
-        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+        builder.setTitle("Permissões necessárias");
+        builder.setMessage("Esta aplicação precisa de permissões para usar esta funcionalidade. Podem ser dadas nas definições da aplicação.");
+        builder.setPositiveButton("Definições", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -709,6 +682,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         View dialogView = inflater.inflate(R.layout.item_dialog_confirmation_list, null);
 
         ListView listViewItems = dialogView.findViewById(R.id.itemDialogConfirmationList);
+
         //System.out.println(dataParcelable.get(0).getName());
         for (RubbishParcelable rubbishParcelable : dataParcelable) {
             if (rubbishParcelable.getQuantity() > 0) {
@@ -747,8 +721,8 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                             jsonObject1.addProperty("item_quantity", rubbish.getQuantity());
                             jsonObject1.addProperty("student_score", rubbish.getQuantity() * rubbish.getScore());
                             jsonObject1.addProperty("student_steps", Integer.parseInt(TvSteps.getText().toString()));
-                            jsonObject1.addProperty("student_kilometers", Float.parseFloat(txtKilos.getText().toString()));
-                            jsonObject1.addProperty("student_calories", Float.parseFloat(txtCals.getText().toString()));
+                            jsonObject1.addProperty("student_kilometers", kilometers);
+                            jsonObject1.addProperty("student_calories", calories);
                             itemsArray.add(jsonObject1);
                         }
 
@@ -786,7 +760,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     }
 
     private void teamPictureDialogConfirmation() throws IOException {
-        //todo layout is the same as the above one
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.share_image_preview_dialog, null);
 
@@ -863,11 +836,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             public void onResponse(Call<ActivityModel> call, Response<ActivityModel> response) {
                 if (response.isSuccessful()) {
                     swipeLayout.setRefreshing(false);
-                    if (response.body().getData().getState().equals("Terminated")) {
+                    if (response.body().getData().getState().equals("terminated")) {
                         ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "terminated_accepted");
                         listViewObjects.setAdapter(objectListAdapter);
                         checkStudentActivityGameInfo();
-                    } else if (response.body().getData().getState().equals("Started")){
+                    } else if (response.body().getData().getState().equals("started")){
                         ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "started_accepted");
                         listViewObjects.setAdapter(objectListAdapter);
                         numSteps = 0;
@@ -890,8 +863,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                                 }
                             }.start();
                         }
-                        //todo start timer
-                        //todo start step listener
                     }
                 } else {
                     swipeLayout.setRefreshing(false);

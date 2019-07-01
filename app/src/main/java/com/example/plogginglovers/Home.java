@@ -168,15 +168,7 @@ public class Home extends AppCompatActivity
         // Handle navigation view message clicks here.
         int id = item.getItemId();
 
-        //todo tem de ser verificado qual é a atividade atual para não estar a criar atividades por cima de atividades
-        /*
-        ActivityManager am = (ActivityManager)getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-        */
-
-
         if (id == R.id.nav_home && !item.isChecked()) {
-           //fazer aqui o handle
             startActivity(Home.getIntent(this));
             finish();
         } else if (id == R.id.nav_achievements && !item.isChecked()) {
@@ -204,12 +196,6 @@ public class Home extends AppCompatActivity
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
         }else if (id == R.id.nav_logout && !item.isChecked()){
-            /*
-            mAuth.signOut();
-            Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show();
-            startActivity(LoginActivity.getIntent(this));
-            finish();
-            */
 
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 

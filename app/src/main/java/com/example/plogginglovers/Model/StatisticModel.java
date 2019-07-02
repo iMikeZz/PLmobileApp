@@ -9,10 +9,10 @@ public class StatisticModel {
     private String steps;
     @SerializedName("calories")
     @Expose
-    private Integer calories;
+    private Double calories;
     @SerializedName("kilometers")
     @Expose
-    private Integer kilometers;
+    private Double kilometers;
     @SerializedName("objects")
     @Expose
     private String objects;
@@ -24,7 +24,7 @@ public class StatisticModel {
     private Integer ecopontos;
     @SerializedName("kilometers_global")
     @Expose
-    private Integer kilometersGlobal;
+    private Double kilometersGlobal;
     @SerializedName("objects_global")
     @Expose
     private Integer objectsGlobal;
@@ -43,19 +43,19 @@ public class StatisticModel {
         this.steps = steps;
     }
 
-    public Integer getCalories() {
+    public Double getCalories() {
         return calories;
     }
 
-    public void setCalories(Integer calories) {
+    public void setCalories(Double calories) {
         this.calories = calories;
     }
 
-    public Integer getKilometers() {
+    public Double getKilometers() {
         return kilometers;
     }
 
-    public void setKilometers(Integer kilometers) {
+    public void setKilometers(Double kilometers) {
         this.kilometers = kilometers;
     }
 
@@ -83,11 +83,11 @@ public class StatisticModel {
         this.ecopontos = ecopontos;
     }
 
-    public Integer getKilometersGlobal() {
+    public Double getKilometersGlobal() {
         return kilometersGlobal;
     }
 
-    public void setKilometersGlobal(Integer kilometersGlobal) {
+    public void setKilometersGlobal(Double kilometersGlobal) {
         this.kilometersGlobal = kilometersGlobal;
     }
 

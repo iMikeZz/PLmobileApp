@@ -349,8 +349,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                                 .setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        checkStudentActivityGameInfo();
+                                        //checkStudentActivityGameInfo();
                                         dialog.dismiss();
+                                        finish();
                                     }
                                 })
                                 .setCancelable(false)

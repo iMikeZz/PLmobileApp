@@ -4,9 +4,9 @@ public class Statistic {
 
     private int image;
     private String title;
-    private int quantity;
+    private String quantity;
 
-    public Statistic(int image, String title, int quantity) {
+    public Statistic(int image, String title, String quantity) {
         this.image = image;
         this.title = title;
         this.quantity = quantity;
@@ -28,11 +28,11 @@ public class Statistic {
         this.title = title;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 }

@@ -1,14 +1,18 @@
 package com.example.plogginglovers;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,7 +28,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
+import com.example.plogginglovers.Model.Errors;
 import com.example.plogginglovers.Model.LogoutToken;
+import com.example.plogginglovers.Model.Password;
 import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.Model.UserData;
 import com.google.android.material.navigation.NavigationView;
@@ -103,22 +109,78 @@ public class Home extends AppCompatActivity
             //Handle a successful response//
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 // Add a marker in Sydney and move the camera
-                System.out.println(response.body().getData());
+                System.out.println(response);
+                if (response.isSuccessful()) {
+                    SharedPreferences.Editor editor = pref.edit();
+                    txtStudentName.setText(response.body().getData().getName());
+                    txtStudentEmail.setText(response.body().getData().getEmail());
+                    editor.putString("studentName", response.body().getData().getName());
+                    editor.putString("studentEmail", response.body().getData().getEmail());
+                    editor.putString("studentSchool", response.body().getData().getSchoolName());
+                    editor.putString("studentClass", response.body().getData().getYear() + "º " + response.body().getData().getClass_());
+                    editor.putString("studentPhoto", response.body().getData().getPhoto());
+                    if (response.body().getData().getPhoto() != null) {
+                        Picasso.get().load("http://46.101.15.61/storage/profiles/" + response.body().getData().getPhoto()).into(nav_profile_image);
+                    } else {
+                        Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
+                    }
+                    editor.commit();
+                }else if (response.code() == 403){
+                    final AlertDialog dialogBuilder = new AlertDialog.Builder(Home.this)
+                            .setPositiveButton("Ok", null)
+                            .setTitle("Não Autorizado")
+                            .setMessage("Não existe uma área para a sua função")
+                            .setCancelable(false)
+                            .create();
+                    dialogBuilder.show();
 
-                SharedPreferences.Editor editor = pref.edit();
-                txtStudentName.setText(response.body().getData().getName());
-                txtStudentEmail.setText(response.body().getData().getEmail());
-                editor.putString("studentName", response.body().getData().getName());
-                editor.putString("studentEmail", response.body().getData().getEmail());
-                editor.putString("studentSchool", response.body().getData().getSchoolName());
-                editor.putString("studentClass", response.body().getData().getYear()+ "º " +response.body().getData().getClass_());
-                editor.putString("studentPhoto", response.body().getData().getPhoto());
-                if (response.body().getData().getPhoto() != null){
-                    Picasso.get().load("http://46.101.15.61/storage/profiles/" + response.body().getData().getPhoto()).into(nav_profile_image);
-                }else {
-                    Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
+                    final Button button = dialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                    new CountDownTimer(5000, 1000){
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            button.setText(String.valueOf(millisUntilFinished/1000));
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            button.performClick();
+                        }
+                    }.start();
+
+
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
+
+                            Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
+
+                            //Execute the request asynchronously//
+                            call.enqueue(new Callback<LogoutToken>() {
+                                @Override
+                                public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
+                                    if (response.isSuccessful()){
+                                        SharedPreferences.Editor editor = pref.edit();
+                                        editor.clear();
+                                        editor.commit();
+                                        Toast.makeText(Home.this, "Logged out", Toast.LENGTH_LONG).show();
+                                        finishAffinity();
+                                        dialogBuilder.dismiss();
+                                        startActivity(LoginActivity.getIntent(Home.this));
+                                        finish();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<LogoutToken> call, Throwable t) {
+                                    System.out.println(t.getMessage());
+                                    Toast.makeText(Home.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
                 }
-                editor.commit();
             }
 
             @Override
@@ -139,28 +201,6 @@ public class Home extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar message clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

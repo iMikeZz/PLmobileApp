@@ -116,16 +116,16 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
                 System.out.println(response);
                 if (response.isSuccessful()){
                     final List<Statistic> statistics = new ArrayList<>();
-                    statistics.add(new Statistic(R.drawable.foot_with_background, "Total de passos", Integer.parseInt(response.body().getSteps())));
-                    statistics.add(new Statistic(R.drawable.calorias, "Total de calorias", response.body().getCalories()));
-                    statistics.add(new Statistic(R.drawable.kilometros, "Total quilómetros", response.body().getKilometers()));
-                    statistics.add(new Statistic(R.drawable.objetos, "Total objetos", Integer.parseInt(response.body().getObjects())));
-                    statistics.add(new Statistic(R.drawable.objetos, "Média de objetos por atividade", response.body().getObjectsActivityAverage()));
-                    statistics.add(new Statistic(R.drawable.ecopontos_icons, "Número de ecopontos no sistema", response.body().getEcopontos()));
-                    statistics.add(new Statistic(R.drawable.kilometros, "Número de quilómetros totais", response.body().getKilometersGlobal()));
-                    statistics.add(new Statistic(R.drawable.objetos, "Total de objetos recolhidos (global)", response.body().getObjectsGlobal()));
-                    statistics.add(new Statistic(R.drawable.escola, "Total de escolas", response.body().getSchools()));
-                    statistics.add(new Statistic(R.drawable.pessoas, "Total de utilizadores", response.body().getUsers()));
+                    statistics.add(new Statistic(R.drawable.foot_with_background, "Total de passos", response.body().getSteps()));
+                    statistics.add(new Statistic(R.drawable.calorias, "Total de calorias", String.valueOf(response.body().getCalories())));
+                    statistics.add(new Statistic(R.drawable.kilometros, "Total quilómetros", String.valueOf(response.body().getKilometers())));
+                    statistics.add(new Statistic(R.drawable.objetos, "Total objetos", response.body().getObjects()));
+                    statistics.add(new Statistic(R.drawable.objetos, "Média de objetos por atividade", String.valueOf(response.body().getObjectsActivityAverage())));
+                    statistics.add(new Statistic(R.drawable.ecopontos_icons, "Número de ecopontos no sistema", String.valueOf(response.body().getEcopontos())));
+                    statistics.add(new Statistic(R.drawable.kilometros, "Número de quilómetros totais", String.valueOf(response.body().getKilometersGlobal())));
+                    statistics.add(new Statistic(R.drawable.objetos, "Total de objetos recolhidos (global)", String.valueOf(response.body().getObjectsGlobal())));
+                    statistics.add(new Statistic(R.drawable.escola, "Total de escolas", String.valueOf(response.body().getSchools())));
+                    statistics.add(new Statistic(R.drawable.pessoas, "Total de utilizadores", String.valueOf(response.body().getUsers())));
 
                     ListView statisticsList = findViewById(R.id.statisticsList);
 
@@ -139,6 +139,7 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
             //Handle execution failures//
             public void onFailure(Call<StatisticModel> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
+                System.out.println(throwable.getMessage());
                 Toast.makeText(StatisticsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });

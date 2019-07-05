@@ -65,7 +65,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PendingActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class PendingActivity extends AppCompatActivity {
     private TextView txtActivityDescription, activity_name, txtActivityLocation, txtActivityType, txtActivityDuration, txtActivityStartTime, txtActivityEndTime, txtActivityResponsibleTeacher;
 
     private SharedPreferences pref;
@@ -131,9 +131,6 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
         txtActivityEndTime.setText(DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy HH:mm:ss", activity.getEndTime()));
         txtActivityResponsibleTeacher.setText(activity.getResponsibleTeacher());
 
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeLayout.setOnRefreshListener(this);
-
         isActivityTeamCaptain();
     }
 
@@ -194,6 +191,9 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
                 break;
             case R.id.chatMenuItem:
                 startActivity(ChatActivity.getIntent(this).putExtra("id", activity.getId()));
+                break;
+            case R.id.refresh_button:
+                onRefresh();
                 break;
         }
 
@@ -457,7 +457,6 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
         requestStoragePermission(true);
     }
 
-    @Override
     public void onRefresh() {
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
@@ -469,15 +468,16 @@ public class PendingActivity extends AppCompatActivity implements SwipeRefreshLa
             public void onResponse(Call<ActivityModel> call, Response<ActivityModel> response) {
                 //System.out.println(response);
                 if (response.isSuccessful() && response.body().getData().getTeamStatus().equals("accepted")) {
-                    swipeLayout.setRefreshing(false);
                     Toast.makeText(PendingActivity.this, "A tua equipa está pronta!", Toast.LENGTH_LONG).show();
                     startActivity(ActiveActivity.getIntent(PendingActivity.this)
                             .putExtra("activity", new ActivityParcelable(response.body().getData()))
                             .putExtra("data", new ArrayList<RubbishParcelable>())
-                            .putExtra("state", "pending_accepted"));
+                            .putExtra("state", "pending_accepted")
+                            .putExtra("steps", 0)
+                            .putExtra("kilometers", 0.0)
+                            .putExtra("calories", 0.0)
+                            .putExtra("milisUntilFinished", Long.parseLong(activity.getDuration())));
                     finish();
-                } else {
-                    swipeLayout.setRefreshing(false);
                 }
             }
 

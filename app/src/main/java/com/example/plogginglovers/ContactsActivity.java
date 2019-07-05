@@ -137,7 +137,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Contact contact = dataModels.get(position);
+                            final Contact contact = dataModels.get(position);
 
                             AlertDialog dialogBuilder = new AlertDialog.Builder(ContactsActivity.this).create();
                             //new MaterialDialog(getApplicationContext());
@@ -149,7 +149,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    requestCallPermission();
+                                    requestCallPermission(contact.getPhoneNumber());
                                 }
                             });
 
@@ -192,8 +192,8 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
 
     }
 
-    private void callIntent() {
-        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+351917620681")); //todo change to the real number
+    private void callIntent(String contact) {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contact)); //todo change to the real number
         startActivity(intent);
         //Toast.makeText(getApplicationContext(), "A Ligar...", Toast.LENGTH_LONG).show();
     }
@@ -247,7 +247,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(ContactsActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ContactsActivity.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(ContactsActivity.this));
                         finish();
@@ -267,14 +267,14 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
         return true;
     }
 
-    private void requestCallPermission() {
+    private void requestCallPermission(final String phoneNumber) {
         Dexter.withActivity(this).withPermissions(Manifest.permission.CALL_PHONE)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            callIntent();
+                            callIntent(phoneNumber);
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {

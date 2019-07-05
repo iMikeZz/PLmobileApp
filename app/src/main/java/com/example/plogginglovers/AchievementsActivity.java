@@ -228,7 +228,7 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(AchievementsActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AchievementsActivity.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(AchievementsActivity.this));
                         finish();

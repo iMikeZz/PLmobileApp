@@ -200,7 +200,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(AccountActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AccountActivity.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(AccountActivity.this));
                         finish();

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -40,19 +41,21 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import io.github.tonnyl.light.Light;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActivitiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+public class ActivitiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ArrayList<String> dataModels;
     private FirebaseAuth mAuth;
     private SharedPreferences pref;
     private TextView txtStudentName, txtStudentEmail;
     private ImageView nav_profile_image;
-    private SwipeRefreshLayout swipeLayout;
     private LinearLayout mask;
+    private int updating = 0;
+    private View layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +102,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         txtStudentName.setText(pref.getString("studentName", null));
         txtStudentEmail.setText(pref.getString("studentEmail", null));
 
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeLayout.setOnRefreshListener(this);
+        layout = findViewById(R.id.constraint_layout_refresh_activities);
 
         mask = findViewById(R.id.mask);
         mask.setVisibility(View.GONE);
@@ -127,8 +129,11 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
             //Handle a successful response//
             public void onResponse(Call<ActivitiesModel> call, Response<ActivitiesModel> response) {
                 System.out.println(response);
-                // Add a marker in Sydney and move the camera
                 if (response.body() != null) {
+                    if (updating == 1){
+                        Light.success(layout, "Atualizado", Light.LENGTH_SHORT).show();
+                        updating = 0;
+                    }
                     ListView activeActivitiesList = findViewById(R.id.activeActivityList);
 
                     final ArrayList<Activity> activities = new ArrayList<>();
@@ -155,8 +160,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                         ActivitiesListAdapter adapter = new ActivitiesListAdapter(activities, ActivitiesActivity.this, R.layout.activity_list_item);
 
                         activeActivitiesList.setAdapter(adapter);
-
-                        swipeLayout.setRefreshing(false);
 
                         activeActivitiesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
@@ -216,9 +219,25 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         });
     }
 
-
     public static Intent getIntent(Context context) {
         return new Intent(context, ActivitiesActivity.class);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.refresh_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.refresh_button) {
+            onRefresh();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -265,7 +284,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(ActivitiesActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivitiesActivity.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(ActivitiesActivity.this));
                         finish();
@@ -285,8 +304,9 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         return true;
     }
 
-    @Override
     public void onRefresh() {
+        updating = 1;
+        Light.info(layout, "A atualizar...", Light.LENGTH_SHORT).show();
         getActivities();
     }
 

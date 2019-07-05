@@ -1,16 +1,17 @@
 package com.example.plogginglovers;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.MenuItem;
@@ -59,7 +60,7 @@ import retrofit2.Response;
 
 public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int LOCATION_REFRESH_DISTANCE = 5; // 5 metros
+    private static final int LOCATION_REFRESH_DISTANCE = 20; // 5 metros
     private static final int LOCATION_REFRESH_TIME = 5000; // 5 seconds
     private GoogleMap mMap;
     private FirebaseAuth mAuth;
@@ -81,7 +82,6 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
     private View map_view;
 
-    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +125,6 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         map_view = findViewById(R.id.map);
         map_view.setVisibility(View.INVISIBLE);
 
-        mapFragment.getMapAsync(this);
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
@@ -146,11 +145,10 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
             Picasso.get().load("http://46.101.15.61/storage/misc/profile-default.jpg").into(nav_profile_image);
         }
 
-        enableMyLocation();
-
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         //todo add loading
+        mapFragment.getMapAsync(this);
     }
 
 
@@ -163,23 +161,30 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        //mMap.setOnMyLocationButtonClickListener(this);
-        //mMap.setOnMyLocationClickListener(this);
-        //enableMyLocation();
-
         mLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(final Location location) {
                 mMap = googleMap;
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    Activity#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for Activity#requestPermissions for more details.
+                        return;
+                    }
+                }
+                mMap.setMyLocationEnabled(true);
+
                 mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
                 map_view.setVisibility(View.VISIBLE);
-
-                enableMyLocation();
 
                 GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
@@ -191,7 +196,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                     //Handle a successful response//
                     public void onResponse(Call<EcopontosList> call, Response<EcopontosList> response) {
                         // Add a marker in Sydney and move the camera
-                        if (response.body() != null){
+                        if (response.body() != null) {
                             for (Ecoponto ecoponto : response.body().getData()) {
                                 mMap.addMarker(new MarkerOptions().position(new LatLng(ecoponto.getLatitude(), ecoponto.getLongitude())));
                             }
@@ -224,11 +229,24 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
             }
         };
 
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+                enableMyLocation();
+                return;
+            }
+        }
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
 
     }
 
-    public static Intent getIntent(Context context){
+    public static Intent getIntent(Context context) {
         return new Intent(context, EcopontosActivity.class);
     }
 
@@ -257,26 +275,26 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         } else if (id == R.id.nav_stats && !item.isChecked()) {
             startActivity(StatisticsActivity.getIntent(this));
             finish();
-        } else if (id == R.id.nav_ecopontos && !item.isChecked()){
+        } else if (id == R.id.nav_ecopontos && !item.isChecked()) {
             startActivity(EcopontosActivity.getIntent(this));
             finish();
-        } else if(id == R.id.nav_onde_colocar && !item.isChecked()){
+        } else if (id == R.id.nav_onde_colocar && !item.isChecked()) {
             startActivity(FindGarbageActivity.getIntent(this));
             finish();
-        }else if (id == R.id.nav_logout && !item.isChecked()){
+        } else if (id == R.id.nav_logout && !item.isChecked()) {
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
-            Call<LogoutToken> call = service.logout("Bearer "  + pref.getString("token", null));
+            Call<LogoutToken> call = service.logout("Bearer " + pref.getString("token", null));
 
             //Execute the request asynchronously//
             call.enqueue(new Callback<LogoutToken>() {
                 @Override
                 public void onResponse(Call<LogoutToken> call, Response<LogoutToken> response) {
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(EcopontosActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EcopontosActivity.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(EcopontosActivity.this));
                         finish();
@@ -303,7 +321,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            callIntent();
+                            updatecurrentLocationIntent();
                         }
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
@@ -354,11 +372,21 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         startActivityForResult(intent, 101);
     }
 
-    @SuppressLint("MissingPermission")
-    private void callIntent() {
-        if (mMap != null) {
-            // Access to the location has been granted to the app.
-            mMap.setMyLocationEnabled(true);
+    private void updatecurrentLocationIntent() {
+        // Access to the location has been granted to the app.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+                //enableMyLocation();
+                return;
+            }
         }
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
     }
 }

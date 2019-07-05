@@ -18,4 +18,9 @@
         android:title=""
         app:showAsAction="ifRoom"/>
         -->
+    <item
+        android:id="@+id/refresh_button"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        android:title=""
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -164,7 +164,7 @@ public class Home extends AppCompatActivity
                                         SharedPreferences.Editor editor = pref.edit();
                                         editor.clear();
                                         editor.commit();
-                                        Toast.makeText(Home.this, "Logged out", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Home.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                                         finishAffinity();
                                         dialogBuilder.dismiss();
                                         startActivity(LoginActivity.getIntent(Home.this));
@@ -218,7 +218,11 @@ public class Home extends AppCompatActivity
             startActivity(AccountActivity.getIntent(this));
             finish();
         } else if (id == R.id.nav_activity && !item.isChecked()) {
-            startActivity(ActivitiesActivity.getIntent(this).putExtra("data", new ArrayList<RubbishParcelable>()));
+            startActivity(ActivitiesActivity.getIntent(this).putExtra("data", new ArrayList<RubbishParcelable>())
+                    .putExtra("steps", 0)
+                    .putExtra("kilometers", 0.0)
+                    .putExtra("calories", 0.0)
+                    .putExtra("milisUntilFinished", 0));
             finish();
         } else if (id == R.id.nav_contacts && !item.isChecked()) {
             startActivity(ContactsActivity.getIntent(this));
@@ -249,7 +253,7 @@ public class Home extends AppCompatActivity
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(Home.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Home.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(Home.this));
                         finish();

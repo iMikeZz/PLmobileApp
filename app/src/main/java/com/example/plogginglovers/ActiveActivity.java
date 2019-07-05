@@ -57,8 +57,10 @@ import com.example.plogginglovers.Model.InfoModel;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Model.RubbishParcelable;
+import com.example.plogginglovers.Model.Statistic;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.karumi.dexter.Dexter;
@@ -83,6 +85,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import id.zelory.compressor.Compressor;
+import io.github.tonnyl.light.Light;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -91,8 +94,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener, SwipeRefreshLayout.OnRefreshListener {
+public class ActiveActivity extends AppCompatActivity implements SensorEventListener, StepListener, ObjectListAdapter.PointsListener {
     private TextView TvSteps, countDownTimer, txtCals, txtKilos, txtPoints, editTextQuantity, txtActivityDescription;
+    private View layout;
     private StepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
@@ -117,8 +121,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
     private ActivityParcelable activity;
 
     private ArrayList<RubbishParcelable> dataParcelable;
-
-    private SwipeRefreshLayout swipeLayout;
 
     private ListView listViewObjects;
 
@@ -151,9 +153,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         setTitle("Atividade");
 
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeLayout.setOnRefreshListener(this);
-
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
         // Get an instance of the SensorManager
@@ -171,6 +170,8 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         btnEndPlogging = findViewById(R.id.btnEndPlogging);
         countDownTimer = findViewById(R.id.countDownTimer);
         listViewObjects = findViewById(R.id.objectList);
+
+        layout = findViewById(R.id.constraint_layout_ative_activity);
 
         activity = getIntent().getParcelableExtra("activity");
 
@@ -222,7 +223,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                         }
                     }.start();
                 }else {
-                    new CountDownTimer(/*Integer.parseInt(activity.getDuration())*60000*/30000, 1000) {
+                    new CountDownTimer(Integer.parseInt(activity.getDuration())*60000, 1000) {
                         public void onTick(long millisUntilFinished) {
                             milisleft = millisUntilFinished;
                             ActiveActivity.this.countDownTimer.setText(String.format("%d:%d",
@@ -304,15 +305,15 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         call.enqueue(new Callback<InfoModel>() {
             @Override
             public void onResponse(Call<InfoModel> call, Response<InfoModel> response) {
-                //System.out.println(response);
+                System.out.println(response);
                 if (response.isSuccessful()) {
-                    swipeLayout.setRefreshing(false);
+                    System.out.println(response.body().getInfo().getCaptain() + " student send: " +response.body().getInfo().getStudentSend());
                     if (!response.body().getInfo().getStudentSend()) {
                         btnEndPlogging.setVisibility(View.VISIBLE);
                     } else if (!response.body().getInfo().getCaptain() && response.body().getInfo().getStudentSend()) {
                         //todo vai entrar se for não capitão e se já tiver submetido
-                        Toast.makeText(ActiveActivity.this, "Já submeteste a informação sobre a atividade", Toast.LENGTH_SHORT).show();
-                        onBackPressed();
+                        Toast.makeText(ActiveActivity.this, "Já submeteste a informação sobre a atividade", Toast.LENGTH_LONG).show();
+                        //onBackPressed();
                         finish();
                     } else if (!response.body().getInfo().getTeamReady()) {
                         //todo vai entrar se for capitão e se a equipa não tiver ready
@@ -460,6 +461,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 break;
             case R.id.chatMenuItem:
                 startActivity(ChatActivity.getIntent(this).putExtra("id", activity.getId()));
+                break;
+            case R.id.refresh_button:
+                onRefresh();
                 break;
         }
 
@@ -721,11 +725,12 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                             jsonObject1.addProperty("activity_item_id", rubbish.getId());
                             jsonObject1.addProperty("item_quantity", rubbish.getQuantity());
                             jsonObject1.addProperty("student_score", rubbish.getQuantity() * rubbish.getScore());
-                            jsonObject1.addProperty("student_steps", Integer.parseInt(TvSteps.getText().toString()));
-                            jsonObject1.addProperty("student_kilometers", kilometers);
-                            jsonObject1.addProperty("student_calories", calories);
                             itemsArray.add(jsonObject1);
                         }
+
+                        jsonObject.addProperty("student_steps", numSteps);
+                        jsonObject.addProperty("student_kilometers", kilometers);
+                        jsonObject.addProperty("student_calories", calories);
 
                         jsonObject.add("items", itemsArray);
 
@@ -825,8 +830,9 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         Picasso.get().load(compressedImageFile).into(team_image);
     }
 
-    @Override
+
     public void onRefresh() {
+        Light.info(layout, "A atualizar...", Light.LENGTH_SHORT).show();
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
         Call<ActivityModel> call = service.getActivityTeamStatus("Bearer " + pref.getString("token", null), activity.getId(), activity.getTeamId());
@@ -836,12 +842,12 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             @Override
             public void onResponse(Call<ActivityModel> call, Response<ActivityModel> response) {
                 if (response.isSuccessful()) {
-                    swipeLayout.setRefreshing(false);
+                    Light.success(layout, "Atualizado", Light.LENGTH_SHORT).show();
                     if (response.body().getData().getState().equals("terminated")) {
                         ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "terminated_accepted");
                         listViewObjects.setAdapter(objectListAdapter);
                         checkStudentActivityGameInfo();
-                    } else if (response.body().getData().getState().equals("started")){
+                    } else if (response.body().getData().getState().equals("started") && !activity.getState().equals("started")){
                         ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "started_accepted");
                         listViewObjects.setAdapter(objectListAdapter);
                         numSteps = 0;
@@ -850,7 +856,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                             countDownTimer.setText(activity.getDuration());
                         } else {
                             createNotification("O tempo está a contar!", "Apanha o maior número de objetos possível");
-                            CountDownTimer countDownTimer = new CountDownTimer(/*Integer.parseInt(activity.getDuration())*60000*/30000, 1000) {
+                            new CountDownTimer(Integer.parseInt(activity.getDuration())*60000, 1000) {
                                 public void onTick(long millisUntilFinished) {
                                     ActiveActivity.this.countDownTimer.setText(String.format("%d:%d",
                                             TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
@@ -865,8 +871,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                             }.start();
                         }
                     }
-                } else {
-                    swipeLayout.setRefreshing(false);
                 }
             }
 

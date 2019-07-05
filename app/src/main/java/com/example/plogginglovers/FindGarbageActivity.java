@@ -58,7 +58,7 @@ public class FindGarbageActivity extends AppCompatActivity implements Navigation
         setContentView(R.layout.activity_find_garbage);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Onde Colocar ?");
+        setTitle("EcoFacilita");
 
 
         //mudar cor da status bar
@@ -206,7 +206,7 @@ public class FindGarbageActivity extends AppCompatActivity implements Navigation
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(FindGarbageActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(FindGarbageActivity.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(FindGarbageActivity.this));
                         finish();

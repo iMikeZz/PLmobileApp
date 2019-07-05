@@ -10,6 +10,7 @@
         android:layout_height="169dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="5dp"
+        android:layout_marginBottom="8dp"
         android:minHeight="200dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,12 +27,12 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/imageView1"
+                android:layout_alignTop="@+id/date_chip"
                 android:layout_marginTop="-126dp"
                 android:contentDescription="CardImageViewDesc"
+                android:focusable="false"
                 android:scaleType="centerCrop"
-                android:src="@drawable/actividades"
-                android:focusable="false"/>
+                android:src="@drawable/actividades" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/date_chip"
@@ -69,17 +70,6 @@
                 app:chipBackgroundColor="#18bc26"
                 app:chipIcon="@drawable/ic_nature_people_white_24dp"
                 app:iconStartPadding="5dp"
-                android:focusable="false"/>
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="139dp"
-                android:layout_marginTop="126dp"
-                app:srcCompat="@drawable/ic_navigate_next_black_24dp"
                 android:focusable="false"/>
 
             <ImageView

@@ -397,7 +397,7 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(RankingActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RankingActivity.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(RankingActivity.this));
                         finish();

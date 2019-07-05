@@ -195,7 +195,7 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
                         editor.commit();
-                        Toast.makeText(StatisticsActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(StatisticsActivity.this, "Terminou sessão", Toast.LENGTH_LONG).show();
                         finishAffinity();
                         startActivity(LoginActivity.getIntent(StatisticsActivity.this));
                         finish();

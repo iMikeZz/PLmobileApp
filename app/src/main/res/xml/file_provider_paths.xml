@@ -2,6 +2,6 @@
 <paths>
     <external-path
         name="my_images"
-        path="Android/data/com.example.plogginglovers/files/PloggingLovers" />
+        path="Android/data/com.example.plogginglovers/files/Pictures" />
     <!-- replace com.androidwave.filepicker with your package name -->
 </paths>

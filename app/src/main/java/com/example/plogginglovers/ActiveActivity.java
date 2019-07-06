@@ -151,7 +151,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        setTitle("Atividade");
+        setTitle("Actividade");
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 

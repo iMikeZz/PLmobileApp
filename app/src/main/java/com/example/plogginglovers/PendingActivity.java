@@ -429,7 +429,7 @@ public class PendingActivity extends AppCompatActivity {
                                             .putExtra("steps", 0)
                                             .putExtra("kilometers", 0.0)
                                             .putExtra("calories", 0.0)
-                                            .putExtra("milisUntilFinished", Long.parseLong(activity.getDuration())));
+                                            .putExtra("milisUntilFinished", activity.getDuration().equals("N/A") ? activity.getDuration() : Long.parseLong(activity.getDuration())));
                                     finish();
                                 }
                             }

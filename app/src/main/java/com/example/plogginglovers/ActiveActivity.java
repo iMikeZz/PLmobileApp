@@ -397,6 +397,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 mBuilder.setContentText(content_text);
             }
             mBuilder.setContentTitle(title);
+            /*
             Intent resultIntent = new Intent(ActiveActivity.this, ActiveActivity.class);
             resultIntent.putExtra("data", dataParcelable);
             resultIntent.putExtra("state", "started_accepted");
@@ -408,6 +409,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             stackBuilder.addNextIntent(resultIntent);
             PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.setContentIntent(resultPendingIntent);
+            */
 
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(ActiveActivity.this);
             notificationManagerCompat.notify(101, mBuilder.build());

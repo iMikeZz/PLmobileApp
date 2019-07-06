@@ -201,7 +201,7 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                                 } else {
                                     mask.setVisibility(View.INVISIBLE);
                                     //todo alert dialog "a sua equipa já terminou a atividade" ou então deixar o toast
-                                    Toast.makeText(ActivitiesActivity.this, "A tua equipa já terminou a atividade", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ActivitiesActivity.this, "A tua equipa já terminou a atividade", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

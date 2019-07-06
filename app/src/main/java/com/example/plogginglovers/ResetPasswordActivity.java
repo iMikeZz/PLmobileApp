@@ -59,6 +59,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     public void onClickSendEmail(final View view) {
+        if(edtEmailReset.getText().toString().isEmpty()){
+            showErrorMessage("Campo E-mail está vazio", view);
+            return;
+        }
+
         if (!edtEmailReset.getText().toString().contains("@")){
             showErrorMessage("Por favor insira um email válido", view);
             return;

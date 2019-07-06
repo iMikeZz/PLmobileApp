@@ -79,8 +79,6 @@ public class PendingActivity extends AppCompatActivity {
 
     private ActivityParcelable activity;
 
-    private SwipeRefreshLayout swipeLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -316,7 +314,6 @@ public class PendingActivity extends AppCompatActivity {
         File mFile = File.createTempFile(mFileName, ".jpg", storageDir);
         return mFile;
     }
-
 
     private void sharePictureDialogConfirmation() {
         LayoutInflater inflater = this.getLayoutInflater();

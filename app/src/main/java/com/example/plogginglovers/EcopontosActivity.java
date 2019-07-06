@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -81,6 +82,8 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
     private LocationManager mLocationManager;
 
     private View map_view;
+
+    private AlertDialog searchDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +169,8 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         mLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(final Location location) {
+                searchDialog.dismiss();
+
                 mMap = googleMap;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -242,6 +247,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                 return;
             }
         }
+        findingGpsSignalDialog();
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
 
     }
@@ -387,6 +393,22 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                 return;
             }
         }
+        //todo make thread
+        findingGpsSignalDialog();
+
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
+    }
+
+    private void findingGpsSignalDialog() {
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.progress_bar_layout, null);
+
+        searchDialog = new AlertDialog.Builder(this)
+                .setCancelable(false)
+                .setTitle("A pesquisar GPS")
+                .setView(dialogView)
+                .create();
+
+        searchDialog.show();
     }
 }

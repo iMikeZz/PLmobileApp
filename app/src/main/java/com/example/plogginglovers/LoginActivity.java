@@ -63,15 +63,15 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         if(inputEmail.getText().toString().isEmpty()){
-            showErrorMessage("Email está vazio", view);
+            showErrorMessage("Campo E-mail está vazio", view);
             return;
         }
         if(inputPassword.getText().toString().isEmpty()){
-            showErrorMessage("Password está vazia", view);
+            showErrorMessage("Campo Password está vazia", view);
             return;
         }
         if (!inputEmail.getText().toString().contains("@")){
-            showErrorMessage("Por favor insira um email válido", view);
+            showErrorMessage("Por favor insira um E-mail válido", view);
             return;
         }
 
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(Home.getIntent(LoginActivity.this));
                     finish();
                 } else {
-                    showErrorMessage("Email or Password Inválidos", view);
+                    showErrorMessage("E-mail ou Password Inválidos", view);
                 }
             }
 
@@ -140,6 +140,5 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickGoToResetPassword(View view) {
         startActivity(ResetPasswordActivity.getIntent(this));
-        finish();
     }
 }

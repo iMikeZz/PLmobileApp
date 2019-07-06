@@ -1,9 +1,11 @@
 package com.example.plogginglovers.Adapters;
 
 import android.app.Activity;
+import android.inputmethodservice.Keyboard;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;

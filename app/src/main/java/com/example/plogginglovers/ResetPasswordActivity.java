@@ -31,6 +31,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         //mudar cor da status bar
         //----------------------
         Window window = this.getWindow();
@@ -41,7 +44,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.green_app_dark));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.green_app_dark));
         //-----------------
 
         setTitle("Recuperar Password");
@@ -49,23 +52,18 @@ public class ResetPasswordActivity extends AppCompatActivity {
         edtEmailReset = findViewById(R.id.edtEmailReset);
     }
 
-    public static Intent getIntent(Context context){
+    public static Intent getIntent(Context context) {
         return new Intent(context, ResetPasswordActivity.class);
     }
 
-    public void onClickCancelResetPassword(View view) {
-        startActivity(LoginActivity.getIntent(this));
-        finish();
-    }
-
     public void onClickSendEmail(final View view) {
-        if(edtEmailReset.getText().toString().isEmpty()){
+        if (edtEmailReset.getText().toString().isEmpty()) {
             showErrorMessage("Campo E-mail está vazio", view);
             return;
         }
 
-        if (!edtEmailReset.getText().toString().contains("@")){
-            showErrorMessage("Por favor insira um email válido", view);
+        if (!edtEmailReset.getText().toString().contains("@")) {
+            showErrorMessage("Por favor insira um E-mail válido", view);
             return;
         }
 
@@ -80,12 +78,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 //System.out.println(response);
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     Toast.makeText(ResetPasswordActivity.this, "As instruções em como alterar a palavra passe, foram enviadas para o teu e-mail.", Toast.LENGTH_LONG).show();
                     startActivity(LoginActivity.getIntent(ResetPasswordActivity.this));
-                    finish();
+                    finishAffinity();
                 } else {
-                    showErrorMessage("O e-mail não existe", view);
+                    showErrorMessage("O E-mail não existe", view);
                 }
             }
 
@@ -103,5 +101,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();*/
 
         Light.error(view, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+
     }
 }

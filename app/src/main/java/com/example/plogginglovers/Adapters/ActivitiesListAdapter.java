@@ -29,12 +29,14 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
         Chip date_chip;
         ImageView team_status;
         TextView txtActivityName;
+        ImageView state_image;
 
         public ViewHolder(View v) {
             chipState = (Chip) v.findViewById(R.id.state_chip);
             date_chip = (Chip) v.findViewById(R.id.date_chip);
             team_status = v.findViewById(R.id.team_status);
             txtActivityName = v.findViewById(R.id.txtActivityName);
+            state_image = v.findViewById(R.id.state_image);
         }
     }
 
@@ -66,6 +68,7 @@ public class ActivitiesListAdapter extends ArrayAdapter<Activity> {
 
         if (dataModel.getState().equals("pending")){
             holder.chipState.setText("Pendente");
+            holder.state_image.setImageResource(R.drawable.pendente);
             holder.chipState.setChipBackgroundColorResource(R.color.pending_activity_yellow);
         } else if (dataModel.getState().equals("started")){
             holder.chipState.setText("Ativa");

@@ -1,6 +1,7 @@
 package com.example.plogginglovers.Adapters;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,9 +47,13 @@ public class RankingListAdapter extends ArrayAdapter<Ranking> {
         holder.points.setText(item.getPoints() + " pontos");
         holder.points.setTextColor(ContextCompat.getColor(getContext(), android.R.color.tab_indicator_text));
         holder.name.setTextColor(ContextCompat.getColor(getContext(), android.R.color.tab_indicator_text));
+        holder.points.setTypeface(null, Typeface.NORMAL);
+        holder.name.setTypeface(null, Typeface.NORMAL);
 
         if (item.getStudentTeam()){
+            holder.points.setTypeface(null, Typeface.BOLD);
             holder.points.setTextColor(ContextCompat.getColor(getContext(), R.color.green_app_dark));
+            holder.name.setTypeface(null, Typeface.BOLD);
             holder.name.setTextColor(ContextCompat.getColor(getContext(), R.color.green_app_dark));
         }
 

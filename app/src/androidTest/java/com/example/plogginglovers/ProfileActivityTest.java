@@ -174,7 +174,7 @@ public class ProfileActivityTest {
             e.printStackTrace();
         }
 
-        onView(withText("Logged out")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
+        onView(withText("Terminou sessão")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
     }
 
     @Test
@@ -305,7 +305,7 @@ public class ProfileActivityTest {
             e.printStackTrace();
         }
 
-        onView(withText("Logged out")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
+        onView(withText("Terminou sessão")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
     }
 
     @Test
@@ -417,7 +417,7 @@ public class ProfileActivityTest {
             e.printStackTrace();
         }
 
-        onView(withText("Logged out")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
+        onView(withText("Terminou sessão")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
     }
 
     @Test
@@ -544,7 +544,7 @@ public class ProfileActivityTest {
             e.printStackTrace();
         }
 
-        onView(withText("Logged out")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
+        onView(withText("Terminou sessão")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
     }
 
     @Test
@@ -746,7 +746,7 @@ public class ProfileActivityTest {
             e.printStackTrace();
         }
 
-        onView(withText("Logged out")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
+        onView(withText("Terminou sessão")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
     }
 
     private void login() {
@@ -801,7 +801,7 @@ public class ProfileActivityTest {
         appCompatEditText5.perform(pressImeActionButton());
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnLogin), withText("Login"),
+                allOf(withId(R.id.btnLogin), withText("Entrar"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),

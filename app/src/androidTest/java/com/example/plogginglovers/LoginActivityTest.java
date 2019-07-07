@@ -60,7 +60,7 @@ public class LoginActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnLogin), withText("Login"),
+                allOf(withId(R.id.btnLogin), withText("Entrar"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),
@@ -121,7 +121,7 @@ public class LoginActivityTest {
         appCompatEditText4.perform(pressImeActionButton());
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnLogin), withText("Login"),
+                allOf(withId(R.id.btnLogin), withText("Entrar"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),
@@ -130,7 +130,7 @@ public class LoginActivityTest {
                         isDisplayed()));
         materialButton.perform(click());
 
-        onView(withText("Password está vazia"))
+        onView(withText("Campo Password está vazia"))
                 .check(matches(withEffectiveVisibility(
                         ViewMatchers.Visibility.VISIBLE
                 )));
@@ -162,7 +162,7 @@ public class LoginActivityTest {
         appCompatEditText2.perform(pressImeActionButton());
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnLogin), withText("Login"),
+                allOf(withId(R.id.btnLogin), withText("Entrar"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),
@@ -171,7 +171,7 @@ public class LoginActivityTest {
                         isDisplayed()));
         materialButton.perform(click());
 
-        onView(withText("Email está vazio"))
+        onView(withText("Campo E-mail está vazio"))
                 .check(matches(withEffectiveVisibility(
                         ViewMatchers.Visibility.VISIBLE
                 )));
@@ -234,7 +234,7 @@ public class LoginActivityTest {
         appCompatEditText5.perform(pressImeActionButton());
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnLogin), withText("Login"),
+                allOf(withId(R.id.btnLogin), withText("Entrar"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),
@@ -243,7 +243,7 @@ public class LoginActivityTest {
                         isDisplayed()));
         materialButton.perform(click());
 
-        onView(withText("Por favor insira um email válido"))
+        onView(withText("Por favor insira um E-mail válido"))
                 .check(matches(withEffectiveVisibility(
                         ViewMatchers.Visibility.VISIBLE
                 )));
@@ -336,7 +336,7 @@ public class LoginActivityTest {
         appCompatEditText9.perform(pressImeActionButton());
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnLogin), withText("Login"),
+                allOf(withId(R.id.btnLogin), withText("Entrar"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),
@@ -370,7 +370,7 @@ public class LoginActivityTest {
             e.printStackTrace();
         }
 
-        onView(withText("Logged out")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
+        onView(withText("Terminou sessão")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
     }
 
     private void logout() {

@@ -46,7 +46,7 @@ public class ResetPasswordActivityTest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnResetPassword), withText("Recuperar Password"),
+                allOf(withId(R.id.btnResetPassword), withText("Esqueceste a palavra passe ?"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),
@@ -61,7 +61,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText.perform(click());
 
@@ -71,7 +71,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("teste.teste.pt"), closeSoftKeyboard());
 
@@ -81,7 +81,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText3.perform(pressImeActionButton());
 
@@ -91,11 +91,11 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                1),
+                                2),
                         isDisplayed()));
         materialButton2.perform(click());
 
-        onView(withText("Por favor insira um email válido"))
+        onView(withText("Por favor insira um E-mail válido"))
                 .check(matches(withEffectiveVisibility(
                         ViewMatchers.Visibility.VISIBLE
                 )));
@@ -108,7 +108,7 @@ public class ResetPasswordActivityTest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnResetPassword), withText("Recuperar Password"),
+                allOf(withId(R.id.btnResetPassword), withText("Esqueceste a palavra passe ?"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),
@@ -123,7 +123,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText.perform(click());
 
@@ -133,7 +133,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText2.perform(click());
 
@@ -143,7 +143,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("lalala@lala.pt"), closeSoftKeyboard());
 
@@ -153,7 +153,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText4.perform(pressImeActionButton());
 
@@ -163,7 +163,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                1),
+                                2),
                         isDisplayed()));
         materialButton2.perform(click());
 
@@ -173,7 +173,7 @@ public class ResetPasswordActivityTest {
             e.printStackTrace();
         }
 
-        onView(withText("O e-mail não existe"))
+        onView(withText("O E-mail não existe"))
                 .check(matches(withEffectiveVisibility(
                         ViewMatchers.Visibility.VISIBLE
                 )));
@@ -185,7 +185,7 @@ public class ResetPasswordActivityTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnResetPassword), withText("Recuperar Password"),
+                allOf(withId(R.id.btnResetPassword), withText("Esqueceste a palavra passe ?"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.relativeLayout),
@@ -200,7 +200,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText.perform(click());
 
@@ -210,7 +210,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("s1@plogginglovers.test"), closeSoftKeyboard());
 
@@ -220,7 +220,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         appCompatEditText3.perform(pressImeActionButton());
 
@@ -230,7 +230,7 @@ public class ResetPasswordActivityTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                1),
+                                2),
                         isDisplayed()));
         materialButton2.perform(click());
 

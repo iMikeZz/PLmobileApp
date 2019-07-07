@@ -304,37 +304,27 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         imageFirstTeam.setVisibility(View.VISIBLE);
         txtActivityNameAndDate.setVisibility(View.VISIBLE);
         podiumLayout.setVisibility(View.VISIBLE);
-        txtFirstTeamPoints.setTypeface(null, Typeface.NORMAL);
-        txtFirstTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.white));
-        txtFirstTeamName.setTypeface(null, Typeface.NORMAL);
-        txtFirstTeamName.setTextColor(ContextCompat.getColor(this, R.color.white));
-        txtSecondTeamPoints.setTypeface(null, Typeface.NORMAL);
-        txtSecondTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.white));
-        txtSecondTeamName.setTypeface(null, Typeface.NORMAL);
-        txtSecondTeamName.setTextColor(ContextCompat.getColor(this, R.color.white));
-        txtThirdTeamPoints.setTypeface(null, Typeface.NORMAL);
-        txtThirdTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.white));
-        txtThirdTeamName.setTypeface(null, Typeface.NORMAL);
-        txtThirdTeamName.setTextColor(ContextCompat.getColor(this, R.color.white));
+        changeColorAndTextStyle(txtFirstTeamPoints, Typeface.NORMAL, R.color.white);
+        changeColorAndTextStyle(txtFirstTeamName, Typeface.NORMAL, R.color.white);
+        changeColorAndTextStyle(txtSecondTeamPoints, Typeface.NORMAL, R.color.white);
+        changeColorAndTextStyle(txtSecondTeamName, Typeface.NORMAL, R.color.white);
+        changeColorAndTextStyle(txtThirdTeamPoints, Typeface.NORMAL, R.color.white);
+        changeColorAndTextStyle(txtThirdTeamName, Typeface.NORMAL, R.color.white);
 
         txtActivityNameAndDate.setText(response.body().getData().getActivityName() + " - " +
                 DateUtil.dateWithDesiredFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", response.body().getData().getActivityDate()));
         Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(0).getPhotoUrl()).into(imageFirstTeam);
         if (rankings_podium.get(0).getStudentTeam()){
-            txtFirstTeamPoints.setTypeface(null, Typeface.BOLD);
-            txtFirstTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
-            txtFirstTeamName.setTypeface(null, Typeface.BOLD);
-            txtFirstTeamName.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+            changeColorAndTextStyle(txtFirstTeamPoints, Typeface.BOLD, R.color.green_app_dark);
+            changeColorAndTextStyle(txtFirstTeamName, Typeface.BOLD, R.color.green_app_dark);
         }
         txtFirstTeamPoints.setText(rankings_podium.get(0).getTeamName());
         txtFirstTeamName.setText(rankings_podium.get(0).getPoints());
 
         if (rankings_podium.get(1) != null) {
             if (rankings_podium.get(1).getStudentTeam()){
-                txtSecondTeamPoints.setTypeface(null, Typeface.BOLD);
-                txtSecondTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
-                txtSecondTeamName.setTypeface(null, Typeface.BOLD);
-                txtSecondTeamName.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+                changeColorAndTextStyle(txtSecondTeamPoints, Typeface.BOLD, R.color.green_app_dark);
+                changeColorAndTextStyle(txtSecondTeamName, Typeface.BOLD, R.color.green_app_dark);
             }
             Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(1).getPhotoUrl()).into(imageSecondTeam);
             txtSecondTeamPoints.setText(rankings_podium.get(1).getTeamName());
@@ -343,10 +333,8 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
 
         if (rankings_podium.get(2) != null) {
             if (rankings_podium.get(1).getStudentTeam()){
-                txtThirdTeamPoints.setTypeface(null, Typeface.BOLD);
-                txtThirdTeamPoints.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
-                txtThirdTeamName.setTypeface(null, Typeface.BOLD);
-                txtThirdTeamName.setTextColor(ContextCompat.getColor(this, R.color.green_app_dark));
+                changeColorAndTextStyle(txtThirdTeamPoints, Typeface.BOLD, R.color.green_app_dark);
+                changeColorAndTextStyle(txtThirdTeamName, Typeface.BOLD, R.color.green_app_dark);
             }
             Picasso.get().load("http://46.101.15.61/storage/teams/" + rankings_podium.get(2).getPhotoUrl()).into(imageThirdTeam);
             txtThirdTeamPoints.setText(rankings_podium.get(2).getTeamName());
@@ -358,6 +346,11 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
         ArrayAdapter adapter = new RankingListAdapter(RankingActivity.this, R.layout.ranking_list_item, rankings);
 
         activeActivitiesList.setAdapter(adapter);
+    }
+
+    private void changeColorAndTextStyle(TextView txtThirdTeamName, int normal, int p) {
+        txtThirdTeamName.setTypeface(null, normal);
+        txtThirdTeamName.setTextColor(ContextCompat.getColor(this, p));
     }
 
 

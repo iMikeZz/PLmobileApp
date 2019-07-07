@@ -297,9 +297,6 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 if (s.toString().length() == 0) {
                     txtErrorOldPassword.setText("Campo Obrigatório");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if (!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")) {
-                    txtErrorNewPassword.setText("");
-                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
                 } else {
                     txtErrorOldPassword.setText("");
                 }
@@ -307,7 +304,15 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (txtErrorNewPassword.getText().toString().equals("")
+                        && txtErrorOldPassword.getText().toString().equals("")
+                        && txtErrorNewPasswordConfirmation.getText().toString().equals("")
+                        && !txtNewPassword.getText().toString().equals("")
+                        && !txtOldPassword.getText().toString().equals("")
+                        && !txtNewPasswordConfirmation.getText().toString().equals("")) {
+                    txtErrorNewPassword.setText("");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                }
             }
         });
 
@@ -325,9 +330,10 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 } else if (s.toString().length() < 6) {
                     txtErrorNewPassword.setText("Password com menos de 6 carateres");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if (!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")) {
+                } else if (!s.toString().equals(txtNewPasswordConfirmation.getText().toString())) {
                     txtErrorNewPassword.setText("");
-                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                    txtErrorNewPasswordConfirmation.setText("Passwords têm de ser iguais");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
                 } else {
                     txtErrorNewPassword.setText("");
                 }
@@ -335,7 +341,15 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (txtErrorNewPassword.getText().toString().equals("")
+                        && txtErrorOldPassword.getText().toString().equals("")
+                        && txtErrorNewPasswordConfirmation.getText().toString().equals("")
+                        && !txtNewPassword.getText().toString().equals("")
+                        && !txtOldPassword.getText().toString().equals("")
+                        && !txtNewPasswordConfirmation.getText().toString().equals("")) {
+                    txtErrorNewPassword.setText("");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                }
             }
         });
 
@@ -353,17 +367,23 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 } else if (!s.toString().equals(txtNewPassword.getText().toString())) {
                     txtErrorNewPasswordConfirmation.setText("Passwords têm de ser iguais");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if (!txtNewPassword.getText().toString().equals("") && !txtOldPassword.getText().toString().equals("") && !txtNewPasswordConfirmation.getText().toString().equals("")) {
-                    txtErrorNewPasswordConfirmation.setText("");
-                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
                 } else {
+                    System.out.println("hello");
                     txtErrorNewPasswordConfirmation.setText("");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (txtErrorNewPassword.getText().toString().equals("")
+                        && txtErrorOldPassword.getText().toString().equals("")
+                        && txtErrorNewPasswordConfirmation.getText().toString().equals("")
+                        && !txtNewPassword.getText().toString().equals("")
+                        && !txtOldPassword.getText().toString().equals("")
+                        && !txtNewPasswordConfirmation.getText().toString().equals("")) {
+                    txtErrorNewPasswordConfirmation.setText("");
+                    dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                }
             }
         });
 

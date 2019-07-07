@@ -852,6 +852,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                     } else if (response.body().getData().getState().equals("started") && !activity.getState().equals("started")){
                         ObjectListAdapter objectListAdapter = new ObjectListAdapter(ActiveActivity.this, R.layout.object_list_item, dataParcelable, "started_accepted");
                         listViewObjects.setAdapter(objectListAdapter);
+                        objectListAdapter.setPointsListener(ActiveActivity.this);
                         numSteps = 0;
                         sensorManager.registerListener(ActiveActivity.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
                         if (activity.getDuration().equals("N/A")){

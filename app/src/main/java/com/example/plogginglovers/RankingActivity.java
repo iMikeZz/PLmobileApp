@@ -133,7 +133,6 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
             //Handle a successful response//
             public void onResponse(Call<RankingModel> call, Response<RankingModel> response) {
                 // Add a marker in Sydney and move the camera
-                System.out.println(response);
                 if (response.isSuccessful()) {
                     if (response.body().getData().getRankings().size() == 0){
                         noActivitiesDialog("Ainda não existe nenhuma atividade terminada.", "Sem atividades", true);
@@ -149,7 +148,6 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
             //Handle execution failures//
             public void onFailure(Call<RankingModel> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
                 Toast.makeText(RankingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
@@ -267,7 +265,6 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
 
     private void getActivityRanking(ActivityRankingSelectListAdapter activityRankingSelectListAdapter, List<Activity> data) {
         //Mesmo que não apanhe nada o registo dele tem de aparecer na tabela
-        System.out.println(activityRankingSelectListAdapter.getSelectedPosition());
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
         Call<RankingModel> call = service.getActivityRanking("Bearer " + pref.getString("token", null), data.get(activityRankingSelectListAdapter.getSelectedPosition()).getId());
@@ -295,7 +292,6 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
     }
 
     private void populateRankingList(Response<RankingModel> response) {
-        System.out.println(response.body().getData().getRankings().size() + " tamanho da lista");
         List<Ranking> rankings_podium = response.body().getData().getRankings().subList(0, 3);
         List<Ranking> rankings = response.body().getData().getRankings().subList(3, response.body().getData().getRankings().size());
 
@@ -412,7 +408,6 @@ public class RankingActivity extends AppCompatActivity implements NavigationView
 
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                    System.out.println(t.getMessage());
                     Toast.makeText(RankingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });

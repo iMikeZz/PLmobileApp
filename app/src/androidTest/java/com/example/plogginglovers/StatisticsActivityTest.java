@@ -18,7 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
@@ -39,13 +38,13 @@ import static org.hamcrest.Matchers.not;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class EcoFacilitaActivityTest {
+public class StatisticsActivityTest {
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
 
     @Test
-    public void ecoFacilitaActivityTest() {
+    public void statisticsActivityTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.editTextEmail),
                         childAtPosition(
@@ -113,18 +112,16 @@ public class EcoFacilitaActivityTest {
         }
 
         ViewInteraction materialCardView = onView(
-                allOf(withId(R.id.find_card),
+                allOf(withId(R.id.stats_card),
                         childAtPosition(
                                 allOf(withId(R.id.content),
                                         childAtPosition(
                                                 withId(R.id.scrollablContent),
                                                 0)),
-                                4)));
+                                5)));
         materialCardView.perform(scrollTo(), click());
 
-        pressBack();
-
-        onView(withId(R.id.toolbar)).check(matches(hasDescendant(withText("EcoFacilita"))));
+        onView(withId(R.id.toolbar)).check(matches(hasDescendant(withText("Estatísticas"))));
 
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open navigation drawer"),
@@ -155,7 +152,7 @@ public class EcoFacilitaActivityTest {
             e.printStackTrace();
         }
 
-        onView(withText("Terminou sessão")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))) .check(matches(isDisplayed()));
+        onView(withText("Terminou sessão")).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

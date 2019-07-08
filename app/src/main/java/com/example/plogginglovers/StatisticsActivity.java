@@ -113,7 +113,6 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
             //Handle a successful response//
             public void onResponse(Call<StatisticModel> call, final Response<StatisticModel> response) {
                 // Add a marker in Sydney and move the camera
-                System.out.println(response);
                 if (response.isSuccessful()){
                     final List<Statistic> statistics = new ArrayList<>();
                     statistics.add(new Statistic(R.drawable.foot_with_background, "Total de passos", response.body().getSteps()));
@@ -139,7 +138,6 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
             //Handle execution failures//
             public void onFailure(Call<StatisticModel> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
                 Toast.makeText(StatisticsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
@@ -204,7 +202,6 @@ public class StatisticsActivity extends AppCompatActivity implements NavigationV
 
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                    System.out.println(t.getMessage());
                     Toast.makeText(StatisticsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });

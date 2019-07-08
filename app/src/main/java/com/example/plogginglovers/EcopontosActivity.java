@@ -43,7 +43,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -64,7 +63,6 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
     private static final int LOCATION_REFRESH_DISTANCE = 20; // 5 metros
     private static final int LOCATION_REFRESH_TIME = 5000; // 5 seconds
     private GoogleMap mMap;
-    private FirebaseAuth mAuth;
     private SharedPreferences pref;
     private TextView txtStudentName, txtStudentEmail;
 
@@ -107,8 +105,6 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.green_app_dark));
         //-----------------
 
-        mAuth = FirebaseAuth.getInstance();
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -150,7 +146,6 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        //todo add loading
         mapFragment.getMapAsync(this);
     }
 
@@ -175,7 +170,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
+                        // Consider calling
                         //    Activity#requestPermissions
                         // here to request the missing permissions, and then overriding
                         //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -236,7 +231,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
+                // Consider calling
                 //    Activity#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -309,7 +304,6 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
 
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                    System.out.println(t.getMessage());
                     Toast.makeText(EcopontosActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -382,7 +376,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
         // Access to the location has been granted to the app.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
+                // Consider calling
                 //    Activity#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -393,7 +387,7 @@ public class EcopontosActivity extends AppCompatActivity implements OnMapReadyCa
                 return;
             }
         }
-        //todo make thread
+
         findingGpsSignalDialog();
 
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);

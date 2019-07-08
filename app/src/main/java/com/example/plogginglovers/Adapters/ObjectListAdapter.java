@@ -127,7 +127,6 @@ public class ObjectListAdapter extends ArrayAdapter<RubbishParcelable> {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //System.out.println(s);
                 if (s.length() > 0 && Integer.parseInt(s.toString()) > 0 && Integer.parseInt(s.toString()) <= 999){
                     finalHolder.buttonMinus.setEnabled(true);
                 } else {
@@ -228,7 +227,6 @@ public class ObjectListAdapter extends ArrayAdapter<RubbishParcelable> {
         } else {
             dataModel.setQuantity(--quantity);
             holder.quantity.setText(String.valueOf(quantity));
-            //System.out.println("Removi 100 pontos");
             if (pointsListener != null) {
                 pointsListener.onPointsRemovedListener(dataModel.getScore());
             }
@@ -242,7 +240,6 @@ public class ObjectListAdapter extends ArrayAdapter<RubbishParcelable> {
         } else {
             dataModel.setQuantity(++quantity);
             holder.quantity.setText(String.valueOf(quantity));
-            //System.out.println("Adicionei 100 pontos");
             if (pointsListener != null) {
                 pointsListener.onPointsAddedListener(dataModel.getScore());
             }

@@ -108,7 +108,6 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
             //Handle a successful response//
             public void onResponse(Call<AchievementModel> call, final Response<AchievementModel> response) {
                 // Add a marker in Sydney and move the camera
-                System.out.println(response);
                 if (response.isSuccessful()){
                     final GridView gridView = findViewById(R.id.gridViewAchievements);
                     final AchievementsAdapter achievementsAdapter = new AchievementsAdapter(AchievementsActivity.this, response.body().getData());
@@ -131,7 +130,6 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
                                     //Handle a successful response//
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         // Add a marker in Sydney and move the camera
-                                        System.out.println(response);
                                         if (response.isSuccessful()){
                                             achievement.setViewed(1);
                                             achievementsAdapter.notifyDataSetChanged();
@@ -237,7 +235,6 @@ public class AchievementsActivity extends AppCompatActivity implements Navigatio
 
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                    System.out.println(t.getMessage());
                     Toast.makeText(AchievementsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });

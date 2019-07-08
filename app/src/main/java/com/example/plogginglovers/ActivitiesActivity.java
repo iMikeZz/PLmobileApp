@@ -25,7 +25,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.plogginglovers.Adapters.ActivitiesListAdapter;
 import com.example.plogginglovers.Client.RetrofitClient;
@@ -36,7 +35,6 @@ import com.example.plogginglovers.Model.ActivityParcelable;
 import com.example.plogginglovers.Model.ActivityTeam;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -49,7 +47,6 @@ import retrofit2.Response;
 public class ActivitiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ArrayList<String> dataModels;
-    private FirebaseAuth mAuth;
     private SharedPreferences pref;
     private TextView txtStudentName, txtStudentEmail;
     private ImageView nav_profile_image;
@@ -77,8 +74,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.green_app_dark));
         //-----------------
-
-        mAuth = FirebaseAuth.getInstance();
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
@@ -128,7 +123,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
             @Override
             //Handle a successful response//
             public void onResponse(Call<ActivitiesModel> call, Response<ActivitiesModel> response) {
-                System.out.println(response);
                 if (response.body() != null) {
                     if (updating == 1){
                         Light.success(layout, "Atualizado", Light.LENGTH_SHORT).show();
@@ -200,7 +194,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
                                     finish();
                                 } else {
                                     mask.setVisibility(View.INVISIBLE);
-                                    //todo alert dialog "a sua equipa já terminou a atividade" ou então deixar o toast
                                     Toast.makeText(ActivitiesActivity.this, "A tua equipa já terminou a atividade", Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -213,7 +206,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
             //Handle execution failures//
             public void onFailure(Call<ActivitiesModel> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
                 Toast.makeText(ActivitiesActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
@@ -293,7 +285,6 @@ public class ActivitiesActivity extends AppCompatActivity implements NavigationV
 
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                    System.out.println(t.getMessage());
                     Toast.makeText(ActivitiesActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });

@@ -41,7 +41,6 @@ import com.example.plogginglovers.Model.LogoutToken;
 import com.example.plogginglovers.Model.Password;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -67,8 +66,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AccountActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private FirebaseAuth mAuth;
 
     private SharedPreferences pref;
 
@@ -112,9 +109,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         txtTurma = findViewById(R.id.txtAccountTurma);
 
         profileImage = findViewById(R.id.profile_image);
-
-        mAuth = FirebaseAuth.getInstance();
-
+        
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -265,7 +260,6 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                         call.enqueue(new Callback<Errors>() {
                             @Override
                             public void onResponse(Call<Errors> call, Response<Errors> response) {
-                                System.out.println(response);
                                 if (response.isSuccessful()) {
                                     dialogBuilder.dismiss();
                                     Toast.makeText(AccountActivity.this, "Password alterada com sucesso", Toast.LENGTH_LONG).show();
@@ -277,7 +271,6 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
                             @Override
                             public void onFailure(Call<Errors> call, Throwable t) {
-                                System.out.println(t.getMessage());
                                 Toast.makeText(AccountActivity.this, "Verifique ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -368,7 +361,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                     txtErrorNewPasswordConfirmation.setText("Passwords têm de ser iguais");
                     dialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
                 } else {
-                    System.out.println("hello");
+
                     txtErrorNewPasswordConfirmation.setText("");
                 }
             }
@@ -571,7 +564,6 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                         // Create MultipartBody.Part using file request-body,file name and part name
                         MultipartBody.Part part = MultipartBody.Part.createFormData("photo", compressedImageFile.getName(), fileReqBody);
 
-                        System.out.println(part.toString());
 
                         Call<ResponseBody> call = service.uploadProfilePicture("Bearer " + pref.getString("token", null), part);
 
@@ -579,7 +571,6 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                System.out.println(response);
                                 if (response.isSuccessful()) {
                                     dialogBuilder.dismiss();
                                     Toast.makeText(AccountActivity.this, "Foto alterada com sucesso", Toast.LENGTH_LONG).show();
@@ -588,7 +579,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                System.out.println(t.getMessage());
+
                                 Toast.makeText(AccountActivity.this, "Verifique ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });

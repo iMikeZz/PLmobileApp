@@ -45,7 +45,6 @@ public class ContactsListAdapter extends ArrayAdapter<Contact>{
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.contact_item, parent, false);
 
-            //todo maybe change to viewholder construtor
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtContactName);
             viewHolder.txtNumber = (TextView) convertView.findViewById(R.id.txtContactNumber);
             viewHolder.contact = (ImageView) convertView.findViewById(R.id.callImage);

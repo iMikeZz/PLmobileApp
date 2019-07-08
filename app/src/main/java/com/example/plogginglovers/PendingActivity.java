@@ -29,7 +29,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Helpers.DateUtil;
@@ -152,7 +151,6 @@ public class PendingActivity extends AppCompatActivity {
             //Handle execution failures//
             public void onFailure(Call<Captain> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
                 Toast.makeText(PendingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
@@ -377,7 +375,6 @@ public class PendingActivity extends AppCompatActivity {
     }
 
     private void teamPictureDialogConfirmation() throws IOException {
-        //todo layout is the same as the above one
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.share_image_preview_dialog, null);
 
@@ -417,7 +414,6 @@ public class PendingActivity extends AppCompatActivity {
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                System.out.println(response);
                                 if (response.isSuccessful()) {
                                     dialogBuilder.dismiss();
                                     Toast.makeText(PendingActivity.this, "Foto e estado alterados", Toast.LENGTH_LONG).show();
@@ -436,7 +432,6 @@ public class PendingActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                System.out.println(t.getMessage());
                                 Toast.makeText(PendingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -463,7 +458,6 @@ public class PendingActivity extends AppCompatActivity {
         call.enqueue(new Callback<ActivityModel>() {
             @Override
             public void onResponse(Call<ActivityModel> call, Response<ActivityModel> response) {
-                //System.out.println(response);
                 if (response.isSuccessful() && response.body().getData().getTeamStatus().equals("accepted")) {
                     Toast.makeText(PendingActivity.this, "A tua equipa está pronta!", Toast.LENGTH_LONG).show();
                     startActivity(ActiveActivity.getIntent(PendingActivity.this)
@@ -480,7 +474,6 @@ public class PendingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ActivityModel> call, Throwable t) {
-                System.out.println(t.getMessage());
                 Toast.makeText(PendingActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });

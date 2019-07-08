@@ -1,11 +1,9 @@
 package com.example.plogginglovers.Adapters;
 
 import android.app.Activity;
-import android.inputmethodservice.Keyboard;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,7 +39,6 @@ public class MyFindGarbageListAdapter extends ArrayAdapter<String> {
         TextView titleText = (TextView) rowView.findViewById(R.id.title);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
-        System.out.println(titleText.getText().toString());
         final String ecoponto = RecyclingManager.INSTANCE.getEcoponto(garbageList.get(position));
         if (ecoponto.equals("Amarelo")) {
             titleText.setText(garbageList.get(position));

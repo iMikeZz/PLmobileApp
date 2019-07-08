@@ -2,12 +2,10 @@ package com.example.plogginglovers;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -28,9 +26,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.plogginglovers.Client.RetrofitClient;
 import com.example.plogginglovers.Interfaces.GetData;
-import com.example.plogginglovers.Model.Errors;
 import com.example.plogginglovers.Model.LogoutToken;
-import com.example.plogginglovers.Model.Password;
 import com.example.plogginglovers.Model.RubbishParcelable;
 import com.example.plogginglovers.Model.UserData;
 import com.google.android.material.navigation.NavigationView;
@@ -109,7 +105,6 @@ public class Home extends AppCompatActivity
             //Handle a successful response//
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 // Add a marker in Sydney and move the camera
-                System.out.println(response);
                 if (response.isSuccessful()) {
                     SharedPreferences.Editor editor = pref.edit();
                     txtStudentName.setText(response.body().getData().getName());
@@ -174,7 +169,6 @@ public class Home extends AppCompatActivity
 
                                 @Override
                                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                                    System.out.println(t.getMessage());
                                     Toast.makeText(Home.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -187,7 +181,6 @@ public class Home extends AppCompatActivity
             //Handle execution failures//
             public void onFailure(Call<UserData> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
                 Toast.makeText(Home.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
@@ -262,7 +255,6 @@ public class Home extends AppCompatActivity
 
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                    System.out.println(t.getMessage());
                     Toast.makeText(Home.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });

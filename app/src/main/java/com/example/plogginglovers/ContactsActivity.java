@@ -35,7 +35,6 @@ import com.example.plogginglovers.Model.Contact;
 import com.example.plogginglovers.Model.ContactList;
 import com.example.plogginglovers.Model.LogoutToken;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -57,7 +56,6 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
     private ArrayList<Contact> dataModels;
     private ListView listView;
     private static ContactsListAdapter adapter;
-    private FirebaseAuth mAuth;
 
     private SharedPreferences pref;
 
@@ -86,8 +84,6 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.green_app_dark));
         //-----------------
-
-        mAuth = FirebaseAuth.getInstance();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -122,8 +118,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
             @Override
             //Handle a successful response//
             public void onResponse(Call<ContactList> call, Response<ContactList> response) {
-                //todo otimizar não é necessário lista auxiliar
-                System.out.println(response.body());
+
                 // Add a marker in Sydney and move the camera
                 dataModels = new ArrayList<>();
 
@@ -177,7 +172,6 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
             //Handle execution failures//
             public void onFailure(Call<ContactList> call, Throwable throwable) {
                 //If the request fails, then display the following toast//
-                System.out.println(throwable.getMessage());
                 Toast.makeText(ContactsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
@@ -193,7 +187,7 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void callIntent(String contact) {
-        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contact)); //todo change to the real number
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contact));
         startActivity(intent);
         //Toast.makeText(getApplicationContext(), "A Ligar...", Toast.LENGTH_LONG).show();
     }
@@ -256,7 +250,6 @@ public class ContactsActivity extends AppCompatActivity implements NavigationVie
 
                 @Override
                 public void onFailure(Call<LogoutToken> call, Throwable t) {
-                    System.out.println(t.getMessage());
                     Toast.makeText(ContactsActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });

@@ -67,8 +67,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
             return;
         }
 
-
-        //todo talvez adicionar loading(slow)
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
         Call<ResponseBody> call = service.resetPassword(edtEmailReset.getText().toString());
@@ -77,7 +75,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                //System.out.println(response);
                 if (response.isSuccessful()) {
                     Toast.makeText(ResetPasswordActivity.this, "As instruções em como alterar a palavra passe, foram enviadas para o teu e-mail.", Toast.LENGTH_LONG).show();
                     startActivity(LoginActivity.getIntent(ResetPasswordActivity.this));
@@ -89,7 +86,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                System.out.println(t.getMessage());
                 Toast.makeText(ResetPasswordActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });

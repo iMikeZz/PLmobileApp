@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,7 +42,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.plogginglovers.Adapters.ItemConfirmationListAdapter;
 import com.example.plogginglovers.Adapters.ObjectListAdapter;
@@ -57,10 +54,8 @@ import com.example.plogginglovers.Model.InfoModel;
 import com.example.plogginglovers.Model.Rubbish;
 import com.example.plogginglovers.Model.RubbishModel;
 import com.example.plogginglovers.Model.RubbishParcelable;
-import com.example.plogginglovers.Model.Statistic;
 import com.example.plogginglovers.Pedometer.StepDetector;
 import com.example.plogginglovers.Pedometer.StepListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.karumi.dexter.Dexter;
@@ -75,9 +70,6 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -166,7 +158,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         txtKilos = (TextView) findViewById(R.id.kilometersTxt);
         txtPoints = (TextView) findViewById(R.id.txtpoints);
         txtActivityDescription = (TextView) findViewById(R.id.txtActivityDescription);
-        editTextQuantity = findViewById(R.id.editTextNumber); //todo é textView fazer refactor
+        editTextQuantity = findViewById(R.id.editTextNumber);
         btnEndPlogging = findViewById(R.id.btnEndPlogging);
         countDownTimer = findViewById(R.id.countDownTimer);
         listViewObjects = findViewById(R.id.objectList);
@@ -247,17 +239,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             txtCals.setText(String.format("%.1f", (calories)));
             txtKilos.setText(String.format("%.2f", Math.round((kilometers)*100.0)/100.0));
             checkStudentActivityGameInfo();
-            /*todo verificar se ainda não submeteu
-                   se já submeteu e se for o capitão e se já todos os membros submeteram mostrar dialog para enviar a foto final
-                                    senão for mostrar um aviso como já submeteu e fechar a atividade
-                   senão mostrar o botão para submeter os resultados
-             */
         }
 
         txtActivityDescription.setText(activity.getDescription());
 
         if (getIntent().getExtras().getParcelableArrayList("data").isEmpty()) {
-            System.out.println("passei aqui no empty");
             GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
             Call<RubbishModel> call = service.getActivityItems("Bearer " + pref.getString("token", null), activity.getId());
@@ -267,7 +253,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 @Override
                 //Handle a successful response//
                 public void onResponse(Call<RubbishModel> call, Response<RubbishModel> response) {
-                    System.out.println(response);
                     dataParcelable = new ArrayList<>();
                     // Add a marker in Sydney and move the camera
                     if (response.body() != null) {
@@ -285,13 +270,11 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                 //Handle execution failures//
                 public void onFailure(Call<RubbishModel> call, Throwable throwable) {
                     //If the request fails, then display the following toast//
-                    System.out.println(throwable.getMessage());
                     Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
             dataParcelable = getIntent().getExtras().getParcelableArrayList("data");
-            System.out.println("passei aqui" + dataParcelable.get(0).getQuantity());
             for (RubbishParcelable model : dataParcelable) {
                 this.points += model.getScore() * model.getQuantity();
             }
@@ -311,19 +294,14 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
         call.enqueue(new Callback<InfoModel>() {
             @Override
             public void onResponse(Call<InfoModel> call, Response<InfoModel> response) {
-                System.out.println(response);
                 if (response.isSuccessful()) {
-                    System.out.println(response.body().getInfo().getCaptain() + " student send: " +response.body().getInfo().getStudentSend());
                     if (!response.body().getInfo().getStudentSend()) {
                         btnEndPlogging.setVisibility(View.VISIBLE);
                     } else if (!response.body().getInfo().getCaptain() && response.body().getInfo().getStudentSend()) {
-                        //todo vai entrar se for não capitão e se já tiver submetido
                         Toast.makeText(ActiveActivity.this, "Já submeteste a informação sobre a atividade", Toast.LENGTH_LONG).show();
                         //onBackPressed();
                         finish();
                     } else if (!response.body().getInfo().getTeamReady()) {
-                        //todo vai entrar se for capitão e se a equipa não tiver ready
-                        //todo alert dialog com equipa ainda não esta pronta tentar outra vez
                         AlertDialog dialogBuilder = new AlertDialog.Builder(ActiveActivity.this)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
@@ -344,8 +322,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                                 .create();
                         dialogBuilder.show();
                     } else {
-                        //todo vai entrar se for capitão e se a equipa tiver ready
-                        //todo upload da foto
                         AlertDialog dialogBuilder = new AlertDialog.Builder(ActiveActivity.this)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
@@ -372,7 +348,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
             @Override
             public void onFailure(Call<InfoModel> call, Throwable t) {
-                System.out.println(t.getMessage());
                 Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
@@ -396,7 +371,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
             NotificationChannel channel = new NotificationChannel(id, name, importance);
             mNotificationManager.createNotificationChannel(channel);
 
-            System.out.println("passei aqui");
             Notification.Builder mBuilder = new Notification.Builder(ActiveActivity.this, id);
             mBuilder.setSmallIcon(R.drawable.timer);
             if (content_text != null){
@@ -696,7 +670,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
         ListView listViewItems = dialogView.findViewById(R.id.itemDialogConfirmationList);
 
-        //System.out.println(dataParcelable.get(0).getName());
         for (RubbishParcelable rubbishParcelable : dataParcelable) {
             if (rubbishParcelable.getQuantity() > 0) {
                 rubbishPickedUp.add(rubbishParcelable);
@@ -750,7 +723,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                System.out.println(response);
                                 if (response.isSuccessful()) {
                                     Toast.makeText(ActiveActivity.this, "A atividade foi concluida com sucesso", Toast.LENGTH_LONG).show();
                                     dialogBuilder.dismiss();
@@ -760,7 +732,6 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                System.out.println(t.getMessage());
                                 Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -813,18 +784,16 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                System.out.println(response);
                                 if (response.isSuccessful()) {
                                     dialogBuilder.dismiss();
                                     Toast.makeText(ActiveActivity.this, "Atividade concluida com sucesso", Toast.LENGTH_LONG).show();
-                                    onBackPressed(); //todo testar
+                                    onBackPressed();
                                     finish();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                System.out.println(t.getMessage());
                                 Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -885,13 +854,12 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
 
             @Override
             public void onFailure(Call<ActivityModel> call, Throwable t) {
-                System.out.println(t.getMessage());
                 Toast.makeText(ActiveActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    /* todo save state of the activity
+    /*  save state of the activity
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);

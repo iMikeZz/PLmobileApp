@@ -75,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        //todo maybe add progress dialog (slow login)
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
 
         Call<LoginToken> call = service.login(inputEmail.getText().toString(), inputPassword.getText().toString());
@@ -84,7 +83,6 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginToken>() {
             @Override
             public void onResponse(Call<LoginToken> call, Response<LoginToken> response) {
-                System.out.println(response);
                 if (response.isSuccessful()){
                     SharedPreferences.Editor edit = pref.edit();
                     edit.putString("token", response.body().getAccessToken());
@@ -98,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginToken> call, Throwable t) {
-                System.out.println(t.getMessage());
                 Toast.makeText(LoginActivity.this, "Verifique a ligação a internet", Toast.LENGTH_SHORT).show();
             }
         });

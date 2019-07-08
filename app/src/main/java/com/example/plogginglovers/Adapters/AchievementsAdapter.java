@@ -59,7 +59,6 @@ public class AchievementsAdapter extends ArrayAdapter<Achievement> {
             holder.achievementImage.setColorFilter(filter);
             holder.background.setBackgroundResource(R.color.grey_achievement);
         }else {
-            System.out.println(achievement.getItemImageUrl());
             Picasso.get().load("http://46.101.15.61/storage/items/" + achievement.getItemImageUrl()).into(holder.achievementImage);
             if (achievement.getCategory().equals("bronze")){
                 holder.background.setBackgroundResource(R.color.brown_achievement);

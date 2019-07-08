@@ -218,7 +218,7 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                         }
 
                         public void onFinish() {
-                            ActiveActivity.this.countDownTimer.setText("done!");
+                            ActiveActivity.this.countDownTimer.setText("acabou!");
                             createNotification("Acabou o tempo!", null);
                         }
                     }.start();
@@ -233,13 +233,19 @@ public class ActiveActivity extends AppCompatActivity implements SensorEventList
                         }
 
                         public void onFinish() {
-                            ActiveActivity.this.countDownTimer.setText("done!");
+                            ActiveActivity.this.countDownTimer.setText("acabou!");
                             createNotification("Acabou o tempo!", null);
                         }
                     }.start();
                 }
             }
         } else if (activity_state.equals("terminated_accepted")) {
+            numSteps = getIntent().getExtras().getInt("steps");
+            calories = getIntent().getExtras().getDouble("calories");
+            kilometers = getIntent().getExtras().getDouble("kilometers");
+            TvSteps.setText(String.valueOf(numSteps));
+            txtCals.setText(String.format("%.1f", (calories)));
+            txtKilos.setText(String.format("%.2f", Math.round((kilometers)*100.0)/100.0));
             checkStudentActivityGameInfo();
             /*todo verificar se ainda não submeteu
                    se já submeteu e se for o capitão e se já todos os membros submeteram mostrar dialog para enviar a foto final
